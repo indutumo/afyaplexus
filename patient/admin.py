@@ -1,3 +1,9 @@
 from django.contrib import admin
+from .models import *
+from import_export.admin import ImportExportModelAdmin
 
-# Register your models here.
+@admin.register(Patient)
+class PatientAdmin(ImportExportModelAdmin):
+    list_display = ['status','name','mobile_number']
+    list_filter = ['status','name']
+    search_fields = ['status','name']

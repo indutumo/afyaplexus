@@ -20,13 +20,15 @@ today = date.today()
 class County(models.Model):
 	id = models.UUIDField(primary_key=True, default=uuid.uuid1, editable=False)
 	name = models.CharField(max_length=200)
+	code = models.CharField(max_length=10,default='001')
+	index = models.IntegerField(default=47)
 
 	def __str__(self):
 		return self.name
 
 class Constituent(models.Model):
 	id = models.UUIDField(primary_key=True, default=uuid.uuid1, editable=False)
-	county = models.ForeignKey(County, related_name='constituent', on_delete=models.SET_NULL,null=True,blank=True)
+	county = models.CharField(max_length=10,default=1)
 	name = models.CharField(max_length=200)
 
 	def __str__(self):
@@ -34,8 +36,8 @@ class Constituent(models.Model):
 
 class Ward(models.Model):
 	id = models.UUIDField(primary_key=True, default=uuid.uuid1, editable=False)
-	county = models.ForeignKey(County, related_name='ward', on_delete=models.SET_NULL,null=True,blank=True)
-	constituent = models.ForeignKey(Constituent, related_name='ward', on_delete=models.SET_NULL,null=True,blank=True)
+	county = models.CharField(max_length=10,default=1)
+	constituent = models.CharField(max_length=200,null=True,blank=True)
 	name = models.CharField(max_length=200)
 
 	def __str__(self):

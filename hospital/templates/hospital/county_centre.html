@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+
+<p>{{county.name}}</p>
+{% for hospital in hospital %}
+  <p>{{hospital.name}}</p>
+{% endfor %}
+
+{% endblock %}

@@ -1,0 +1,14 @@
+id,name,mobile_number,alternative_number,email_address,website,centre_type,mobile_pysical,county,constituent,location,google_pin,ward,description,date,user,status
+4a9f8a86-3db6-11f1-af68-b4a9fcea8668,Shalom Hospital,721595160,254796279840,info@shalomcommunityhospital.org,N/A,Public,Physical,Machakos,mavoko,"HX78+983, 505, Athi River, Machakos",https://share.google/07s6rkGpfw90g03Cz,muthwani,,4/21/2026,1,active
+,Baringo County Hospital ,721595161,254796279841,info@shalomcommunityhospital.org,N/A,County,Physical,Baringo,baringo south,Baringo,https://share.google/07s6rkGpfw90g03Cz,mukutani,,4/21/2026,1,active
+,Haven Hospital,721595162,254796279842,info@shalomcommunityhospital.org,N/A,Private,Physical,Siaya,Bondo,Bondo,https://share.google/07s6rkGpfw90g03Cz,north sakwa,,4/21/2026,1,active
+,Bungoma County,721595163,254796279843,info@shalomcommunityhospital.org,N/A,County,Physical,Bungoma,kimilili,Bungoma,https://share.google/07s6rkGpfw90g03Cz,kamukuywa,,4/21/2026,1,active
+,Lifecare Hospital ,721595164,254796279844,info@shalomcommunityhospital.org,N/A,Private ,Physical,Bungoma,webuye west,Bungoma,https://share.google/07s6rkGpfw90g03Cz,matulo,,4/21/2026,1,active
+,Bungoma West Hospital,721595165,254796279845,info@shalomcommunityhospital.org,N/A,Private,Physical,Bungoma,bumula,Bungoma,https://share.google/07s6rkGpfw90g03Cz,west bukusu,,4/21/2026,1,active
+,Lugulu Mission Hospital AHN,721595166,254796279846,info@shalomcommunityhospital.org,N/A,Mission ,Physical,Bungoma,kabuchai,Bungoma,https://share.google/07s6rkGpfw90g03Cz,mukuyuni,,4/21/2026,1,active
+,Busia County,721595167,254796279847,info@shalomcommunityhospital.org,N/A,County,Physical,Busia,budalangi,Busia,https://share.google/07s6rkGpfw90g03Cz,bunyala south,,4/21/2026,1,active
+,Good Hope,721595168,254796279848,info@shalomcommunityhospital.org,N/A,Private ,Physical,Busia,funyula,Busia,https://share.google/07s6rkGpfw90g03Cz,nangina,,4/21/2026,1,active
+,Figo Care Plus-Tanaka Hospital,721595169,254796279849,info@shalomcommunityhospital.org,N/A,Private ,Physical,Busia,butula,Busia,https://share.google/07s6rkGpfw90g03Cz,elugulu,,4/21/2026,1,active
+,PCEA chogoria AHN,721595170,254796279850,info@shalomcommunityhospital.org,N/A,Mission ,Physical,Meru,south imenti,Chogoria,https://share.google/07s6rkGpfw90g03Cz,nkuene,,4/21/2026,1,active
+,Tharaka nithi,721595171,254796279851,info@shalomcommunityhospital.org,N/A,County,Physical,Tharaka Nithi,chuka/igambang'om,chuka,https://share.google/07s6rkGpfw90g03Cz,karingani,,4/21/2026,1,active
+,Diani Beach Hospital ,721595172,254796279852,info@shalomcommunityhospital.org,N/A,Private ,Physical,Kwale,msambweni,Diani,https://share.google/07s6rkGpfw90g03Cz,ukunda,,4/21/2026,1,active

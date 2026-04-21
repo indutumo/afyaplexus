@@ -1,0 +1,75 @@
+[2026-04-01 15:51:05,262] ERROR [django.server] "POST /admin/hospital/county/import/ HTTP/1.1" 500 59
+[2026-04-21 22:32:24,882] ERROR [django.request] Internal Server Error: /
+Traceback (most recent call last):
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexus/hospital/views.py", line 21, in home_page
+    return render(request, 'hospital/home_page.html', context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/backends/django.py", line 61, in render
+    return self.template.render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 175, in render
+    return self._render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/defaulttags.py", line 238, in render
+    nodelist.append(node.render_annotated(context))
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/defaulttags.py", line 471, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/urls/base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/urls/resolvers.py", line 828, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'county_centre' with keyword arguments '{'pk': ''}' not found. 1 pattern(s) tried: ['(?P<pk>[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/county_centre\\Z']
+[2026-04-21 22:32:24,888] ERROR [django.server] "GET / HTTP/1.1" 500 191782
+[2026-04-21 22:34:05,182] ERROR [django.request] Internal Server Error: /d31ace90-2dc9-11f1-98cb-b4a9fcea8668/county_centre
+Traceback (most recent call last):
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexus/hospital/views.py", line 27, in county_centre
+    qs = Hospital.objects.filter(county=county__name)
+NameError: name 'county__name' is not defined
+[2026-04-21 22:34:05,185] ERROR [django.server] "GET /d31ace90-2dc9-11f1-98cb-b4a9fcea8668/county_centre HTTP/1.1" 500 65994
+[2026-04-21 22:36:36,432] ERROR [django.request] Internal Server Error: /d31ace90-2dc9-11f1-98cb-b4a9fcea8668/county_centre
+Traceback (most recent call last):
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexus/hospital/views.py", line 27, in county_centre
+    county_name = capitalize(county.name)
+NameError: name 'capitalize' is not defined
+[2026-04-21 22:36:36,433] ERROR [django.server] "GET /d31ace90-2dc9-11f1-98cb-b4a9fcea8668/county_centre HTTP/1.1" 500 66000

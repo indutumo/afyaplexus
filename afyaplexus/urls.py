@@ -9,7 +9,8 @@ def trigger_error(request):
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-]
+    path('',include('hospital.urls')),
+    ]
 
 # Error handlers (no import needed)
 #handler404 = 'userprofile.views.handler404'

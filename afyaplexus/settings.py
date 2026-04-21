@@ -156,9 +156,9 @@ FILE_UPLOAD_HANDLERS = ("django_excel.ExcelMemoryFileUploadHandler",
 # JAZZMIN CONFIG
 # ------------------------------------------------------------
 JAZZMIN_SETTINGS = {
-    "site_title": "Zola HMS",
-    "site_header": "Zola HMS",
-    "site_brand": "ZOLA HMS",
+    "site_title": "Afya Plexus",
+    "site_header": "Afya Plexus",
+    "site_brand": "Afya Plexus",
     "site_icon": None,
     "login_logo": None,
     "site_logo": None,

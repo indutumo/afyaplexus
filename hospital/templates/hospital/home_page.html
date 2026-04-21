@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+
+<div class="lg:px-10 lg:py-6">
+
+  <!-- GRID -->
+  <div class="grid lg:grid-cols-4 gap-4">
+
+    <!-- SIDEBAR -->
+    <aside id="sidebar"
+      class="fixed lg:static top-0 left-0 w-64 h-full bg-white p-5 transform -translate-x-full lg:translate-x-0 transition z-50 rounded">
+      <ul class="space-y-3 text-sm">
+        {% for counties in counties %}
+        <li><a href="{% url 'county_centre' pk=counties.pk %}">{{ counties.name }}</a></li>
+        {% endfor %}
+      </ul>
+    </aside>
+
+    <div id="overlay" class="fixed inset-0 bg-black/40 hidden lg:hidden"></div>
+
+    <!-- HERO (BACKGROUND IMAGE) -->
+    <div class="col-span-2 relative rounded overflow-hidden h-[350px]">
+
+      <!-- BACKGROUND IMAGE -->
+      <div class="absolute inset-0 bg-cover bg-center"
+           style="background-image: url('{% static "cover.jpeg" %}');">
+      </div>
+
+      <!-- GRADIENT OVERLAY -->
+      <div class="absolute inset-0 bg-gradient-to-r from-black/70 to-transparent"></div>
+
+      <!-- TEXT CONTENT -->
+      <div class="relative z-10 h-full flex flex-col justify-center p-6 text-white max-w-sm">
+
+        <h2 class="text-2xl font-bold mb-2">
+          Main Cause of Kidney Failure
+        </h2>
+
+        <p class="mb-4 text-sm">
+          By Dr. Eluid Maina
+        </p>
+
+        <button class="bg-orange-500 px-4 py-2 rounded w-fit">
+          Read More
+        </button>
+
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <aside class="space-y-4">
+      <div class="bg-white p-4 rounded shadow-sm">
+        <p class="font-semibold">Contact Us</p>
+        <p class="text-sm">Text to order</p>
+      </div>
+
+      <div class="bg-white p-4 rounded shadow-sm">
+        <p class="font-semibold">Sell on Jumia</p>
+        <p class="text-sm">Millions of visitors</p>
+      </div>
+
+      <div class="bg-yellow-900 text-white p-4 rounded shadow-sm">
+        <p>Call/WhatsApp</p>
+        <h2 class="font-bold">0711 011 011</h2>
+      </div>
+    </aside>
+
+  </div>
+
+  <!-- CATEGORY SLIDER -->
+  <div class="mt-6 relative">
+
+    <button id="prev" class="nav-btn left-0">❮</button>
+
+    <div class="overflow-hidden">
+      <div id="categorySlider" class="flex gap-4 px-8">
+
+        {% for hospital in hospital %}
+        <div class="cat-card">{{hospital.name}}</div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <button id="next" class="nav-btn right-0">❯</button>
+
+    <!-- DOTS -->
+    <div id="dots" class="flex justify-center mt-3 gap-2"></div>
+
+  </div>
+
+</div>
+
+<!-- OPTIONAL STYLES -->
+<style>
+.cat-card {
+  min-width: 130px;
+  padding: 12px;
+  background: white;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 14px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  transition: 0.3s;
+}
+.cat-card:hover {
+  transform: translateY(-4px);
+}
+.nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: white;
+  border-radius: 50%;
+  padding: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  z-index: 10;
+  cursor: pointer;
+}
+.dot {
+  width: 8px;
+  height: 8px;
+  background: #ccc;
+  border-radius: 50%;
+}
+.dot.active {
+  background: orange;
+}
+</style>
+
+<!-- JS -->
+<script>
+const slider = document.getElementById("categorySlider");
+const cards = document.querySelectorAll(".cat-card");
+const next = document.getElementById("next");
+const prev = document.getElementById("prev");
+const dotsContainer = document.getElementById("dots");
+
+let index = 0;
+
+/* dots */
+cards.forEach((_, i) => {
+  const dot = document.createElement("div");
+  dot.classList.add("dot");
+  if (i === 0) dot.classList.add("active");
+
+  dot.onclick = () => moveTo(i);
+  dotsContainer.appendChild(dot);
+});
+
+const dots = document.querySelectorAll(".dot");
+
+function updateSlider() {
+  const cardWidth = cards[0].offsetWidth + 16;
+  slider.style.transform = `translateX(-${index * cardWidth}px)`;
+
+  dots.forEach(d => d.classList.remove("active"));
+  dots[index]?.classList.add("active");
+}
+
+function moveTo(i) {
+  index = i;
+  updateSlider();
+}
+
+next.onclick = () => {
+  index = (index + 1) % cards.length;
+  updateSlider();
+};
+
+prev.onclick = () => {
+  index = (index - 1 + cards.length) % cards.length;
+  updateSlider();
+};
+
+let auto = setInterval(() => next.click(), 3000);
+
+slider.addEventListener("mouseenter", () => clearInterval(auto));
+slider.addEventListener("mouseleave", () => {
+  auto = setInterval(() => next.click(), 3000);
+});
+</script>
+
+{% endblock %}
