@@ -33,6 +33,12 @@ class DailysisServiceAdmin(ImportExportModelAdmin):
     list_filter = ['hospital','name']
     search_fields = ['hospital','name']
 
+@admin.register(HospitalImage)
+class HospitalImageAdmin(ImportExportModelAdmin):
+    list_display = ['hospital','cover','status']
+    list_filter = ['hospital']
+    search_fields = ['hospital']
+
 
 @admin.register(HospitalRating)
 class HospitalRatingAdmin(ImportExportModelAdmin):

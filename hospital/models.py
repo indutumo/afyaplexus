@@ -23,6 +23,10 @@ class County(models.Model):
 	code = models.CharField(max_length=10,default='001')
 	index = models.IntegerField(default=47)
 
+	def save(self, *args, **kwargs):
+		self.name = (self.name).capitalize()
+		super(County, self).save(*args, **kwargs)
+
 	def __str__(self):
 		return self.name
 
@@ -30,6 +34,11 @@ class Constituent(models.Model):
 	id = models.UUIDField(primary_key=True, default=uuid.uuid1, editable=False)
 	county = models.CharField(max_length=10,default=1)
 	name = models.CharField(max_length=200)
+
+	def save(self, *args, **kwargs):
+		self.county = (self.county).capitalize()
+		self.name = (self.name).capitalize()
+		super(Constituent, self).save(*args, **kwargs)
 
 	def __str__(self):
 		return self.name
@@ -39,6 +48,12 @@ class Ward(models.Model):
 	county = models.CharField(max_length=10,default=1)
 	constituent = models.CharField(max_length=200,null=True,blank=True)
 	name = models.CharField(max_length=200)
+
+	def save(self, *args, **kwargs):
+		self.county = (self.county).capitalize()
+		self.constituent = (self.constituent).capitalize()
+		self.name = (self.name).capitalize()
+		super(Ward, self).save(*args, **kwargs)
 
 	def __str__(self):
 		return self.name
@@ -61,9 +76,30 @@ class Hospital(models.Model):
 	date = models.DateField(default=timezone.now)
 	user = models.ForeignKey(User, related_name='hospital', on_delete=models.SET_NULL,null=True,blank=True)
 	status = models.CharField(max_length=20,default='active')
+	image = models.FileField(upload_to='hospital/%Y/%m/%d/'')/%Y/%m/%d/',blank=True,null=True)
+	latitude = models.FloatField(null=True, blank=True)
+	longitude = models.FloatField(null=True, blank=True)
+
+	def save(self, *args, **kwargs):
+		self.county = (self.county).capitalize()
+		self.constituent = (self.constituent).capitalize()
+		self.ward = (self.ward).capitalize()
+		super(Hospital, self).save(*args, **kwargs)
 
 	def __str__(self):
 		return self.name
+
+class HospitalImage(models.Model):
+	id = models.UUIDField(primary_key=True, default=uuid.uuid1, editable=False)
+	hospital = models.ForeignKey(Hospital, related_name='hospitalimage',on_delete=models.SET_NULL,null=True,blank=True)
+	cover = models.CharField(max_length=50,default='No')
+	image = models.FileField(upload_to='hospitalimage/%Y/%m/%d/'')/%Y/%m/%d/',blank=True,null=True)
+	date = models.DateField(default=timezone.now)
+	user = models.ForeignKey(User, related_name='hospitalimage', on_delete=models.SET_NULL,null=True,blank=True)
+	status = models.CharField(max_length=20,default='active')
+
+	def __str__(self):
+		return str(self.hospital)
 
 
 class DailysisService(models.Model):

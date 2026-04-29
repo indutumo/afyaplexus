@@ -6,119 +6,180 @@
 
 <div class="lg:px-10 lg:py-6">
 
+  <!-- 🔍 SEARCH BAR -->
+  <form method="GET" class="flex flex-col lg:flex-row items-center gap-3 mb-6" action="{% url 'hospital_search' %}">
+
+    <!-- INPUT -->
+    <input type="text" name="q"
+           placeholder="Search hospitals by name or location..."
+           class="border p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-orange-400">
+
+    <!-- hidden GPS -->
+    <input type="hidden" name="lat" id="lat">
+    <input type="hidden" name="lng" id="lng">
+
+    <!-- BUTTONS -->
+    <div class="flex gap-2 w-full lg:w-auto">
+
+      <button type="submit"
+              class="bg-orange-500 text-white px-5 py-2 rounded whitespace-nowrap hover:bg-orange-600">
+        Search
+      </button>
+
+      <button type="button"
+              onclick="getLocation()"
+              class="bg-blue-500 text-white px-5 py-2 rounded whitespace-nowrap hover:bg-blue-600">
+        📍 Near Me
+      </button>
+
+    </div>
+
+  </form>
+
   <!-- GRID -->
   <div class="grid lg:grid-cols-4 gap-4">
 
     <!-- SIDEBAR -->
-    <aside id="sidebar"
-      class="fixed lg:static top-0 left-0 w-64 h-full bg-white p-5 transform -translate-x-full lg:translate-x-0 transition z-50 rounded">
+    <aside class="hidden lg:block bg-white p-5 rounded shadow">
       <ul class="space-y-3 text-sm">
         {% for counties in counties %}
-        <li><a href="{% url 'county_centre' pk=counties.pk %}">{{ counties.name }}</a></li>
+        <li>
+          <a href="{% url 'county_centre' pk=counties.pk %}"
+             class="hover:text-orange-500">
+            {{ counties.name }}
+          </a>
+        </li>
         {% endfor %}
       </ul>
     </aside>
 
-    <div id="overlay" class="fixed inset-0 bg-black/40 hidden lg:hidden"></div>
-
-    <!-- HERO (BACKGROUND IMAGE) -->
+    <!-- HERO -->
     <div class="col-span-2 relative rounded overflow-hidden h-[350px]">
 
-      <!-- BACKGROUND IMAGE -->
+      <!-- IMAGE -->
       <div class="absolute inset-0 bg-cover bg-center"
            style="background-image: url('{% static "cover.jpeg" %}');">
       </div>
 
-      <!-- GRADIENT OVERLAY -->
+      <!-- OVERLAY -->
       <div class="absolute inset-0 bg-gradient-to-r from-black/70 to-transparent"></div>
 
-      <!-- TEXT CONTENT -->
+      <!-- TEXT -->
       <div class="relative z-10 h-full flex flex-col justify-center p-6 text-white max-w-sm">
-
         <h2 class="text-2xl font-bold mb-2">
-          Main Cause of Kidney Failure
+          Find the Best Dialysis Centers Near You
         </h2>
 
         <p class="mb-4 text-sm">
-          By Dr. Eluid Maina
+          Fast, trusted and verified centers
         </p>
 
-        <button class="bg-orange-500 px-4 py-2 rounded w-fit">
-          Read More
+        <button class="bg-orange-500 px-4 py-2 rounded hover:bg-orange-600">
+          Explore Now
         </button>
-
       </div>
+
     </div>
 
     <!-- RIGHT PANEL -->
     <aside class="space-y-4">
-      <div class="bg-white p-4 rounded shadow-sm">
+
+      <div class="bg-white p-4 rounded shadow">
         <p class="font-semibold">Contact Us</p>
-        <p class="text-sm">Text to order</p>
+        <p class="text-sm text-gray-500">Text to order</p>
       </div>
 
-      <div class="bg-white p-4 rounded shadow-sm">
-        <p class="font-semibold">Sell on Jumia</p>
-        <p class="text-sm">Millions of visitors</p>
+      <div class="bg-white p-4 rounded shadow">
+        <p class="font-semibold">Add Your Center</p>
+        <p class="text-sm text-gray-500">Reach more patients</p>
       </div>
 
-      <div class="bg-yellow-900 text-white p-4 rounded shadow-sm">
+      <div class="bg-yellow-900 text-white p-4 rounded shadow">
         <p>Call/WhatsApp</p>
-        <h2 class="font-bold">0711 011 011</h2>
+        <h2 class="font-bold text-lg">0711 011 011</h2>
       </div>
+
     </aside>
 
   </div>
 
-  <!-- CATEGORY SLIDER -->
-  <div class="mt-6 relative">
+  <!-- 🏥 RESULTS SLIDER -->
+  <div class="mt-8 relative">
 
     <button id="prev" class="nav-btn left-0">❮</button>
 
     <div class="overflow-hidden">
-      <div id="categorySlider" class="flex gap-4 px-8">
+      <div id="categorySlider"
+           class="flex gap-4 px-8 transition-transform duration-300">
 
         {% for hospital in hospital %}
-        <div class="cat-card">{{hospital.name}}</div>
+        <div class="cat-card bg-white rounded shadow p-2 min-w-[220px]">
+
+          <a href="{% url 'centre_detail' pk=hospital.pk %}">
+            {% if hospital.image %}
+              <img src="{{ hospital.image.url }}"
+                   class="w-full h-40 object-cover rounded">
+            {% else %}
+              <img src="{% static 'placeholder.png' %}"
+                   class="w-full h-40 object-cover rounded">
+            {% endif %}
+          </a>
+
+          <div class="mt-2 text-sm">
+            <p class="font-semibold truncate">
+              {{ hospital.name }}
+            </p>
+
+            <p class="text-gray-500 truncate">
+              {{ hospital.location }}
+            </p>
+
+            {% if hospital.distance %}
+            <p class="text-green-600 text-xs">
+              {{ hospital.distance }} km away
+            </p>
+            {% endif %}
+
+            <a href="{{ hospital.google_pin }}"
+               class="text-orange-500 text-xs hover:underline">
+               View Map
+            </a>
+          </div>
+
+        </div>
+        {% empty %}
+        <p>No centers found.</p>
         {% endfor %}
+
       </div>
     </div>
 
     <button id="next" class="nav-btn right-0">❯</button>
 
-    <!-- DOTS -->
-    <div id="dots" class="flex justify-center mt-3 gap-2"></div>
+    <div id="dots" class="flex justify-center mt-4 gap-2"></div>
 
   </div>
 
 </div>
 
-<!-- OPTIONAL STYLES -->
+<!-- STYLES -->
 <style>
-.cat-card {
-  min-width: 130px;
-  padding: 12px;
-  background: white;
-  border-radius: 10px;
-  text-align: center;
-  font-size: 14px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-  transition: 0.3s;
-}
-.cat-card:hover {
-  transform: translateY(-4px);
-}
 .nav-btn {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   background: white;
   border-radius: 50%;
-  padding: 8px;
+  padding: 10px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-  z-index: 10;
   cursor: pointer;
 }
+
+.cat-card:hover {
+  transform: translateY(-5px);
+  transition: 0.3s;
+}
+
 .dot {
   width: 8px;
   height: 8px;
@@ -132,6 +193,20 @@
 
 <!-- JS -->
 <script>
+// 📍 GEOLOCATION
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition((pos) => {
+      document.getElementById("lat").value = pos.coords.latitude;
+      document.getElementById("lng").value = pos.coords.longitude;
+      document.querySelector("form").submit();
+    }, () => {
+      alert("Location access denied");
+    });
+  }
+}
+
+// 🎞 SLIDER
 const slider = document.getElementById("categorySlider");
 const cards = document.querySelectorAll(".cat-card");
 const next = document.getElementById("next");
@@ -140,47 +215,49 @@ const dotsContainer = document.getElementById("dots");
 
 let index = 0;
 
-/* dots */
-cards.forEach((_, i) => {
-  const dot = document.createElement("div");
-  dot.classList.add("dot");
-  if (i === 0) dot.classList.add("active");
+if (cards.length > 0) {
 
-  dot.onclick = () => moveTo(i);
-  dotsContainer.appendChild(dot);
-});
+  cards.forEach((_, i) => {
+    const dot = document.createElement("div");
+    dot.classList.add("dot");
+    if (i === 0) dot.classList.add("active");
 
-const dots = document.querySelectorAll(".dot");
+    dot.onclick = () => moveTo(i);
+    dotsContainer.appendChild(dot);
+  });
 
-function updateSlider() {
-  const cardWidth = cards[0].offsetWidth + 16;
-  slider.style.transform = `translateX(-${index * cardWidth}px)`;
+  const dots = document.querySelectorAll(".dot");
 
-  dots.forEach(d => d.classList.remove("active"));
-  dots[index]?.classList.add("active");
+  function updateSlider() {
+    const cardWidth = cards[0].offsetWidth + 16;
+    slider.style.transform = `translateX(-${index * cardWidth}px)`;
+
+    dots.forEach(d => d.classList.remove("active"));
+    dots[index]?.classList.add("active");
+  }
+
+  function moveTo(i) {
+    index = i;
+    updateSlider();
+  }
+
+  next.onclick = () => {
+    index = (index + 1) % cards.length;
+    updateSlider();
+  };
+
+  prev.onclick = () => {
+    index = (index - 1 + cards.length) % cards.length;
+    updateSlider();
+  };
+
+  let auto = setInterval(() => next.click(), 3000);
+
+  slider.addEventListener("mouseenter", () => clearInterval(auto));
+  slider.addEventListener("mouseleave", () => {
+    auto = setInterval(() => next.click(), 3000);
+  });
 }
-
-function moveTo(i) {
-  index = i;
-  updateSlider();
-}
-
-next.onclick = () => {
-  index = (index + 1) % cards.length;
-  updateSlider();
-};
-
-prev.onclick = () => {
-  index = (index - 1 + cards.length) % cards.length;
-  updateSlider();
-};
-
-let auto = setInterval(() => next.click(), 3000);
-
-slider.addEventListener("mouseenter", () => clearInterval(auto));
-slider.addEventListener("mouseleave", () => {
-  auto = setInterval(() => next.click(), 3000);
-});
 </script>
 
 {% endblock %}

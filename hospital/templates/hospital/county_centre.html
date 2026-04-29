@@ -6,7 +6,7 @@
 
 <p>{{county.name}}</p>
 {% for hospital in hospital %}
-  <p>{{hospital.name}}</p>
+  <p> <a href="{% url 'centre_detail' pk=hospital.pk %}">{{hospital.name}}</a></p>
 {% endfor %}
 
 {% endblock %}

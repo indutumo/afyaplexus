@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-lb&c7dam0m7#*xd1l5k=1rxt1)k-w#t#rr=&!3jnth)32fgqdq'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -173,64 +173,3 @@ JAZZMIN_UI_TWEEKS = {
     "theme": "flatly",
     "dark_mode_theme": "darkly",
 }
-# ------------------------------------------------------------
-# SECURITY & HTTPS
-# ------------------------------------------------------------
-# --- Security: Only enable SSL settings in production ---
-
-if not DEBUG:
-    SECURE_SSL_REDIRECT = True
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
-    SECURE_HSTS_SECONDS = 31536000  # 1 year
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD = True
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-    X_FRAME_OPTIONS = 'SAMEORIGIN'
-else:
-    # Disable SSL in development
-    SECURE_SSL_REDIRECT = False
-    SESSION_COOKIE_SECURE = False
-    CSRF_COOKIE_SECURE = False
-    SECURE_HSTS_SECONDS = 0
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = False
-    SECURE_HSTS_PRELOAD = False
-    X_FRAME_OPTIONS = 'SAMEORIGIN'
-# ------------------------------------------------------------
-# LOGGING (backend errors only)
-# ------------------------------------------------------------
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'verbose': {
-            'format': '[{asctime}] {levelname} [{name}] {message}',
-            'style': '{',
-        },
-    },
-    'handlers': {
-        'file': {
-            'level': 'ERROR',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': BASE_DIR / 'erp.log',
-            'maxBytes': 15 * 1024 * 1024,
-            'backupCount': 10,
-            'formatter': 'verbose',
-        },
-    },
-    'loggers': {
-        'django': {'handlers': ['file'], 'level': 'ERROR', 'propagate': False},
-        'django.request': {'handlers': ['file'], 'level': 'ERROR', 'propagate': False},
-        'django.db.backends': {'handlers': ['file'], 'level': 'ERROR', 'propagate': False},
-        'django.server': {'handlers': ['file'], 'level': 'ERROR', 'propagate': False},
-        'django.template': {'handlers': [], 'level': 'CRITICAL', 'propagate': False},
-        'django.security.DisallowedHost': {'handlers': ['file'], 'level': 'ERROR', 'propagate': False},
-    },
-}
-# ------------------------------------------------------------
-# EXTERNAL SERVICES
-# ------------------------------------------------------------
-FOREX_URL = 'https://v6.exchangerate-api.com/v6/b9884567b9698d330600bad9/latest/USD'
-AT_ENDPOINT_URL = "http://ujumbesms.co.ke/api/messaging"
-AT_API_KEY = 'OTBiYjVjYWY2NjgxOTU5NTRhYmFhODViNWE4OWE5'
-EMAIL = 'zolatechnologies@gmail.com'

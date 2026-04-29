@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="lg:px-10 py-6">
+
+  <div class="grid lg:grid-cols-3 gap-6 bg-white p-4 rounded shadow">
+
+    <!-- LEFT: IMAGES -->
+    <div>
+
+      <!-- MAIN IMAGE -->
+      <div class="border rounded mb-3">
+        {% if hospital.image %}
+          <img id="mainImage"
+               src="{{ hospital.image.url }}"
+               class="w-full h-64 object-cover rounded">
+        {% else %}
+          <img src="{% static 'placeholder.PNG' %}" class="w-full h-64">
+        {% endif %}
+      </div>
+
+      <!-- THUMBNAILS -->
+      <div class="flex gap-2">
+        {% for img in hospitalimage %}
+          <img src="{{ img.image.url }}"
+               class="w-16 h-16 object-cover border cursor-pointer"
+               onclick="changeImage(this)">
+        {% endfor %}
+      </div>
+
+      <!-- SHARE -->
+      <div class="mt-4">
+        <p class="text-sm font-semibold mb-2">Share this center</p>
+        <div class="flex gap-3">
+          <span class="border p-2 rounded cursor-pointer">F</span>
+          <span class="border p-2 rounded cursor-pointer">X</span>
+          <span class="border p-2 rounded cursor-pointer">WA</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT: DETAILS -->
+    <div class="lg:col-span-2">
+
+      <!-- TITLE -->
+      <h1 class="text-xl font-semibold mb-2">
+        {{ hospital.name }}
+      </h1>
+
+      <!-- TYPE -->
+      <p class="text-sm text-gray-600 mb-2">
+        Type: {{ hospital.centre_type }}
+      </p>
+
+      <!-- LOCATION -->
+      <p class="text-sm text-gray-600 mb-4">
+        {{ hospital.location }} - {{ hospital.ward }}, {{ hospital.constituent }}
+      </p>
+
+      <!-- RATING -->
+      <div class="flex items-center gap-2 mb-4">
+        ⭐⭐⭐⭐☆
+        <span class="text-sm text-gray-500">
+          ({{ hospitalrating|length }} reviews)
+        </span>
+      </div>
+
+      <!-- SERVICES -->
+      <div class="bg-red-500 text-white p-3 rounded mb-4">
+        <p class="font-semibold">Dialysis Services</p>
+        <ul class="text-sm mt-2">
+          {% for s in dailysisservice %}
+            <li>• {{ s.name }}</li>
+          {% empty %}
+            <li>No services listed</li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <!-- CONTACT -->
+      <div class="mb-4">
+        <p class="text-lg font-bold text-orange-600">
+          📞 {{ hospital.mobile_number }}
+        </p>
+        <p class="text-sm text-gray-500">
+          Alt: {{ hospital.alternative_number }}
+        </p>
+      </div>
+
+      <!-- BUTTON -->
+      <button class="w-full bg-orange-500 text-white py-3 rounded text-lg">
+        Contact Center
+      </button>
+
+      <!-- DESCRIPTION -->
+      <div class="mt-6">
+        <h3 class="font-semibold mb-2">About this center</h3>
+        <p class="text-sm text-gray-600">
+          {{ hospital.description }}
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- JS -->
+<script>
+function changeImage(el) {
+  document.getElementById("mainImage").src = el.src;
+}
+</script>
+
+{% endblock %}

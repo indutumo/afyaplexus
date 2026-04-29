@@ -73,3 +73,483 @@ Traceback (most recent call last):
     county_name = capitalize(county.name)
 NameError: name 'capitalize' is not defined
 [2026-04-21 22:36:36,433] ERROR [django.server] "GET /d31ace90-2dc9-11f1-98cb-b4a9fcea8668/county_centre HTTP/1.1" 500 66000
+[2026-04-24 08:36:13,533] ERROR [django.request] Internal Server Error: /add_centre
+Traceback (most recent call last):
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexus/hospital/views.py", line 37, in add_centre
+    county = form.cleaned_data['county']
+KeyError: 'county'
+[2026-04-24 08:36:13,535] ERROR [django.server] "POST /add_centre HTTP/1.1" 500 74695
+[2026-04-24 09:05:41,745] ERROR [django.request] Internal Server Error: /add_centre
+Traceback (most recent call last):
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexus/hospital/views.py", line 37, in add_centre
+    county = form.cleaned_data['county']
+KeyError: 'county'
+[2026-04-24 09:05:41,748] ERROR [django.server] "POST /add_centre HTTP/1.1" 500 74695
+[2026-04-29 08:47:15,592] ERROR [django.server] You're accessing the development server over HTTPS, but it only supports HTTP.
+[2026-04-29 08:47:15,595] ERROR [django.server] You're accessing the development server over HTTPS, but it only supports HTTP.
+[2026-04-29 08:47:16,707] ERROR [django.server] You're accessing the development server over HTTPS, but it only supports HTTP.
+[2026-04-29 08:47:16,707] ERROR [django.server] You're accessing the development server over HTTPS, but it only supports HTTP.
+[2026-04-29 08:47:16,710] ERROR [django.server] You're accessing the development server over HTTPS, but it only supports HTTP.
+[2026-04-29 08:47:16,711] ERROR [django.server] You're accessing the development server over HTTPS, but it only supports HTTP.
+[2026-04-29 08:47:18,309] ERROR [django.server] You're accessing the development server over HTTPS, but it only supports HTTP.
+[2026-04-29 08:47:18,309] ERROR [django.server] You're accessing the development server over HTTPS, but it only supports HTTP.
+[2026-04-29 08:47:18,310] ERROR [django.server] You're accessing the development server over HTTPS, but it only supports HTTP.
+[2026-04-29 08:47:18,311] ERROR [django.server] You're accessing the development server over HTTPS, but it only supports HTTP.
+[2026-04-29 08:47:25,694] ERROR [django.server] You're accessing the development server over HTTPS, but it only supports HTTP.
+[2026-04-29 08:47:25,694] ERROR [django.server] You're accessing the development server over HTTPS, but it only supports HTTP.
+[2026-04-29 08:47:25,696] ERROR [django.server] You're accessing the development server over HTTPS, but it only supports HTTP.
+[2026-04-29 08:47:25,696] ERROR [django.server] You're accessing the development server over HTTPS, but it only supports HTTP.
+[2026-04-29 08:47:30,976] ERROR [django.server] You're accessing the development server over HTTPS, but it only supports HTTP.
+[2026-04-29 08:47:30,976] ERROR [django.server] You're accessing the development server over HTTPS, but it only supports HTTP.
+[2026-04-29 08:47:30,978] ERROR [django.server] You're accessing the development server over HTTPS, but it only supports HTTP.
+[2026-04-29 08:47:30,978] ERROR [django.server] You're accessing the development server over HTTPS, but it only supports HTTP.
+[2026-04-29 08:47:32,912] ERROR [django.server] You're accessing the development server over HTTPS, but it only supports HTTP.
+[2026-04-29 08:47:32,913] ERROR [django.server] You're accessing the development server over HTTPS, but it only supports HTTP.
+[2026-04-29 08:47:32,914] ERROR [django.server] You're accessing the development server over HTTPS, but it only supports HTTP.
+[2026-04-29 08:47:32,915] ERROR [django.server] You're accessing the development server over HTTPS, but it only supports HTTP.
+[2026-04-29 08:48:15,321] ERROR [django.server] You're accessing the development server over HTTPS, but it only supports HTTP.
+[2026-04-29 08:48:15,322] ERROR [django.server] You're accessing the development server over HTTPS, but it only supports HTTP.
+[2026-04-29 08:48:15,324] ERROR [django.server] You're accessing the development server over HTTPS, but it only supports HTTP.
+[2026-04-29 08:48:15,324] ERROR [django.server] You're accessing the development server over HTTPS, but it only supports HTTP.
+[2026-04-29 08:48:26,107] ERROR [django.server] You're accessing the development server over HTTPS, but it only supports HTTP.
+[2026-04-29 08:48:26,108] ERROR [django.server] You're accessing the development server over HTTPS, but it only supports HTTP.
+[2026-04-29 08:50:59,235] ERROR [django.request] Internal Server Error: /4a9f8a86-3db6-11f1-af68-b4a9fcea8668/centre_details
+Traceback (most recent call last):
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 505, in parse
+    compile_func = self.tags[command]
+KeyError: 'else'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexus/hospital/views.py", line 104, in centre_details
+    return render(request, 'hospital/centre_details.html', context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/backends/django.py", line 33, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/engine.py", line 175, in get_template
+    template, origin = self.find_template(template_name)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/engine.py", line 157, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 200, in compile_nodelist
+    return parser.parse()
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 513, in parse
+    raise self.error(token, e)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/loader_tags.py", line 293, in do_extends
+    nodelist = parser.parse()
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 513, in parse
+    raise self.error(token, e)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/loader_tags.py", line 232, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 507, in parse
+    self.invalid_block_tag(token, command, parse_until)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 558, in invalid_block_tag
+    raise self.error(
+django.template.exceptions.TemplateSyntaxError: Invalid block tag on line 19: 'else', expected 'endblock'. Did you forget to register or load this tag?
+[2026-04-29 08:50:59,396] ERROR [django.server] "GET /4a9f8a86-3db6-11f1-af68-b4a9fcea8668/centre_details HTTP/1.1" 500 0
+[2026-04-29 08:51:07,716] ERROR [django.request] Internal Server Error: /4a9f8a86-3db6-11f1-af68-b4a9fcea8668/centre_details
+Traceback (most recent call last):
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 505, in parse
+    compile_func = self.tags[command]
+KeyError: 'else'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexus/hospital/views.py", line 104, in centre_details
+    return render(request, 'hospital/centre_details.html', context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/backends/django.py", line 33, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/engine.py", line 175, in get_template
+    template, origin = self.find_template(template_name)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/engine.py", line 157, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 200, in compile_nodelist
+    return parser.parse()
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 513, in parse
+    raise self.error(token, e)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/loader_tags.py", line 293, in do_extends
+    nodelist = parser.parse()
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 513, in parse
+    raise self.error(token, e)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/loader_tags.py", line 232, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 507, in parse
+    self.invalid_block_tag(token, command, parse_until)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 558, in invalid_block_tag
+    raise self.error(
+django.template.exceptions.TemplateSyntaxError: Invalid block tag on line 19: 'else', expected 'endblock'. Did you forget to register or load this tag?
+[2026-04-29 08:51:07,718] ERROR [django.server] "GET /4a9f8a86-3db6-11f1-af68-b4a9fcea8668/centre_details HTTP/1.1" 500 0
+[2026-04-29 08:51:50,141] ERROR [django.request] Internal Server Error: /4a9f8a86-3db6-11f1-af68-b4a9fcea8668/centre_details
+Traceback (most recent call last):
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 505, in parse
+    compile_func = self.tags[command]
+KeyError: 'else'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexus/hospital/views.py", line 104, in centre_details
+    return render(request, 'hospital/centre_details.html', context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/backends/django.py", line 33, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/engine.py", line 175, in get_template
+    template, origin = self.find_template(template_name)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/engine.py", line 157, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 200, in compile_nodelist
+    return parser.parse()
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 513, in parse
+    raise self.error(token, e)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/loader_tags.py", line 293, in do_extends
+    nodelist = parser.parse()
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 513, in parse
+    raise self.error(token, e)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/loader_tags.py", line 232, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 507, in parse
+    self.invalid_block_tag(token, command, parse_until)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 558, in invalid_block_tag
+    raise self.error(
+django.template.exceptions.TemplateSyntaxError: Invalid block tag on line 19: 'else', expected 'endblock'. Did you forget to register or load this tag?
+[2026-04-29 08:51:50,144] ERROR [django.server] "GET /4a9f8a86-3db6-11f1-af68-b4a9fcea8668/centre_details HTTP/1.1" 500 0
+[2026-04-29 08:51:57,739] ERROR [django.request] Internal Server Error: /4a9f8a86-3db6-11f1-af68-b4a9fcea8668/centre_details
+Traceback (most recent call last):
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 505, in parse
+    compile_func = self.tags[command]
+KeyError: 'else'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexus/hospital/views.py", line 104, in centre_details
+    return render(request, 'hospital/centre_details.html', context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/backends/django.py", line 33, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/engine.py", line 175, in get_template
+    template, origin = self.find_template(template_name)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/engine.py", line 157, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 200, in compile_nodelist
+    return parser.parse()
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 513, in parse
+    raise self.error(token, e)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/loader_tags.py", line 293, in do_extends
+    nodelist = parser.parse()
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 513, in parse
+    raise self.error(token, e)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/loader_tags.py", line 232, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 507, in parse
+    self.invalid_block_tag(token, command, parse_until)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 558, in invalid_block_tag
+    raise self.error(
+django.template.exceptions.TemplateSyntaxError: Invalid block tag on line 19: 'else', expected 'endblock'. Did you forget to register or load this tag?
+[2026-04-29 08:51:57,742] ERROR [django.server] "GET /4a9f8a86-3db6-11f1-af68-b4a9fcea8668/centre_details HTTP/1.1" 500 0
+[2026-04-29 15:47:14,680] ERROR [django.request] Internal Server Error: /
+Traceback (most recent call last):
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexus/hospital/views.py", line 21, in home_page
+    return render(request, 'hospital/home_page.html', context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/backends/django.py", line 61, in render
+    return self.template.render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 175, in render
+    return self._render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/defaulttags.py", line 238, in render
+    nodelist.append(node.render_annotated(context))
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/defaulttags.py", line 471, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/urls/base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/urls/resolvers.py", line 828, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'centre_details' not found. 'centre_details' is not a valid view function or pattern name.
+[2026-04-29 15:47:15,093] ERROR [django.server] "GET / HTTP/1.1" 500 0
+[2026-04-29 15:47:15,123] ERROR [django.request] Internal Server Error: /
+Traceback (most recent call last):
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexus/hospital/views.py", line 21, in home_page
+    return render(request, 'hospital/home_page.html', context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/backends/django.py", line 61, in render
+    return self.template.render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 175, in render
+    return self._render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/defaulttags.py", line 238, in render
+    nodelist.append(node.render_annotated(context))
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/defaulttags.py", line 471, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/urls/base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/urls/resolvers.py", line 828, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'centre_details' not found. 'centre_details' is not a valid view function or pattern name.
+[2026-04-29 15:47:15,126] ERROR [django.server] "GET / HTTP/1.1" 500 0
+[2026-04-29 15:47:55,906] ERROR [django.request] Internal Server Error: /
+Traceback (most recent call last):
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexus/hospital/views.py", line 21, in home_page
+    return render(request, 'hospital/home_page.html', context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/backends/django.py", line 61, in render
+    return self.template.render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 175, in render
+    return self._render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/defaulttags.py", line 238, in render
+    nodelist.append(node.render_annotated(context))
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/defaulttags.py", line 471, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/urls/base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/urls/resolvers.py", line 828, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'centre_details' not found. 'centre_details' is not a valid view function or pattern name.
+[2026-04-29 15:47:55,911] ERROR [django.server] "GET / HTTP/1.1" 500 0
+[2026-04-29 15:47:56,748] ERROR [django.request] Internal Server Error: /
+Traceback (most recent call last):
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexus/hospital/views.py", line 21, in home_page
+    return render(request, 'hospital/home_page.html', context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/backends/django.py", line 61, in render
+    return self.template.render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 175, in render
+    return self._render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/defaulttags.py", line 238, in render
+    nodelist.append(node.render_annotated(context))
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/template/defaulttags.py", line 471, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/urls/base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "/mnt/c/Users/lenovo/Desktop/ZOLA/afyaplexus/afyaplexusenv/lib/python3.8/site-packages/django/urls/resolvers.py", line 828, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'centre_details' not found. 'centre_details' is not a valid view function or pattern name.
+[2026-04-29 15:47:56,751] ERROR [django.server] "GET / HTTP/1.1" 500 0

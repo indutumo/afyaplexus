@@ -6,9 +6,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Afya Plexus</title>
+
   <link rel="apple-touch-icon" href="{% static 'afyaplexus.png' %}">
   <link rel="shortcut icon" type="image/x-icon" href="{% static 'afyaplexus.png' %}">
-
 
   <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -19,45 +19,60 @@
 
 <body class="bg-gray-100">
 
-<!-- NAVBAR -->
-<header class="bg-white shadow">
+<!-- 🔥 FIXED NAVBAR -->
+<header class="fixed top-0 left-0 w-full bg-white shadow z-50">
+
   <div class="flex items-center justify-between p-4 lg:px-10">
 
+    <!-- LEFT -->
     <div class="flex items-center gap-3">
       <button id="menuBtn" class="lg:hidden text-2xl">☰</button>
-      <h1 class="font-bold text-xl"><a href="{% url 'home_page' %}"> Afya Plexus</a></h1>
+
+      <h1 class="font-bold text-xl">
+        <a href="{% url 'home_page' %}">Afya Plexus</a>
+      </h1>
     </div>
 
-    <div class="hidden md:flex flex-1 mx-6">
-      <input class="w-full p-2 border rounded-l-full" placeholder="Search products...">
-      <button class="bg-orange-500 text-white px-4 rounded-r-full">Search</button>
+    <!-- SEARCH SPACE (optional for future use) -->
+    <div class="hidden md:flex flex-1 mx-6"></div>
+
+    <!-- RIGHT -->
+    <div class="flex gap-4 text-sm items-center">
+      <span class="cursor-pointer hover:text-orange-500">Login</span>
+
+      <a href="{% url 'add_centre' %}" class="hover:text-orange-500">
+        Register Centre
+      </a>
+
+      <span class="cursor-pointer hover:text-orange-500">Blog</span>
     </div>
 
-    <div class="flex gap-4 text-sm">
-      <span>Login</span>
-      <span>Register Centre</span>
-      <span>Help</span>
-      <span>Cart</span>
-    </div>
   </div>
 
-  <!-- Mobile Search -->
-  <div class="p-3 md:hidden">
-    <div class="flex">
-      <input class="w-full p-2 border rounded-l-full" placeholder="Search...">
-      <button class="bg-orange-500 text-white px-4 rounded-r-full">Go</button>
-    </div>
-  </div>
 </header>
 
-<!-- MAIN -->
-<div class="lg:px-10 lg:py-6">
+<!-- 🔥 ADD TOP SPACING (IMPORTANT) -->
+<div class="pt-20 lg:pt-10">
 
-{% block content %}{% endblock %}
+  <div class="lg:px-10 lg:py-4">
+    {% block content %}{% endblock %}
+  </div>
 
 </div>
 
 <script src="{% static 'script.js' %}"></script>
+<script>
+  window.addEventListener("scroll", function () {
+    const header = document.querySelector("header");
 
+    if (window.scrollY > 50) {
+      header.classList.add("py-2");
+      header.classList.remove("py-4");
+    } else {
+      header.classList.add("py-2");
+      header.classList.remove("py-2");
+    }
+  });
+</script>
 </body>
 </html>

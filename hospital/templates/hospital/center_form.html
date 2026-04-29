@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="max-w-5xl mx-auto mt-8 bg-white p-6 rounded shadow">
+
+  <h2 class="text-2xl font-bold mb-6 text-center">
+    Add Medical Center
+  </h2>
+
+  <!-- MESSAGES -->
+  {% for message in messages %}
+    <div class="mb-4 p-3 rounded 
+      {% if message.tags == 'success' %}bg-green-100 text-green-700
+      {% else %}bg-red-100 text-red-700{% endif %}">
+      {{ message }}
+    </div>
+  {% endfor %}
+
+  <form method="POST" class="space-y-4">
+    {% csrf_token %}
+
+    <!-- NAME -->
+    <div>
+      <label>Center Name</label>
+      {{ form.name }}
+    </div>
+
+    <!-- NUMBERS -->
+    <div class="grid md:grid-cols-2 gap-4">
+      <div>
+        <label>Mobile</label>
+        {{ form.mobile_number }}
+      </div>
+      <div>
+        <label>Alternative</label>
+        {{ form.alternative_number }}
+      </div>
+    </div>
+
+    <!-- EMAIL + WEBSITE -->
+    <div class="grid md:grid-cols-2 gap-4">
+      <div>
+        <label>Email</label>
+        {{ form.email_address }}
+      </div>
+      <div>
+        <label>Website</label>
+        {{ form.website }}
+      </div>
+    </div>
+
+    <!-- CENTRE TYPE -->
+    <div>
+      <label>Centre Type</label>
+      {{ form.centre_type }}
+    </div>
+
+    <!-- LOCATION -->
+    <div>
+      <label>Location</label>
+      {{ form.location }}
+    </div>
+
+    <!-- COUNTY / CONSTITUENT / WARD -->
+    <div class="grid md:grid-cols-3 gap-4">
+
+      <div>
+        <label>County</label>
+        <select id="county" name="county" class="w-full border p-2 rounded">
+          <option value="">Select County</option>
+          {% for c in counties %}
+            <option value="{{ c.code }}">{{ c.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div>
+        <label>Constituent</label>
+        <select id="constituent" name="constituent" class="w-full border p-2 rounded">
+          <option value="">Select Constituent</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Ward</label>
+        <select id="ward" name="ward" class="w-full border p-2 rounded">
+          <option value="">Select Ward</option>
+        </select>
+      </div>
+
+    </div>
+
+    <!-- GOOGLE PIN -->
+    <div>
+      <label>Google Pin</label>
+      {{ form.google_pin }}
+    </div>
+
+    <!-- DESCRIPTION -->
+    <div>
+      <label>Description</label>
+      {{ form.description }}
+    </div>
+
+    <!-- SUBMIT -->
+    <div class="text-center mt-6">
+      <button type="submit"
+        class="bg-orange-500 text-white px-6 py-2 rounded">
+        Save Center
+      </button>
+    </div>
+
+  </form>
+</div>
+
+<!-- JS -->
+<script>
+const constituents = [
+  {% for c in constituents %}
+    { name: "{{ c.name }}", county: "{{ c.county }}" },
+  {% endfor %}
+];
+
+const wards = [
+  {% for w in wards %}
+    { name: "{{ w.name }}", county: "{{ w.county }}", constituent: "{{ w.constituent }}" },
+  {% endfor %}
+];
+
+const county = document.getElementById("county");
+const constituent = document.getElementById("constituent");
+const ward = document.getElementById("ward");
+
+/* COUNTY CHANGE */
+county.addEventListener("change", function() {
+  constituent.innerHTML = '<option>Select Constituent</option>';
+  ward.innerHTML = '<option>Select Ward</option>';
+
+  constituents.forEach(c => {
+    if (c.county === this.value) {
+      let opt = document.createElement("option");
+      opt.value = c.name;
+      opt.textContent = c.name;
+      constituent.appendChild(opt);
+    }
+  });
+});
+
+/* CONSTITUENT CHANGE */
+constituent.addEventListener("change", function() {
+  ward.innerHTML = '<option>Select Ward</option>';
+
+  wards.forEach(w => {
+    if (w.county === county.value && w.constituent === this.value) {
+      let opt = document.createElement("option");
+      opt.value = w.name;
+      opt.textContent = w.name;
+      ward.appendChild(opt);
+    }
+  });
+});
+</script>
+
+{% endblock %}
