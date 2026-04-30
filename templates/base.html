@@ -44,7 +44,7 @@
         Register Centre
       </a>
 
-      <span class="cursor-pointer hover:text-orange-500">Blog</span>
+      <span class="cursor-pointer hover:text-orange-500"><a href="{% url 'blog_list' %}"> Blog</a></span>
     </div>
 
   </div>
@@ -73,6 +73,10 @@
       header.classList.remove("py-2");
     }
   });
+
+  tailwind.config = {
+    plugins: [tailwind.typography],
+  }
 </script>
 </body>
 </html>

@@ -5,7 +5,7 @@ from import_export.admin import ImportExportModelAdmin
 
 @admin.register(Page)
 class PageAdmin(ImportExportModelAdmin):
-    list_display = ['page_type','name']
+    list_display = ['page_type','title']
     list_filter = ['page_type']
     search_fields = ['page_type']
 

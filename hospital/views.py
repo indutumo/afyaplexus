@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from .forms import *
 from .models import *
+from page.models import Page
 import uuid, json, requests
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -13,14 +14,16 @@ def is_valid_queryparam(param):
 
 
 def home_page(request):
-	counties = County.objects.order_by('index')[:10]
-	hospital = Hospital.objects.all()
+    counties = County.objects.order_by('index')[:10]
+    hospital = Hospital.objects.all()
+    blog = Page.objects.filter(featured=True).last()
 
-	context = {
+    context = {
 		'counties':counties,
 		'hospital':hospital,
+        'blog':blog,
 	}
-	return render(request, 'hospital/home_page.html', context)
+    return render(request, 'hospital/home_page.html', context)
 
 
 

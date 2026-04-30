@@ -10,6 +10,7 @@ def trigger_error(request):
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('hospital.urls')),
+    path('page/',include('page.urls')),
     ]
 
 # Error handlers (no import needed)

@@ -19,17 +19,33 @@ today = date.today()
 
 class Page(models.Model):
 	id = models.UUIDField(primary_key=True, default=uuid.uuid1, editable=False)
-	name = models.CharField(max_length=200)
+	title = models.CharField(max_length=200)
 	page_type = models.CharField(max_length=20,default='Normal')
 	status = models.CharField(max_length=20,default='active')
 	content = models.TextField()
 	date = models.DateField(default=timezone.now)
 	user = models.ForeignKey(User, related_name='page', on_delete=models.SET_NULL,null=True,blank=True)
 	rating = models.CharField(max_length=20,default=1)
+	image = models.FileField(upload_to='blogs/', null=True, blank=True)
+	clap_count = models.PositiveIntegerField(default=0)
+	bookmarks = models.ManyToManyField(User, related_name='bookmarked_pages', blank=True)
+	category = models.CharField(max_length=150,default='Kidney Care')
+	featured = models.BooleanField(default=False)
+
+	def reading_time(self):
+		words = len(self.content.split())
+		return max(1, words // 200)
 
 	def __str__(self):
-		return self.name
+		return self.title
 
+class Clap(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='claps')
+    count = models.PositiveIntegerField(default=1)
+
+    class Meta:
+        unique_together = ('user', 'page')
 
 class PageAttachment(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid1, editable=False)

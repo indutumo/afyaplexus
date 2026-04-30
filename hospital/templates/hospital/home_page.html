@@ -9,18 +9,14 @@
   <!-- 🔍 SEARCH BAR -->
   <form method="GET" class="flex flex-col lg:flex-row items-center gap-3 mb-6" action="{% url 'hospital_search' %}">
 
-    <!-- INPUT -->
     <input type="text" name="q"
            placeholder="Search hospitals by name or location..."
            class="border p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-orange-400">
 
-    <!-- hidden GPS -->
     <input type="hidden" name="lat" id="lat">
     <input type="hidden" name="lng" id="lng">
 
-    <!-- BUTTONS -->
     <div class="flex gap-2 w-full lg:w-auto">
-
       <button type="submit"
               class="bg-orange-500 text-white px-5 py-2 rounded whitespace-nowrap hover:bg-orange-600">
         Search
@@ -31,7 +27,6 @@
               class="bg-blue-500 text-white px-5 py-2 rounded whitespace-nowrap hover:bg-blue-600">
         📍 Near Me
       </button>
-
     </div>
 
   </form>
@@ -56,26 +51,20 @@
     <!-- HERO -->
     <div class="col-span-2 relative rounded overflow-hidden h-[350px]">
 
-      <!-- IMAGE -->
       <div class="absolute inset-0 bg-cover bg-center"
-           style="background-image: url('{% static "cover.jpeg" %}');">
-      </div>
+           style="background-image: url('{% static "cover.jpeg" %}');"></div>
 
-      <!-- OVERLAY -->
       <div class="absolute inset-0 bg-gradient-to-r from-black/70 to-transparent"></div>
 
-      <!-- TEXT -->
       <div class="relative z-10 h-full flex flex-col justify-center p-6 text-white max-w-sm">
-        <h2 class="text-2xl font-bold mb-2">
-          Find the Best Dialysis Centers Near You
+        <h2 class="text-1xl font-bold mb-2">
+          {{blog.title}}
         </h2>
-
         <p class="mb-4 text-sm">
-          Fast, trusted and verified centers
+          Author: {{blog.user}}
         </p>
-
-        <button class="bg-orange-500 px-4 py-2 rounded hover:bg-orange-600">
-          Explore Now
+        <button class="bg-orange-500 px-0 py-1 rounded hover:bg-orange-600">
+          <a href="{% url 'blog_detail' pk=blog.pk %}"> Explore Now </a>
         </button>
       </div>
 
@@ -110,7 +99,7 @@
 
     <div class="overflow-hidden">
       <div id="categorySlider"
-           class="flex gap-4 px-8 transition-transform duration-300">
+           class="flex gap-4 px-8">
 
         {% for hospital in hospital %}
         <div class="cat-card bg-white rounded shadow p-2 min-w-[220px]">
@@ -126,13 +115,8 @@
           </a>
 
           <div class="mt-2 text-sm">
-            <p class="font-semibold truncate">
-              {{ hospital.name }}
-            </p>
-
-            <p class="text-gray-500 truncate">
-              {{ hospital.location }}
-            </p>
+            <p class="font-semibold truncate">{{ hospital.name }}</p>
+            <p class="text-gray-500 truncate">{{ hospital.location }}</p>
 
             {% if hospital.distance %}
             <p class="text-green-600 text-xs">
@@ -147,16 +131,12 @@
           </div>
 
         </div>
-        {% empty %}
-        <p>No centers found.</p>
         {% endfor %}
 
       </div>
     </div>
 
     <button id="next" class="nav-btn right-0">❯</button>
-
-    <div id="dots" class="flex justify-center mt-4 gap-2"></div>
 
   </div>
 
@@ -173,21 +153,18 @@
   padding: 10px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.2);
   cursor: pointer;
+  z-index: 10;
 }
 
-.cat-card:hover {
-  transform: translateY(-5px);
+.cat-card {
+  min-width: 220px;
   transition: 0.3s;
 }
-
-.dot {
-  width: 8px;
-  height: 8px;
-  background: #ccc;
-  border-radius: 50%;
+.cat-card:hover {
+  transform: translateY(-5px);
 }
-.dot.active {
-  background: orange;
+#categorySlider {
+  will-change: transform;
 }
 </style>
 
@@ -206,58 +183,68 @@ function getLocation() {
   }
 }
 
-// 🎞 SLIDER
+// 🔥 INFINITE SLIDER
 const slider = document.getElementById("categorySlider");
 const cards = document.querySelectorAll(".cat-card");
 const next = document.getElementById("next");
 const prev = document.getElementById("prev");
-const dotsContainer = document.getElementById("dots");
 
-let index = 0;
+let index = 1;
+let isMoving = false;
 
-if (cards.length > 0) {
+// CLONE
+const firstClone = cards[0].cloneNode(true);
+const lastClone = cards[cards.length - 1].cloneNode(true);
 
-  cards.forEach((_, i) => {
-    const dot = document.createElement("div");
-    dot.classList.add("dot");
-    if (i === 0) dot.classList.add("active");
+slider.appendChild(firstClone);
+slider.insertBefore(lastClone, slider.firstChild);
 
-    dot.onclick = () => moveTo(i);
-    dotsContainer.appendChild(dot);
-  });
+const allCards = document.querySelectorAll(".cat-card");
 
-  const dots = document.querySelectorAll(".dot");
+const cardWidth = allCards[0].offsetWidth + 16;
 
-  function updateSlider() {
-    const cardWidth = cards[0].offsetWidth + 16;
-    slider.style.transform = `translateX(-${index * cardWidth}px)`;
+// START POSITION
+slider.style.transform = `translateX(-${cardWidth * index}px)`;
 
-    dots.forEach(d => d.classList.remove("active"));
-    dots[index]?.classList.add("active");
-  }
+// MOVE
+function move(dir) {
+  if (isMoving) return;
+  isMoving = true;
 
-  function moveTo(i) {
-    index = i;
-    updateSlider();
-  }
+  index += dir;
 
-  next.onclick = () => {
-    index = (index + 1) % cards.length;
-    updateSlider();
-  };
-
-  prev.onclick = () => {
-    index = (index - 1 + cards.length) % cards.length;
-    updateSlider();
-  };
-
-  let auto = setInterval(() => next.click(), 3000);
-
-  slider.addEventListener("mouseenter", () => clearInterval(auto));
-  slider.addEventListener("mouseleave", () => {
-    auto = setInterval(() => next.click(), 3000);
-  });
+  slider.style.transition = "transform 0.4s ease";
+  slider.style.transform = `translateX(-${cardWidth * index}px)`;
 }
+
+next.onclick = () => move(1);
+prev.onclick = () => move(-1);
+
+// LOOP FIX
+slider.addEventListener("transitionend", () => {
+
+  if (allCards[index].isEqualNode(firstClone)) {
+    slider.style.transition = "none";
+    index = 1;
+    slider.style.transform = `translateX(-${cardWidth * index}px)`;
+  }
+
+  if (allCards[index].isEqualNode(lastClone)) {
+    slider.style.transition = "none";
+    index = allCards.length - 2;
+    slider.style.transform = `translateX(-${cardWidth * index}px)`;
+  }
+
+  isMoving = false;
+});
+
+// AUTO
+let auto = setInterval(() => move(1), 3000);
+
+slider.addEventListener("mouseenter", () => clearInterval(auto));
+slider.addEventListener("mouseleave", () => {
+  auto = setInterval(() => move(1), 3000);
+});
 </script>
 
 {% endblock %}

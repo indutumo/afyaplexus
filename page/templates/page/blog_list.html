@@ -1,0 +1,169 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="lg:px-10 py-6">
+  <div class="grid gap-6 bg-white p-4 rounded shadow">
+<div class="max-w-6xl mx-auto px-4 py-8">
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+
+    <!-- MAIN FEED -->
+    <div class="lg:col-span-2">
+
+      <!-- HEADER -->
+      <div class="mb-6">
+        <h1 class="text-3xl font-bold">Recommended</h1>
+      </div>
+
+      <!-- POSTS -->
+      <div class="space-y-10">
+
+        {% for post in posts %}
+        <div class="flex gap-6 group">
+
+          <!-- TEXT -->
+          <div class="flex-1">
+
+            <!-- AUTHOR -->
+            <div class="flex items-center gap-2 text-sm mb-2">
+              <div class="w-6 h-6 bg-gray-300 rounded-full"></div>
+              <span class="text-gray-700">{{ post.user }}</span>
+            </div>
+
+            <!-- TITLE -->
+            <a href="{% url 'blog_detail' pk=post.pk %}">
+              <h2 class="text-xl md:text-2xl font-bold leading-snug group-hover:text-blue-600">
+                {{ post.title }}
+              </h2>
+            </a>
+
+            <!-- EXCERPT -->
+            <p class="text-gray-600 mt-2 line-clamp-3">
+              {{ post.content|truncatewords:15 }}
+            </p>
+
+            <!-- META -->
+            <div class="flex items-center gap-2 text-sm text-gray-500 mt-3">
+              <span>{{ post.date|date:"M d" }}</span>
+              <span>·</span>
+              <span>{{ post.reading_time }} min read</span>
+              <span>·</span>
+              <span class="bg-gray-100 px-2 py-0.5 rounded text-xs">
+                Health
+              </span>
+            </div>
+
+          </div>
+
+          <!-- IMAGE -->
+          <a href="{% url 'blog_detail' pk=post.pk %}" class="w-42 h-28 flex-shrink-0">
+            {% if post.image %}
+              <img src="{{ post.image.url }}"
+                   class="w-full h-full object-cover rounded">
+            {% else %}
+              <img src="{% static 'placeholder.png' %}"
+                   class="w-full h-full object-cover rounded">
+            {% endif %}
+          </a>
+
+        </div>
+
+        <hr class="border-gray-200">
+
+        {% empty %}
+        <p class="text-gray-500">No articles available.</p>
+        {% endfor %}
+
+      </div>
+
+      <!-- PAGINATION -->
+      {% if posts.has_other_pages %}
+      <div class="mt-10 flex justify-center gap-2 text-sm">
+
+        {% if posts.has_previous %}
+        <a href="?page={{ posts.previous_page_number }}"
+           class="px-3 py-1 border rounded hover:bg-gray-100">
+          ← Prev
+        </a>
+        {% endif %}
+
+        {% for num in posts.paginator.page_range %}
+        <a href="?page={{ num }}"
+           class="px-3 py-1 rounded
+           {% if posts.number == num %}
+              bg-black text-white
+           {% else %}
+              border hover:bg-gray-100
+           {% endif %}">
+          {{ num }}
+        </a>
+        {% endfor %}
+
+        {% if posts.has_next %}
+        <a href="?page={{ posts.next_page_number }}"
+           class="px-3 py-1 border rounded hover:bg-gray-100">
+          Next →
+        </a>
+        {% endif %}
+
+      </div>
+      {% endif %}
+
+    </div>
+
+    <!-- RIGHT SIDEBAR -->
+    <aside class="hidden lg:block">
+
+      <div class="sticky top-24 space-y-8">
+
+        <!-- TOPICS -->
+        <div>
+          <h3 class="font-semibold mb-3">Recommended topics</h3>
+
+          <div class="flex flex-wrap gap-2 text-sm">
+            <span class="bg-gray-100 px-3 py-1 rounded-full">Dialysis</span>
+            <span class="bg-gray-100 px-3 py-1 rounded-full">Kidney Care</span>
+            <span class="bg-gray-100 px-3 py-1 rounded-full">Health</span>
+            <span class="bg-gray-100 px-3 py-1 rounded-full">Nutrition</span>
+          </div>
+        </div>
+
+        <!-- WHO TO FOLLOW -->
+        <div>
+          <h3 class="font-semibold mb-3">Who to follow</h3>
+
+          <div class="space-y-4 text-sm">
+
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-gray-300 rounded-full"></div>
+                <span>Dr. Maina</span>
+              </div>
+              <button class="border px-3 py-1 rounded-full text-xs">Follow</button>
+            </div>
+
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-gray-300 rounded-full"></div>
+                <span>Health Org</span>
+              </div>
+              <button class="border px-3 py-1 rounded-full text-xs">Follow</button>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </aside>
+
+  </div>
+
+</div>
+</div>
+</div>
+
+
+{% endblock %}
