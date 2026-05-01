@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- QUILL CSS -->
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
+<div class="w-[90%] lg:w-[80%] mx-auto py-10">
+
+  <!-- HEADER -->
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold">Write your article</h1>
+
+    <button onclick="submitForm()"
+            class="bg-green-600 text-white px-6 py-2 hover:bg-green-700">
+      Publish
+    </button>
+  </div>
+
+  <form method="POST" enctype="multipart/form-data" id="postForm">
+    {% csrf_token %}
+
+    <!-- TITLE -->
+    <input type="text" name="title"
+           placeholder="Title"
+           class="w-full text-3xl font-bold mb-6 border-none focus:outline-none">
+
+    <!-- TOOLBAR -->
+    <div id="toolbar" class="bg-white border rounded-t p-2">
+
+      <select class="ql-header">
+        <option selected></option>
+        <option value="1"></option>
+        <option value="2"></option>
+        <option value="3"></option>
+      </select>
+
+      <select class="ql-font"></select>
+
+      <button class="ql-bold"></button>
+      <button class="ql-italic"></button>
+      <button class="ql-underline"></button>
+
+      <button class="ql-list" value="ordered"></button>
+      <button class="ql-list" value="bullet"></button>
+
+      <button class="ql-align"></button>
+
+      <button class="ql-link"></button>
+      <button class="ql-image"></button>
+
+    </div>
+
+    <!-- EDITOR -->
+    <div id="editor"
+         class="bg-white min-h-[400px] p-6 border border-t-0 rounded-b">
+    </div>
+
+    <!-- HIDDEN CONTENT -->
+    <input type="hidden" name="content" id="contentInput">
+
+    <!-- IMAGE -->
+    <div class="mt-6">
+      <label class="block mb-2 font-medium">Featured Image</label>
+      <input type="file" name="image"
+             class="border p-2 rounded w-full">
+    </div>
+
+  </form>
+
+</div>
+
+<!-- QUILL JS -->
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
+<script>
+const quill = new Quill('#editor', {
+  theme: 'snow',
+  placeholder: 'Tell your story...',
+  modules: {
+    toolbar: '#toolbar'
+  }
+});
+
+// Submit form
+function submitForm() {
+  const content = document.querySelector('#contentInput');
+  content.value = quill.root.innerHTML;
+
+  document.getElementById('postForm').submit();
+}
+</script>
+
+{% endblock %}

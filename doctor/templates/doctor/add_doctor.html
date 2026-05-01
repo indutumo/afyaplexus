@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="max-w-4xl mx-auto py-10">
+
+  <a href="{% url 'doctor_list' %}"
+     class="text-sm text-gray-500 hover:text-orange-500 mb-4 inline-block">
+    ← Back to Doctors
+  </a>
+
+  <form method="POST" enctype="multipart/form-data"
+        class="bg-white p-8 rounded-2xl shadow space-y-6">
+
+    {% csrf_token %}
+
+    <div class="grid md:grid-cols-2 gap-6">
+
+      <!-- FLOATING INPUT -->
+      <div class="relative">
+        {{ form.name }}
+        <label class="label">Full Name</label>
+      </div>
+
+      <div class="relative">
+        {{ form.title }}
+        <label class="label">Title</label>
+      </div>
+
+      <div class="relative">
+        {{ form.mobile_number }}
+        <label class="label">Mobile Number</label>
+      </div>
+
+      <div class="relative">
+        {{ form.alternative_number }}
+        <label class="label">Alternative Number</label>
+      </div>
+
+      <div class="relative">
+        {{ form.email_address }}
+        <label class="label">Email</label>
+      </div>
+
+      <div class="relative">
+        {{ form.location }}
+        <label class="label">Location</label>
+      </div>
+
+      <div class="relative">
+        {{ form.hospital }}
+        <label class="label">Hospital</label>
+      </div>
+
+      <div class="relative">
+        {{ form.license_number }}
+        <label class="label">License Number</label>
+      </div>
+
+
+        <!-- FILE -->
+        <div class="relative">
+          <label class="block mb-2 text-sm">Upload License</label>
+          {{ form.license }}
+        </div>
+        <div class="relative">
+          <label class="block mb-2 text-sm">Profile Picture</label>
+          {{ form.profile_picture }}
+        </div>
+    </div>
+
+    <!-- BUTTON -->
+    <div class="flex justify-end">
+      <button class="bg-orange-500 text-white px-3 py-1 hover:bg-blue-600">
+        Save Doctor
+      </button>
+    </div>
+
+  </form>
+
+</div>
+
+<!-- STYLES -->
+<style>
+input, select {
+  width: 100%;
+  border: 1px solid #ddd;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.label {
+  position: absolute;
+  top: -8px;
+  left: 10px;
+  background: white;
+  padding: 0 5px;
+  font-size: 12px;
+  color: gray;
+}
+</style>
+
+{% endblock %}

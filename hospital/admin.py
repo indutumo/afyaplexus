@@ -45,3 +45,22 @@ class HospitalRatingAdmin(ImportExportModelAdmin):
     list_display = ['hospital','rating','comment']
     list_filter = ['hospital']
     search_fields = ['hospital']
+
+@admin.register(Appointment)
+class AppointmentAdmin(ImportExportModelAdmin):
+    list_display = ['hospital','name','appointment_date','mobile_number']
+    list_filter = ['hospital']
+    search_fields = ['hospital']
+
+@admin.register(OperationDay)
+class OperationDayAdmin(ImportExportModelAdmin):
+    list_display = ['hospital','day','time_from','time_to']
+    list_filter = ['hospital']
+    search_fields = ['hospital']
+
+
+@admin.register(PublicHoliday)
+class PublicHolidayAdmin(ImportExportModelAdmin):
+    list_display = ['name','date','status']
+    list_filter = ['name']
+    search_fields = ['name']

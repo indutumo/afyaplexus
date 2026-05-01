@@ -1,7 +1,7 @@
 from django import forms
-from .models import Post
+from .models import Page
 
-class PostForm(forms.ModelForm):
+class PageForm(forms.ModelForm):
     class Meta:
-        model = Post
+        model = Page
         fields = ['title', 'content', 'image']

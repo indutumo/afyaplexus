@@ -29,6 +29,9 @@ class Doctor(models.Model):
 	user = models.ForeignKey(User, related_name='doctor', on_delete=models.SET_NULL,null=True,blank=True)
 	account = models.ForeignKey(User, related_name='doctor_account', on_delete=models.SET_NULL,null=True,blank=True)
 	status = models.CharField(max_length=20,default='active')
+	title = models.CharField(max_length=250,default='DR.')
+	hospital = models.CharField(max_length=250,null=True,blank=True)
+	profile_picture = models.FileField(upload_to="profile/%Y/%m/%d",null=True,blank=True)
 
 	def __str__(self):
 		return self.name

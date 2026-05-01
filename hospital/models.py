@@ -130,3 +130,42 @@ class HospitalRating(models.Model):
 
 	def __str__(self):
 		return self.name
+
+
+class Appointment(models.Model):
+	id = models.UUIDField(primary_key=True, default=uuid.uuid1, editable=False)
+	hospital = models.ForeignKey(Hospital, related_name='appointment',on_delete=models.SET_NULL,null=True,blank=True)
+	date = models.DateField(default=timezone.now)
+	status = models.CharField(max_length=20,default='active')
+	name = models.CharField(max_length=250)
+	mobile_number = models.CharField(max_length=20)
+	appointment_date = models.DateField(default=timezone.now)
+	time = models.CharField(max_length=50)
+	comment = models.TextField(null=True,blank=True)
+
+	def __str__(self):
+		return self.name
+
+class OperationDay(models.Model):
+	id = models.UUIDField(primary_key=True, default=uuid.uuid1, editable=False)
+	hospital = models.ForeignKey(Hospital, related_name='operationday',on_delete=models.SET_NULL,null=True,blank=True)
+	date = models.DateField(default=timezone.now)
+	status = models.CharField(max_length=20,default='active')
+	day = models.CharField(max_length=100)
+	time_from = models.CharField(max_length=20)
+	time_to = models.CharField(max_length=20)
+	comment = models.TextField(null=True,blank=True)
+
+	def __str__(self):
+		return self.name
+
+
+class PublicHoliday(models.Model):
+	id = models.UUIDField(primary_key=True, default=uuid.uuid1, editable=False)
+	date = models.DateField(default=timezone.now)
+	status = models.CharField(max_length=20,default='active')
+	name = models.CharField(max_length=100)
+	comment = models.TextField(null=True,blank=True)
+
+	def __str__(self):
+		return self.name

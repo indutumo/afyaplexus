@@ -17,66 +17,127 @@
   <link rel="stylesheet" href="{% static 'styles.css' %}">
 </head>
 
-<body class="bg-gray-100">
+<body class="bg-gray-100 flex flex-col min-h-screen">
 
-<!-- 🔥 FIXED NAVBAR -->
-<header class="fixed top-0 left-0 w-full bg-white shadow z-50">
+<!-- 🔥 NAVBAR -->
+<header class="fixed top-0 left-0 w-full bg-white/90 backdrop-blur border-b z-50">
 
-  <div class="flex items-center justify-between p-4 lg:px-10">
+  <div class="flex items-center justify-between px-4 lg:px-10 py-3">
 
     <!-- LEFT -->
     <div class="flex items-center gap-3">
       <button id="menuBtn" class="lg:hidden text-2xl">☰</button>
 
-      <h1 class="font-bold text-xl">
-        <a href="{% url 'home_page' %}">Afya Plexus</a>
-      </h1>
-    </div>
-
-    <!-- SEARCH SPACE (optional for future use) -->
-    <div class="hidden md:flex flex-1 mx-6"></div>
-
-    <!-- RIGHT -->
-    <div class="flex gap-4 text-sm items-center">
-      <span class="cursor-pointer hover:text-orange-500">Login</span>
-
-      <a href="{% url 'add_centre' %}" class="hover:text-orange-500">
-        Register Centre
+      <!-- LOGO -->
+      <a href="{% url 'home_page' %}" class="flex items-center gap-2">
+        <img src="{% static 'afyaplexus.png' %}" class="h-8 w-8 object-contain">
+        <span class="font-bold text-lg tracking-wide">
+          <span class="text-red-500">Afya</span>
+          <span class="text-green-500">Plexus</span>
+        </span>
       </a>
-
-      <span class="cursor-pointer hover:text-orange-500"><a href="{% url 'blog_list' %}"> Blog</a></span>
     </div>
+
+    <!-- CENTER NAV -->
+    <nav class="hidden lg:flex items-center gap-6 text-sm font-medium">
+      <a href="{% url 'home_page' %}" class="hover:text-orange-500">Home</a>
+      <a href="{% url 'about_us' %}" class="hover:text-orange-500">About</a>
+      <a href="{% url 'blog_list' %}" class="hover:text-orange-500">Blog</a>
+      <a href="#" class="hover:text-orange-500">Donate</a>
+      <a href="#" class="hidden lg:block hover:text-orange-500">Login</a>
+      <a href="{% url 'add_centre' %}"
+         class="bg-orange-500 text-white px-4 py-2 text-sm hover:bg-orange-600">
+        Add Centre
+      </a>
+    </nav>
 
   </div>
 
 </header>
 
-<!-- 🔥 ADD TOP SPACING (IMPORTANT) -->
-<div class="pt-20 lg:pt-10">
+<!-- 🔥 MAIN CONTENT -->
+<main class="flex-grow pt-20 lg:pt-16">
 
   <div class="lg:px-10 lg:py-4">
     {% block content %}{% endblock %}
   </div>
 
-</div>
+</main>
 
-<script src="{% static 'script.js' %}"></script>
+<!-- 🔥 MODERN FOOTER -->
+<footer class="bg-gray-900 text-gray-300 mt-10">
+
+  <div class="max-w-7xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-4 gap-8">
+
+    <!-- LOGO / ABOUT -->
+    <div>
+      <div class="flex items-center gap-2 mb-3">
+        <img src="{% static 'afyaplexus.png' %}" class="h-8 w-8">
+        <h2 class="text-white font-bold text-lg">Afya Plexus</h2>
+      </div>
+      <p class="text-sm text-gray-400">
+        Connecting patients with trusted dialysis centers across Kenya.
+      </p>
+    </div>
+
+    <!-- QUICK LINKS -->
+    <div>
+      <h3 class="text-white font-semibold mb-3">Quick Links</h3>
+      <ul class="space-y-2 text-sm">
+        <li><a href="{% url 'about_us' %}" class="hover:text-blue-500">About Us</a></li>
+        <li><a href="{% url 'blog_list' %}" class="hover:text-blue-500">Blog</a></li>
+      </ul>
+    </div>
+
+    <!-- LEGAL -->
+    <div>
+      <h3 class="text-white font-semibold mb-3">Legal</h3>
+      <ul class="space-y-2 text-sm">
+        <li>
+          <a href="{% url 'terms' %}" class="hover:text-blue-500">
+            Terms & Conditions
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'privacy' %}" class="hover:text-blue-500">
+            Privacy Policy
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- CONTACT -->
+    <div>
+      <h3 class="text-white font-semibold mb-3">Contact</h3>
+      <p class="text-sm">📞 0711 011 011</p>
+      <p class="text-sm">📧 info@afyaplexus.com</p>
+      <p class="text-sm">📍 Nairobi, Kenya</p>
+    </div>
+
+  </div>
+
+  <!-- BOTTOM BAR -->
+  <div class="border-t border-gray-700 text-center text-sm py-4">
+    © <span id="year"></span> Afya Plexus. All rights reserved.
+  </div>
+
+</footer>
+
+<!-- JS -->
 <script>
+  // dynamic year
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  // navbar shrink on scroll
   window.addEventListener("scroll", function () {
     const header = document.querySelector("header");
-
     if (window.scrollY > 50) {
-      header.classList.add("py-2");
-      header.classList.remove("py-4");
+      header.classList.add("shadow-md");
     } else {
-      header.classList.add("py-2");
-      header.classList.remove("py-2");
+      header.classList.remove("shadow-md");
     }
   });
-
-  tailwind.config = {
-    plugins: [tailwind.typography],
-  }
 </script>
+
 </body>
 </html>

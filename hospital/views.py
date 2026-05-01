@@ -8,24 +8,48 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from math import radians, cos, sin, asin, sqrt
+from django.core.paginator import Paginator
+from django.db.models import Count
 
 def is_valid_queryparam(param):
     return param != '' and param is not None
 
 
 def home_page(request):
-    counties = County.objects.order_by('index')[:10]
+    counties_qs = County.objects.order_by('index')
+
+    county_counts = (Hospital.objects.values('county').annotate(total=Count('id')))
+
+    # convert to dict for quick lookup
+    county_count_map = {
+        item['county']: item['total']
+        for item in county_counts
+        if item['county']
+    }
+
+    # attach count to each county object
+    for county in counties_qs:
+        county.hospital_count = county_count_map.get(county.name, 0)
+
+    # 📄 PAGINATION
+    paginator = Paginator(counties_qs, 8)
+    page_number = request.GET.get('page')
+    counties = paginator.get_page(page_number)
+
+    # 🏥 other context
     hospital = Hospital.objects.all()
     blog = Page.objects.filter(featured=True).last()
 
     context = {
-		'counties':counties,
-		'hospital':hospital,
-        'blog':blog,
-	}
+        'counties': counties,
+        'hospital': hospital,
+        'blog': blog,
+    }
+
     return render(request, 'hospital/home_page.html', context)
 
-
+def about_us(request):
+    return render(request, 'hospital/about_us.html')
 
 def distance(lat1, lon1, lat2, lon2):
     # Haversine formula
@@ -60,7 +84,7 @@ def hospital_search(request):
         for h in hospitals:
             if h.latitude and h.longitude:
                 dist = distance(user_lat, user_lng, h.latitude, h.longitude)
-                if dist <= 20:  # 20km radius
+                if dist <= 30:  # 20km radius
                     h.distance = round(dist, 2)
                     nearby.append(h)
 

@@ -11,6 +11,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('hospital.urls')),
     path('page/',include('page.urls')),
+    path('doctor/',include('doctor.urls')),
     ]
 
 # Error handlers (no import needed)

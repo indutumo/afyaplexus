@@ -3,6 +3,8 @@ from django.http import JsonResponse
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from .models import Page, Clap
+from django.shortcuts import redirect
+from .forms import PageForm
 
 
 def blog_list(request):
@@ -14,6 +16,19 @@ def blog_list(request):
 
     return render(request, 'page/blog_list.html', {'posts': posts})
 
+
+@login_required
+def create_post(request):
+    form = PageForm(request.POST or None, request.FILES or None)
+
+    if form.is_valid():
+        post = form.save(commit=False)
+        post.user = request.user
+        post.page_type = "Blog"
+        post.save()
+        return redirect('blog_detail', pk=post.pk)
+
+    return render(request, 'page/create.html', {'form': form})
 
 def blog_detail(request, pk):
     page = get_object_or_404(Page, pk=pk)

@@ -9,6 +9,12 @@ class PageAdmin(ImportExportModelAdmin):
     list_filter = ['page_type']
     search_fields = ['page_type']
 
+@admin.register(Clap)
+class PageAdmin(ImportExportModelAdmin):
+    list_display = ['page','count']
+    list_filter = ['page']
+    search_fields = ['page']
+
 @admin.register(PageComment)
 class PageCommentAdmin(ImportExportModelAdmin):
     list_display = ['page','comment']

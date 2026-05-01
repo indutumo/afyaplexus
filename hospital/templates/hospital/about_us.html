@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+<div class="lg:px-10 py-6">
+  <div class="bg-white p-4 rounded shadow">
+        <h2>About Us</h2>
+        <p>
+            Afya Plexus Wellness & Foundation was founded to address the often-overlooked challenges faced by dialysis and Chronic Kidney Disease (CKD) patients in Kenya. While dialysis infrastructure has expanded, many patients struggle with treatment adherence due to unmet emotional, physical, and logistical needs. We recognized that offering dialysis services alone is not enough patients need comprehensive support to ensure better health outcomes.
+        </p>
+
+        <p>
+            Our organization was born out of a deep commitment to holistic patient care. We believe that health should not be limited to the availability of machines or medical procedures; it should encompass emotional well-being, nutrition, financial accessibility, and daily living support. Afya Plexus is dedicated to transforming the dialysis journey from one of isolation and hardship to a path of empowerment and healing.
+        </p>
+
+        <h3>Our Vision</h3>
+        <ol>
+            <li>A Kenya where every CKD and dialysis patient receives the support they need to adhere to treatment, resulting in improved health outcomes and enhanced overall well-being.</li>
+            <li>Creating a Kenya where every CKD and dialysis patient receives the support needed for better health outcomes and overall well-being.</li>
+        </ol>
+
+        <h3>Our Mission</h3>
+        <ol>
+            <li>To enhance the quality of life for dialysis patients in Kenya by providing comprehensive support services that address their physical, emotional, and logistical needs, including education, counseling, and transportation assistance.</li>
+            <li>To enhance the quality of life for Chronic Kidney Disease patients in Kenya by providing comprehensive support services that address their physical, emotional, and logistical needs, including education, counseling, and transportation assistance.</li>
+        </ol>
+
+    </div>
+</div>
+
+    <style>
+        h2 {
+            font-size: 2em;
+            color: #17d211;
+            font-weight: bold;
+            margin: 1%;
+        }
+        h3 {
+            color: red;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        ol {
+            margin-left: 20px;
+        }
+        p {
+            margin: 10px;
+        }
+        ol {
+            list-style-type: decimal !important;
+            list-style-position: inside; /* This ensures numbers stay within the container */
+        }
+    </style>
+{% endblock %}
