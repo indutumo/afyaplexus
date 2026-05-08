@@ -8,24 +8,23 @@
   <title>Afya Plexus</title>
 
   <link rel="apple-touch-icon" href="{% static 'afyaplexus.png' %}">
-  <link rel="shortcut icon" type="image/x-icon" href="{% static 'afyaplexus.png' %}">
+  <link rel="shortcut icon" href="{% static 'afyaplexus.png' %}">
 
   <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="{% static 'styles.css' %}">
 </head>
 
 <body class="bg-gray-100 flex flex-col min-h-screen">
 
 <!-- 🔥 NAVBAR -->
-<header class="fixed top-0 left-0 w-full bg-white/90 backdrop-blur border-b z-50">
+<header class="fixed top-0 left-0 w-full bg-white/80 backdrop-blur border-b z-50">
 
   <div class="flex items-center justify-between px-4 lg:px-10 py-3">
 
     <!-- LEFT -->
     <div class="flex items-center gap-3">
+
       <button id="menuBtn" class="lg:hidden text-2xl">☰</button>
 
       <!-- LOGO -->
@@ -36,6 +35,7 @@
           <span class="text-green-500">Plexus</span>
         </span>
       </a>
+
     </div>
 
     <!-- CENTER NAV -->
@@ -43,100 +43,312 @@
       <a href="{% url 'home_page' %}" class="hover:text-orange-500">Home</a>
       <a href="{% url 'about_us' %}" class="hover:text-orange-500">About</a>
       <a href="{% url 'blog_list' %}" class="hover:text-orange-500">Blog</a>
-      <a href="#" class="hover:text-orange-500">Donate</a>
-      <a href="#" class="hidden lg:block hover:text-orange-500">Login</a>
-      <a href="{% url 'add_centre' %}"
-         class="bg-orange-500 text-white px-4 py-2 text-sm hover:bg-orange-600">
-        Add Centre
-      </a>
+      <a href="{% url 'donate' %}" class="hover:text-orange-500">Donate</a>
     </nav>
+
+    <!-- RIGHT -->
+    <div class="flex items-center gap-4">
+
+      {% if user.is_authenticated %}
+
+      <!-- 🔔 NOTIFICATIONS -->
+      <div class="relative">
+        <button class="relative p-2 rounded-full hover:bg-gray-100">
+
+          <!-- Bell Icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600"
+               fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14V11a6 6 0 10-12 0v3c0 .386-.146.735-.405 1.001L4 17h5m6 0a3 3 0 11-6 0h6z"/>
+          </svg>
+
+          <!-- Badge -->
+          <span class="absolute top-1 right-1 bg-red-500 text-white text-xs px-1 rounded-full">
+            3
+          </span>
+
+        </button>
+      </div>
+
+      <!-- 👤 USER DROPDOWN -->
+      <div class="relative">
+
+        <!-- BUTTON -->
+        <button id="avatarBtn"
+                class="flex items-center gap-2 focus:outline-none">
+
+          <!-- PROFILE IMAGE / INITIAL -->
+          {% if user.profile.image %}
+            <img src="{{ user.profile.image.url }}"
+                 class="w-9 h-9 rounded-full object-cover">
+          {% else %}
+            <div class="w-9 h-9 rounded-full bg-orange-500 text-white flex items-center justify-center font-semibold">
+              {{ user.username|slice:":1"|upper }}
+            </div>
+          {% endif %}
+
+          <span class="hidden md:block text-sm font-medium">
+            {{ user.username }}
+          </span>
+
+          <svg class="w-4 h-4 text-gray-500 transition-transform"
+               id="arrowIcon"
+               fill="none" stroke="currentColor"
+               stroke-width="2" viewBox="0 0 24 24">
+            <path d="M6 9l6 6 6-6"></path>
+          </svg>
+
+        </button>
+
+        <!-- DROPDOWN -->
+        <div id="dropdown"
+             class="hidden absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-xl border overflow-hidden transform opacity-0 scale-95 transition-all duration-200">
+
+          <!-- USER INFO -->
+          <div class="px-4 py-3 border-b">
+            <p class="font-semibold">{{ user.username }}</p>
+            <p class="text-xs text-gray-500">{{ user.email }}</p>
+          </div>
+
+          <!-- MENU -->
+          <div class="py-2 text-sm">
+
+            <a href="#"
+               class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100">
+              👤 Profile
+            </a>
+
+            <a href="{% url 'appointment_list' %}"
+               class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100">
+              ⚙️ Dashboard
+            </a>
+
+            <a href="{% url 'add_centre' %}"
+               class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100">
+              ➕ Add Centre
+            </a>
+
+          </div>
+
+          <!-- LOGOUT -->
+          <div class="border-t">
+            <a href="{% url 'logout' %}"
+               class="block px-4 py-2 text-red-500 hover:bg-red-50">
+              🚪 Logout
+            </a>
+          </div>
+
+        </div>
+
+      </div>
+
+      {% else %}
+
+      <!-- LOGIN -->
+      <button onclick="openLoginModal()"
+              class="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600">
+        Login
+      </button>
+
+      {% endif %}
+
+    </div>
 
   </div>
 
 </header>
 
-<!-- 🔥 MAIN CONTENT -->
-<main class="flex-grow pt-20 lg:pt-16">
-
+<!-- 🔥 MAIN -->
+<main class="flex-grow pt-20">
   <div class="lg:px-10 lg:py-4">
     {% block content %}{% endblock %}
   </div>
-
 </main>
 
-<!-- 🔥 MODERN FOOTER -->
+<!-- 🔥 LOGIN MODAL -->
+<div id="loginModal"
+     class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
+
+  <div class="bg-white rounded-xl shadow-lg w-full max-w-md p-6 relative animate-fadeIn">
+
+    <!-- CLOSE -->
+    <button onclick="closeLoginModal()"
+            class="absolute top-3 right-3 text-gray-400 hover:text-black">
+      ✕
+    </button>
+
+    <h2 class="text-xl font-bold mb-4 text-center">Welcome Back</h2>
+
+    <!-- FORM -->
+    <form id="loginForm" class="space-y-4">
+
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{{ request.path }}">
+
+      <input type="text" name="username"
+             placeholder="Username"
+             class="w-full border p-3 rounded focus:ring-2 focus:ring-orange-400">
+
+      <input type="password" name="password"
+             placeholder="Password"
+             class="w-full border p-3 rounded focus:ring-2 focus:ring-orange-400">
+
+      <!-- ERROR -->
+      <p id="loginError" class="text-red-500 text-sm hidden"></p>
+
+      <!-- BUTTON -->
+      <button id="loginBtn"
+              class="w-full bg-orange-500 text-white py-3 rounded hover:bg-orange-600 flex justify-center items-center gap-2">
+
+        <span id="btnText">Login</span>
+        <span id="btnLoader" class="hidden animate-spin">⏳</span>
+
+      </button>
+
+    </form>
+
+  </div>
+</div>
+
+<!-- 🔥 FOOTER -->
 <footer class="bg-gray-900 text-gray-300 mt-10">
 
   <div class="max-w-7xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-4 gap-8">
 
-    <!-- LOGO / ABOUT -->
     <div>
       <div class="flex items-center gap-2 mb-3">
         <img src="{% static 'afyaplexus.png' %}" class="h-8 w-8">
         <h2 class="text-white font-bold text-lg">Afya Plexus</h2>
       </div>
       <p class="text-sm text-gray-400">
-        Connecting patients with trusted dialysis centers across Kenya.
+        Connecting patients with dialysis centers across Kenya.
       </p>
     </div>
 
-    <!-- QUICK LINKS -->
     <div>
       <h3 class="text-white font-semibold mb-3">Quick Links</h3>
       <ul class="space-y-2 text-sm">
-        <li><a href="{% url 'about_us' %}" class="hover:text-blue-500">About Us</a></li>
-        <li><a href="{% url 'blog_list' %}" class="hover:text-blue-500">Blog</a></li>
+        <li><a href="{% url 'about_us' %}" class="hover:text-blue-400">About</a></li>
+        <li><a href="{% url 'blog_list' %}" class="hover:text-blue-400">Blog</a></li>
       </ul>
     </div>
 
-    <!-- LEGAL -->
     <div>
       <h3 class="text-white font-semibold mb-3">Legal</h3>
       <ul class="space-y-2 text-sm">
-        <li>
-          <a href="{% url 'terms' %}" class="hover:text-blue-500">
-            Terms & Conditions
-          </a>
-        </li>
-        <li>
-          <a href="{% url 'privacy' %}" class="hover:text-blue-500">
-            Privacy Policy
-          </a>
-        </li>
+        <li><a href="{% url 'terms' %}" class="hover:text-blue-400">Terms & Conditions</a></li>
+        <li><a href="{% url 'privacy' %}" class="hover:text-blue-400">Privacy Policy</a></li>
       </ul>
     </div>
 
-    <!-- CONTACT -->
     <div>
       <h3 class="text-white font-semibold mb-3">Contact</h3>
-      <p class="text-sm">📞 0711 011 011</p>
-      <p class="text-sm">📧 info@afyaplexus.com</p>
-      <p class="text-sm">📍 Nairobi, Kenya</p>
+      <p>📞 0711 011 011</p>
+      <p>📧 info@afyaplexus.com</p>
+      <p>📍 Nairobi, Kenya</p>
     </div>
 
   </div>
 
-  <!-- BOTTOM BAR -->
   <div class="border-t border-gray-700 text-center text-sm py-4">
-    © <span id="year"></span> Afya Plexus. All rights reserved.
+    © <span id="year"></span> Afya Plexus
   </div>
 
 </footer>
 
-<!-- JS -->
+<!-- 🔥 JS -->
 <script>
-  // dynamic year
-  document.getElementById("year").textContent = new Date().getFullYear();
 
-  // navbar shrink on scroll
-  window.addEventListener("scroll", function () {
-    const header = document.querySelector("header");
-    if (window.scrollY > 50) {
-      header.classList.add("shadow-md");
-    } else {
-      header.classList.remove("shadow-md");
-    }
+// year
+document.getElementById("year").textContent = new Date().getFullYear();
+
+/* MODAL */
+function openLoginModal(){
+  document.getElementById("loginModal").classList.remove("hidden");
+  document.getElementById("loginModal").classList.add("flex");
+}
+
+function closeLoginModal(){
+  document.getElementById("loginModal").classList.add("hidden");
+}
+
+/* CLOSE OUTSIDE */
+document.getElementById("loginModal").addEventListener("click", function(e){
+  if(e.target === this) closeLoginModal();
+});
+
+/* AJAX LOGIN */
+const form = document.getElementById("loginForm");
+const errorBox = document.getElementById("loginError");
+const btn = document.getElementById("loginBtn");
+const btnText = document.getElementById("btnText");
+const loader = document.getElementById("btnLoader");
+
+form.addEventListener("submit", async function(e){
+  e.preventDefault();
+
+  errorBox.classList.add("hidden");
+
+  btn.disabled = true;
+  btnText.innerText = "Logging in...";
+  loader.classList.remove("hidden");
+
+  const formData = new FormData(form);
+
+  const res = await fetch("{% url 'login' %}", {
+    method: "POST",
+    headers: {
+      "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value
+    },
+    body: formData
   });
+
+  const data = await res.json();
+
+  if(data.success){
+    btnText.innerText = "Success ✓";
+
+    setTimeout(()=>{
+      window.location.href = data.redirect;
+    }, 800);
+
+  } else {
+    errorBox.innerText = data.error;
+    errorBox.classList.remove("hidden");
+
+    btn.disabled = false;
+    btnText.innerText = "Login";
+    loader.classList.add("hidden");
+  }
+});
+
+// DROPDOWN TOGGLE
+const avatarBtn = document.getElementById("avatarBtn");
+const dropdown = document.getElementById("dropdown");
+const arrow = document.getElementById("arrowIcon");
+
+if (avatarBtn) {
+  avatarBtn.addEventListener("click", () => {
+    dropdown.classList.toggle("hidden");
+
+    setTimeout(() => {
+      dropdown.classList.toggle("opacity-0");
+      dropdown.classList.toggle("scale-95");
+    }, 10);
+
+    arrow.classList.toggle("rotate-180");
+  });
+}
+
+// CLOSE ON OUTSIDE CLICK
+document.addEventListener("click", function (e) {
+  if (!e.target.closest("#avatarBtn") && !e.target.closest("#dropdown")) {
+    dropdown?.classList.add("hidden");
+    dropdown?.classList.add("opacity-0");
+    dropdown?.classList.add("scale-95");
+    arrow?.classList.remove("rotate-180");
+  }
+});
 </script>
 
 </body>

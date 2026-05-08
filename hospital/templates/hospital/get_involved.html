@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="max-w-6xl mx-auto py-10 px-4">
+
+  <!-- 🔥 HERO -->
+  <div class="relative rounded-2xl overflow-hidden mb-10">
+
+    <div class="absolute inset-0 bg-cover bg-center"
+         style="background-image: url('{% static "cover.jpeg" %}');">
+    </div>
+
+    <div class="absolute inset-0 bg-black/60"></div>
+
+    <div class="relative z-10 text-center text-white py-10 px-6">
+      <h1 class="text-4xl font-bold mb-4">Get Involved</h1>
+      <p class="max-w-2xl mx-auto text-lg">
+        Join Afya Plexus in improving access to dialysis and healthcare services across Kenya.
+        Together, we can save lives.
+      </p>
+    </div>
+
+  </div>
+
+  <!-- 🌍 INTRO -->
+  <div class="text-center mb-12">
+    <h2 class="text-2xl font-bold mb-3">Be Part of the Change</h2>
+    <p class="text-gray-600 max-w-3xl mx-auto">
+      Whether you are a healthcare provider, volunteer, donor, or partner,
+      there are many ways to support Afya Plexus and help patients access life-saving dialysis services.
+    </p>
+  </div>
+
+  <!-- 💡 OPTIONS GRID -->
+  <div class="grid md:grid-cols-3 gap-6">
+
+    <!-- 🏥 REGISTER CENTER -->
+    <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+      <div class="text-3xl mb-3">🏥</div>
+      <h3 class="font-bold text-lg mb-2">Register Your Center</h3>
+      <p class="text-gray-600 text-sm mb-4">
+        List your hospital or dialysis center and reach patients in need across Kenya.
+      </p>
+      <a href="{% url 'add_centre' %}"
+         class="text-orange-500 font-medium hover:underline">
+        Register Now →
+      </a>
+    </div>
+
+    <!-- 🤝 PARTNER -->
+    <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+      <div class="text-3xl mb-3">🤝</div>
+      <h3 class="font-bold text-lg mb-2">Partner With Us</h3>
+      <p class="text-gray-600 text-sm mb-4">
+        Collaborate with us as an organization, NGO, or institution to expand healthcare access.
+      </p>
+      <a href="#"
+         class="text-orange-500 font-medium hover:underline">
+        Become a Partner →
+      </a>
+    </div>
+
+    <!-- 💰 DONATE -->
+    <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+      <div class="text-3xl mb-3">💰</div>
+      <h3 class="font-bold text-lg mb-2">Donate</h3>
+      <p class="text-gray-600 text-sm mb-4">
+        Support dialysis patients and healthcare programs through your contributions.
+      </p>
+      <a href="#"
+         class="text-orange-500 font-medium hover:underline">
+        Donate Now →
+      </a>
+    </div>
+
+    <!-- 🙋 VOLUNTEER -->
+    <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+      <div class="text-3xl mb-3">🙋</div>
+      <h3 class="font-bold text-lg mb-2">Volunteer</h3>
+      <p class="text-gray-600 text-sm mb-4">
+        Offer your time and skills to support awareness and patient outreach programs.
+      </p>
+      <a href="#"
+         class="text-orange-500 font-medium hover:underline">
+        Join as Volunteer →
+      </a>
+    </div>
+
+    <!-- 🩺 DOCTORS -->
+    <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+      <div class="text-3xl mb-3">🩺</div>
+      <h3 class="font-bold text-lg mb-2">Join as Doctor</h3>
+      <p class="text-gray-600 text-sm mb-4">
+        Create your professional profile and connect with patients who need your expertise.
+      </p>
+      <a href="{% url 'add_doctor' %}"
+         class="text-orange-500 font-medium hover:underline">
+        Add Profile →
+      </a>
+    </div>
+
+    <!-- 📢 AWARENESS -->
+    <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+      <div class="text-3xl mb-3">📢</div>
+      <h3 class="font-bold text-lg mb-2">Spread Awareness</h3>
+      <p class="text-gray-600 text-sm mb-4">
+        Share our platform with others and help more patients find life-saving care.
+      </p>
+      <a href="#"
+         class="text-orange-500 font-medium hover:underline">
+        Share Now →
+      </a>
+    </div>
+
+  </div>
+
+  <!-- ❤️ CTA SECTION -->
+  <div class="mt-16 bg-orange-500 text-white rounded-2xl p-10 text-center">
+
+    <h2 class="text-2xl font-bold mb-3">
+      Together We Can Save Lives
+    </h2>
+
+    <p class="mb-6 max-w-xl mx-auto">
+      Every contribution matters. Join Afya Plexus today and help transform access to dialysis care across Kenya.
+    </p>
+
+    <div class="flex justify-center gap-4 flex-wrap">
+      <a href="{% url 'add_centre' %}"
+         class="bg-white text-orange-500 px-6 py-2 rounded font-semibold">
+        Register Center
+      </a>
+
+      <a href="#"
+         class="border border-white px-6 py-2 rounded font-semibold">
+        Donate
+      </a>
+    </div>
+
+  </div>
+
+</div>
+
+{% endblock %}

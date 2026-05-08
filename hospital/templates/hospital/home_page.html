@@ -18,18 +18,41 @@
 
     <div class="flex gap-2 w-full lg:w-auto">
       <button type="submit"
+              id="searchBtn"
               class="bg-orange-500 text-white px-5 py-2 rounded whitespace-nowrap hover:bg-orange-600">
-        Search
+        <span id="searchText">Search</span>
       </button>
 
       <button type="button"
+              id="locationBtn"
               onclick="getLocation()"
               class="bg-blue-500 text-white px-5 py-2 rounded whitespace-nowrap hover:bg-blue-600">
-        📍 Near Me
+        <span id="locationText">📍 Near Me</span>
       </button>
     </div>
 
   </form>
+
+<!-- 🌫 PAGE LOADER -->
+<div id="pageLoader"
+     class="fixed inset-0 bg-black/40 hidden items-center justify-center z-50">
+
+  <div class="bg-white p-5 rounded shadow text-center">
+    <svg class="animate-spin h-6 w-6 mx-auto text-orange-500 mb-2"
+         xmlns="http://www.w3.org/2000/svg"
+         fill="none"
+         viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="10"
+              stroke="currentColor"
+              stroke-width="4"
+              class="opacity-25"></circle>
+      <path fill="currentColor"
+            class="opacity-75"
+            d="M4 12a8 8 0 018-8v8z"></path>
+    </svg>
+    <p class="text-sm">Loading...</p>
+  </div>
+</div>
 
   <!-- GRID -->
   <div class="grid lg:grid-cols-4 gap-4">
@@ -97,7 +120,7 @@
           Author: {{blog.user}}
         </p>
         <button class="bg-red-500 px-0 py-1 rounded hover:bg-blue-600">
-          <a href="{% url 'blog_detail' pk=blog.pk %}"> Explore Now </a>
+          <a href="{% url 'blog_detail' pk=blog.pk %}"> Learn more about CKD & Dialysis Here </a>
         </button>
       </div>
 
@@ -156,7 +179,7 @@
               <img src="{{ hospital.image.url }}"
                    class="w-full h-40 object-cover rounded">
             {% else %}
-              <img src="{% static 'placeholder.png' %}"
+              <img href="{% static 'hospital.jpg' %}"
                    class="w-full h-40 object-cover rounded">
             {% endif %}
           </a>
@@ -173,7 +196,7 @@
 
             <a href="{{ hospital.google_pin }}"
                class="text-orange-500 text-xs hover:underline">
-               View Map
+               View Location
             </a>
           </div>
 
@@ -217,18 +240,48 @@
 
 <!-- JS -->
 <script>
+
+// 🔄 SHOW LOADER
+function showLoader() {
+  const loader = document.getElementById("pageLoader");
+  loader.classList.remove("hidden");
+  loader.classList.add("flex");
+}
+
+// 🔍 FORM SUBMIT LOADING
+document.querySelector("form").addEventListener("submit", function () {
+
+  document.getElementById("searchText").textContent = "Searching...";
+  document.getElementById("searchBtn").disabled = true;
+
+  showLoader();
+});
+
 // 📍 GEOLOCATION
 function getLocation() {
+
+  document.getElementById("locationText").textContent = "Locating...";
+  document.getElementById("locationBtn").disabled = true;
+
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition((pos) => {
+
       document.getElementById("lat").value = pos.coords.latitude;
       document.getElementById("lng").value = pos.coords.longitude;
+
+      showLoader();
       document.querySelector("form").submit();
+
     }, () => {
       alert("Location access denied");
+
+      // reset button
+      document.getElementById("locationText").textContent = "📍 Near Me";
+      document.getElementById("locationBtn").disabled = false;
     });
   }
 }
+
 
 // 🔥 INFINITE SLIDER
 const slider = document.getElementById("categorySlider");

@@ -12,6 +12,7 @@ urlpatterns = [
     path('',include('hospital.urls')),
     path('page/',include('page.urls')),
     path('doctor/',include('doctor.urls')),
+    path('userprofile/',include('userprofile.urls')),
     ]
 
 # Error handlers (no import needed)

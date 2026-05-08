@@ -1,5 +1,5 @@
 from django import forms
-from .models import Hospital
+from .models import *
 
 class HospitalForm(forms.ModelForm):
 
@@ -37,3 +37,24 @@ class HospitalForm(forms.ModelForm):
             'google_pin': forms.TextInput(attrs={'class': 'w-full border p-2 rounded'}),
             'description': forms.Textarea(attrs={'class': 'w-full border p-2 rounded'}),
         }
+
+class HospitalImageForm(forms.ModelForm):
+    class Meta:
+        model = HospitalImage
+        fields = ['image']
+
+class DailysisServiceForm(forms.ModelForm):
+    class Meta:
+        model = DailysisService
+        fields = ['name', 'description', 'cost', 'service_type','covered_by','schedule']
+
+class AppointmentForm(forms.ModelForm):
+    class Meta:
+        model = Appointment
+        fields = ['name', 'mobile_number', 'appointment_date','time', 'comment']
+
+
+class OperationDayForm(forms.ModelForm):
+    class Meta:
+        model = OperationDay
+        fields = ['day', 'time_from', 'time_to', 'comment']

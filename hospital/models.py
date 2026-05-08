@@ -70,7 +70,7 @@ class Hospital(models.Model):
 	county = models.CharField(max_length=20,null=True,blank=True)
 	constituent = models.CharField(max_length=20,null=True,blank=True)
 	location = models.TextField(null=True,blank=True)
-	google_pin = models.CharField(max_length=50,null=True,blank=True)
+	google_pin = models.CharField(max_length=200,null=True,blank=True)
 	ward = models.CharField(max_length=20,null=True,blank=True)
 	description = models.TextField(null=True,blank=True)
 	date = models.DateField(default=timezone.now)
@@ -157,7 +157,7 @@ class OperationDay(models.Model):
 	comment = models.TextField(null=True,blank=True)
 
 	def __str__(self):
-		return self.name
+		return str(self.hospital)
 
 
 class PublicHoliday(models.Model):

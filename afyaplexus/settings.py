@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-lb&c7dam0m7#*xd1l5k=1rxt1)k-w#t#rr=&!3jnth)32fgqdq'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -144,8 +144,8 @@ EMAIL_USE_SSL = False
 
 #login redirect 
 LOGIN_URL = '/'
-LOGIN_URL_REDIRECT = '/'
-LOGOUT_REDIRECT_URL = '/'
+LOGIN_URL_REDIRECT = 'home_page'
+LOGOUT_REDIRECT_URL = 'home_page'
 LOGIN_FAILURE_LIMIT = 10
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'

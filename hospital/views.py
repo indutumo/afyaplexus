@@ -93,7 +93,6 @@ def hospital_search(request):
     context = {
         'hospital': hospitals
     }
-    print(context)
     return render(request, 'hospital/hospital_search.html', context)
 
 @login_required
@@ -164,16 +163,76 @@ def county_centre(request,pk):
 
 
 
-def centre_detail(request,pk):
-    hospital = get_object_or_404(Hospital,pk=pk)
-    dailysisservice = DailysisService.objects.filter(hospital=hospital)
-    hospitalrating = HospitalRating.objects.filter(hospital=hospital)
-    hospitalimage = HospitalImage.objects.filter(hospital=hospital)
+from django.db.models import F, FloatField
+from django.db.models.functions import ACos, Cos, Sin, Radians
+
+def centre_detail(request, pk):
+    hospital = get_object_or_404(Hospital, pk=pk)
+
+    # nearby hospitals (within ~20km)
+    nearby = Hospital.objects.exclude(pk=pk).annotate(
+        distance=6371 * ACos(
+            Cos(Radians(hospital.latitude)) *
+            Cos(Radians(F('latitude'))) *
+            Cos(Radians(F('longitude')) - Radians(hospital.longitude)) +
+            Sin(Radians(hospital.latitude)) *
+            Sin(Radians(F('latitude')))
+        )
+    ).filter(distance__lte=20)[:6]
 
     context = {
-        'dailysisservice':dailysisservice,
-        'hospitalrating':hospitalrating,
-        'hospitalimage':hospitalimage,
-        'hospital':hospital,
+        'hospital': hospital,
+        'nearby': nearby,
+        'dailysisservice': hospital.dailysisservice.all(),
+        'hospitalrating': hospital.hospitalrating.all(),
+        'hospitalimage': hospital.hospitalimage.all(),
     }
+
     return render(request, 'hospital/centre_details.html', context)
+
+
+def appointment_list(request):
+    query = request.GET.get('q')
+    hospital = request.GET.get('hospital')
+    location = request.GET.get('location')
+
+    appointment = Appointment.objects.all().order_by('-date')
+
+    if query:
+        appointment = appointment.filter(
+            Q(name__icontains=query) |
+            Q(mobile_number__icontains=query) |
+            Q(hospital__icontains=query)
+        )
+
+    paginator = Paginator(appointment, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'hospital/appointment_list.html', {'page_obj': page_obj,'query': query})
+
+@login_required
+def add_appointment(request,pk):
+    login_url = '/'
+    hospital = get_object_or_404(Hospital,pk=pk)
+    if request.method == "POST":
+        form = AppointmentForm(request.POST, request.FILES)
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            mobile_number = form.cleaned_data['mobile_number']
+            appointment_date = form.cleaned_data['appointment_date']
+            time = form.cleaned_data['time']
+            comment = form.cleaned_data['comment']
+            
+            Appointment.objects.create(name=name,mobile_number=mobile_number,hospital=hospital,
+                appointment_date=appointment_date,time=time,comment=comment,)
+            messages.success(request, "Appointment submitted successfully.")
+            return redirect('centre_detail', pk=hospital.pk)
+        else:
+            messages.error(request, "Please correct the errors below.")
+    else:
+        form = AppointmentForm()
+    context = {
+        'form': form,
+        }
+    return render(request, 'hospital/appointment_list.html', context)
