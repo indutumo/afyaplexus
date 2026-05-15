@@ -3,15 +3,20 @@ from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Q
-
+from django.http import JsonResponse
 from .models import Doctor
 from .forms import DoctorForm
 
 
+from django.http import JsonResponse
+from django.db.models import Q
+from django.core.paginator import Paginator
+
 def doctor_list(request):
-    query = request.GET.get('q')
-    hospital = request.GET.get('hospital')
-    location = request.GET.get('location')
+
+    query = request.GET.get('q', '')
+    hospital = request.GET.get('hospital', '')
+    location = request.GET.get('location', '')
 
     doctors = Doctor.objects.all().order_by('-date')
 
@@ -28,6 +33,22 @@ def doctor_list(request):
     if location:
         doctors = doctors.filter(location__icontains=location)
 
+    # 🔥 AJAX RESPONSE
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        data = []
+        for d in doctors[:50]:  # limit for performance
+            data.append({
+                "id": d.id,
+                "name": f"{d.title} {d.name}",
+                "hospital": str(d.hospital) if d.hospital else "-",
+                "location": d.location or "-",
+                "mobile": d.mobile_number,
+                "email": d.email_address,
+            })
+
+        return JsonResponse({"doctors": data})
+
+    # NORMAL PAGE LOAD (with pagination)
     paginator = Paginator(doctors, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)

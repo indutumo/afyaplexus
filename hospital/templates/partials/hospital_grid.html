@@ -1,0 +1,55 @@
+{% load static %}
+
+{% for hospital in hospital %}
+<div class="bg-white rounded-xl shadow-sm hover:shadow-lg transition duration-300 overflow-hidden">
+
+  <!-- IMAGE -->
+  <a href="{% url 'centre_detail' pk=hospital.pk %}">
+    {% if hospital.image %}
+      <img src="{{ hospital.image.url }}" class="w-full h-44 object-cover">
+    {% else %}
+      <img src="{% static 'placeholder.png' %}" class="w-full h-44 object-cover">
+    {% endif %}
+  </a>
+
+  <!-- CONTENT -->
+  <div class="p-4 space-y-2">
+
+    <h2 class="font-semibold text-gray-800 truncate">
+      {{ hospital.name }}
+    </h2>
+
+    <p class="text-sm text-gray-500 truncate">
+      📍 {{ hospital.location }}
+    </p>
+
+    {% if hospital.distance %}
+    <p class="text-green-600 text-xs font-medium">
+      {{ hospital.distance }} km away
+    </p>
+    {% endif %}
+
+    <!-- ACTIONS -->
+    <div class="flex justify-between items-center pt-2">
+
+      <a href="{{ hospital.google_pin }}"
+         target="_blank"
+         class="text-xs text-orange-500 hover:underline">
+        View Location
+      </a>
+
+      <a href="{% url 'centre_detail' pk=hospital.pk %}"
+         class="text-xs bg-orange-500 text-white px-3 py-1 rounded hover:bg-orange-600">
+        Details
+      </a>
+
+    </div>
+
+  </div>
+</div>
+
+{% empty %}
+<div class="col-span-full text-center text-gray-500 py-10">
+    No dialysis centers found.
+</div>
+{% endfor %}

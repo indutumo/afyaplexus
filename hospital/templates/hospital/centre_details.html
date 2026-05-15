@@ -4,181 +4,196 @@
 
 {% block content %}
 
-<div class="max-w-7xl mx-auto px-4 py-2">
+<div class="max-w-7xl mx-auto px-4 py-6">
 
-  <!-- 🔝 HEADER -->
-  <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-6">
-
-  <!-- MESSAGES -->
-  {% for message in messages %}
-    <div class="mb-4 p-3 rounded 
-      {% if message.tags == 'success' %}bg-green-100 text-green-700
-      {% else %}bg-red-100 text-red-700{% endif %}">
-      {{ message }}
-    </div>
-  {% endfor %}
+  <!-- HEADER -->
+  <div class="flex flex-col lg:flex-row justify-between gap-6 mb-8">
 
     <!-- LEFT INFO -->
     <div>
-      <h1 class="text-2xl font-bold">{{ hospital.name }}</h1>
 
-      <p class="text-sm text-gray-500">
+      <h1 class="text-3xl font-bold">
+        {{ hospital.name }}
+      </h1>
+
+      <p class="text-gray-500 mt-1 text-sm">
         {{ hospital.centre_type }} • {{ hospital.location }},
         {{ hospital.constituent }}, {{ hospital.county }}
       </p>
-
-      <!-- ⭐ Rating -->
-      <div class="flex items-center gap-2 mt-2 text-sm">
-        ⭐⭐⭐⭐☆
-        <span class="text-gray-500">
-          ({{ hospitalrating|length }} reviews)
-        </span>
-      </div>
-
-      <!-- 📍 Distance -->
       {% if hospital.distance %}
-      <p class="text-green-600 text-sm mt-1">
+      <p class="text-green-600 text-sm mt-2">
         📍 {{ hospital.distance }} km away
       </p>
       {% endif %}
-    </div>
-
-    <!-- 🔥 ACTION BUTTONS -->
-    <div class="flex gap-2 items-center">
-
-      <a href="{{ hospital.google_pin }}"
-         target="_blank"
-         class="flex items-center gap-1 bg-blue-500 text-white px-4 py-2 text-sm rounded-md hover:bg-blue-600 transition">
-        📍 <span>Map</span>
-      </a>
-
-      <button onclick="openBooking()"
-              class="flex items-center gap-1 bg-orange-500 text-white px-4 py-2 text-sm rounded-md hover:bg-orange-600 transition">
-        📅 <span>Book</span>
-      </button>
 
     </div>
 
   </div>
 
-  <!-- 🔲 MAIN GRID -->
+  <!-- GRID -->
   <div class="grid lg:grid-cols-3 gap-6">
 
-    <!-- ================= LEFT ================= -->
+    <!-- LEFT -->
     <div class="lg:col-span-2 space-y-6">
 
       <!-- IMAGE + MAP -->
       <div class="grid md:grid-cols-2 gap-4">
 
         <!-- IMAGE -->
-        <div>
-          <div class="rounded-lg overflow-hidden shadow">
-            {% if hospital.image %}
-              <img id="mainImage"
-                   src="{{ hospital.image.url }}"
-                   class="w-full h-64 object-cover">
-            {% else %}
-              <img src="{% static 'placeholder.png' %}"
-                   class="w-full h-64 object-cover">
-            {% endif %}
+        <div class="bg-white rounded-xl shadow overflow-hidden">
+
+          {% if hospital.image %}
+          <img id="mainImage"
+               src="{{ hospital.image.url }}"
+               class="w-full h-72 object-cover">
+          {% else %}
+          <img id="mainImage"
+               src="{% static 'placeholder.png' %}"
+               class="w-full h-72 object-cover">
+          {% endif %}
+
+          <!-- THUMBNAILS -->
+          <div class="flex gap-2 p-3 overflow-x-auto">
+
+            {% for img in hospitalimage %}
+            <img src="{{ img.image.url }}"
+                 class="w-16 h-16 min-w-[64px] object-cover rounded-lg border cursor-pointer hover:border-orange-500"
+                 onclick="changeImage(this)">
+            {% endfor %}
+
           </div>
 
-          <!-- thumbnails -->
-          <div class="flex gap-2 mt-2">
-            {% for img in hospitalimage %}
-              <img src="{{ img.image.url }}"
-                   class="w-16 h-16 object-cover rounded cursor-pointer border hover:scale-105 transition"
-                   onclick="changeImage(this)">
-            {% endfor %}
-          </div>
         </div>
 
         <!-- MAP -->
-        <div class="rounded-lg overflow-hidden shadow">
+        <div class="bg-white rounded-xl shadow overflow-hidden">
+
           {% if hospital.latitude and hospital.longitude %}
           <iframe
-            width="100%"
-            height="100%"
-            class="h-64"
+            class="w-full h-72"
+            loading="lazy"
             src="https://maps.google.com/maps?q={{ hospital.latitude }},{{ hospital.longitude }}&z=14&output=embed">
           </iframe>
+          {% else %}
+          <div class="h-72 flex items-center justify-center text-gray-400">
+            No location available
+          </div>
           {% endif %}
+
         </div>
 
       </div>
 
       <!-- ABOUT -->
-      <div class="bg-white p-4 rounded shadow">
-        <h3 class="font-semibold mb-2">About</h3>
-        <p class="text-sm text-gray-600">
+      <div class="bg-white p-6 rounded-xl shadow">
+
+        <h3 class="font-semibold text-lg mb-3">About</h3>
+
+        <p class="text-gray-600 text-sm leading-relaxed">
           {{ hospital.description|default:"No description available." }}
         </p>
+
       </div>
 
       <!-- SERVICES -->
-      <div class="bg-white p-4 rounded shadow">
-        <h3 class="font-semibold mb-3">Services</h3>
+      <div class="bg-white p-6 rounded-xl shadow">
 
-        <div class="grid md:grid-cols-2 gap-3">
+        <h3 class="font-semibold text-lg mb-4">Services</h3>
+
+        <div class="grid md:grid-cols-2 gap-4">
+
           {% for s in dailysisservice %}
-          <div class="border p-3 rounded-lg hover:shadow transition">
+
+          <div class="border rounded-xl p-4 hover:shadow-md transition">
 
             <div class="flex justify-between">
-              <p class="font-semibold text-sm">{{ s.name }}</p>
-              <p class="text-green-600 text-sm">
-                {{ s.schedule }}
+
+              <p class="font-semibold text-sm">
+                {{ s.name }}
               </p>
+
+              <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">
+                {{ s.schedule }}
+              </span>
+
             </div>
 
-            <p class="text-xs text-gray-500 mt-1">
+            <p class="text-sm text-gray-600 mt-2">
               {{ s.description|safe|linebreaksbr }}
             </p>
 
-            <p class="text-xs text-gray-500 mt-1">
-              {{ s.service_type }}
-            </p>
+            <div class="flex gap-2 mt-3 flex-wrap">
 
-            <p class="text-xs mt-1 text-blue-500">
-              {{ s.covered_by }}
-            </p>
+              <span class="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
+                {{ s.service_type }}
+              </span>
+
+              <span class="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded-full">
+                {{ s.covered_by }}
+              </span>
+
+            </div>
 
           </div>
+
           {% empty %}
-          <p>No services listed</p>
+          <p class="text-gray-400 text-sm">No services listed</p>
           {% endfor %}
+
         </div>
+
       </div>
 
       <!-- REVIEWS -->
-      <div class="bg-white p-4 rounded shadow">
-        <h3 class="font-semibold mb-3">
+      <div class="bg-white p-6 rounded-xl shadow">
+
+        <h3 class="font-semibold text-lg mb-4">
           Reviews ({{ hospitalrating|length }})
         </h3>
 
-        {% for r in hospitalrating %}
-        <div class="border-b py-3">
-          <p class="text-sm">{{ r.comment }}</p>
-          <p class="text-xs text-gray-400 mt-1">
-            {{ r.user }} • {{ r.date }}
-          </p>
+        <div class="space-y-4">
+
+          {% for r in hospitalrating %}
+
+          <div class="border-b pb-4">
+
+            <div class="flex justify-between">
+
+              <p class="font-medium text-sm">{{ r.user }}</p>
+
+              <span class="text-xs text-gray-400">
+                {{ r.date|naturaltime }}
+              </span>
+
+            </div>
+
+            <p class="text-sm text-gray-600 mt-1">
+              {{ r.comment }}
+            </p>
+
+          </div>
+
+          {% empty %}
+          <p class="text-gray-400 text-sm">No reviews yet</p>
+          {% endfor %}
+
         </div>
-        {% empty %}
-        <p>No reviews yet</p>
-        {% endfor %}
+
       </div>
 
     </div>
 
-    <!-- ================= RIGHT (STICKY PANEL) ================= -->
+    <!-- RIGHT SIDEBAR -->
     <div class="space-y-4">
 
       <div class="sticky top-24 space-y-4">
 
         <!-- CONTACT -->
-        <div class="bg-white p-4 rounded shadow">
-          <p class="font-semibold mb-2">Contact</p>
+        <div class="bg-white p-5 rounded-xl shadow">
 
-          <p class="text-orange-600 font-bold text-lg">
+          <h3 class="font-semibold mb-3">Contact</h3>
+
+          <p class="text-orange-600 font-semibold">
             📞 {{ hospital.mobile_number }}
           </p>
 
@@ -186,55 +201,63 @@
             {{ hospital.alternative_number }}
           </p>
 
-          <p class="text-sm mt-2">
+          <!-- WHATSAPP -->
+          <a href="https://wa.me/{{ hospital.mobile_number|cut:'+'|cut:' '|cut:'-' }}"
+             target="_blank"
+             class="mt-4 flex items-center justify-center gap-2 bg-green-500 text-white px-4 py-3 rounded-lg hover:bg-green-600 transition">
+
+            💬 WhatsApp
+
+          </a>
+
+          <p class="text-sm mt-3 break-all">
             📧 {{ hospital.email_address }}
           </p>
 
           {% if hospital.website %}
           <a href="{{ hospital.website }}"
-             class="text-blue-500 text-sm underline"
-             target="_blank">
-            Visit Website
+             target="_blank"
+             class="text-blue-500 text-sm hover:underline mt-2 inline-block">
+
+            Visit Website →
+
           </a>
           {% endif %}
+
         </div>
 
-        <!-- BOOKING CTA -->
-        <div class="bg-orange-500 text-white p-4 rounded shadow text-center">
-          <p class="font-semibold">Need Dialysis?</p>
+        <!-- BOOK -->
+        <div class="bg-orange-500 text-white p-5 rounded-xl text-center shadow">
+
+          <p class="font-semibold text-lg">Need Dialysis?</p>
+
           <button onclick="openBooking()"
-                  class="mt-2 bg-white text-orange-500 px-4 py-2 rounded w-full hover:bg-gray-100 transition">
+                  class="mt-3 bg-white text-orange-500 w-full py-3 rounded-lg font-medium hover:bg-gray-100">
+
             Book Appointment
+
           </button>
+
         </div>
 
-        <!-- WORKING HOURS -->
-        <div class="bg-white p-4 rounded shadow">
-          <p class="font-semibold mb-2">Working Hours</p>
+        <!-- HOURS -->
+        <div class="bg-white p-5 rounded-xl shadow">
+
+          <h3 class="font-semibold mb-3">Working Hours</h3>
 
           {% for d in hospital.operationday.all %}
-          <div class="flex justify-between text-sm py-1">
+
+          <div class="flex justify-between text-sm py-2 border-b last:border-none">
+
             <span>{{ d.day }}</span>
-            <span>{{ d.time_from }} - {{ d.time_to }}</span>
+            <span class="text-gray-500">{{ d.time_from }} - {{ d.time_to }}</span>
+
           </div>
+
+          {% empty %}
+          <p class="text-gray-400 text-sm">Not available</p>
           {% endfor %}
-        </div>
 
-        <!-- SHARE -->
-        <div class="bg-white p-4 rounded shadow">
-          <p class="font-semibold mb-2">Share</p>
-
-          <div class="flex gap-2">
-            <a href="https://wa.me/?text={{ request.build_absolute_uri }}"
-               class="bg-green-500 text-white px-3 py-1 rounded text-sm">
-               WhatsApp
-            </a>
-
-            <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}"
-               class="bg-black text-white px-3 py-1 rounded text-sm">
-               X
-            </a>
-          </div>
         </div>
 
       </div>
@@ -245,63 +268,68 @@
 
 </div>
 
-<!-- 📅 BOOKING MODAL -->
+<!-- BOOK MODAL -->
 <div id="bookingModal"
-     class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
+     class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 p-4">
 
-  <div class="bg-white p-6 rounded-xl w-full max-w-md">
+  <div class="bg-white rounded-2xl w-full max-w-md p-6 relative">
 
-    <h2 class="text-lg font-bold mb-4">Book Appointment</h2>
+    <button onclick="closeBooking()"
+            class="absolute top-3 right-3 text-gray-400 hover:text-black">
+      ✕
+    </button>
 
-    <form method="POST" action="{% url 'add_appointment' pk=hospital.pk %}">
+    <h2 class="text-xl font-bold mb-4">Book Appointment</h2>
+
+    <form method="POST"
+          action="{% url 'add_appointment' pk=hospital.pk %}"
+          class="space-y-4">
+
       {% csrf_token %}
 
-      <input name="name" placeholder="Your Name"
-             class="w-full border p-2 mb-2 rounded">
+      <input class="w-full border p-3 rounded-lg"
+             name="name"
+             placeholder="Your Name">
 
-      <input name="mobile_number" placeholder="Phone"
-             class="w-full border p-2 mb-2 rounded">
+      <input class="w-full border p-3 rounded-lg"
+             name="mobile_number"
+             placeholder="Phone Number">
 
-      <input type="date" name="appointment_date"
-             class="w-full border p-2 mb-2 rounded">
+      <input type="date"
+             class="w-full border p-3 rounded-lg"
+             name="appointment_date">
 
-      <input name="time" placeholder="Time"
-             class="w-full border p-2 mb-2 rounded">
+      <textarea class="w-full border p-3 rounded-lg"
+                name="comment"
+                placeholder="Notes"></textarea>
 
-      <textarea name="comment" placeholder="Notes"
-                class="w-full border p-2 mb-2 rounded"></textarea>
+      <button class="w-full bg-orange-500 text-white py-3 rounded-lg hover:bg-orange-600">
 
-      <div class="flex justify-end gap-2">
-        <button type="button"
-                onclick="closeBooking()"
-                class="border px-3 py-1 rounded">
-          Cancel
-        </button>
+        Submit
 
-        <button class="bg-orange-500 text-white px-3 py-1 rounded">
-          Submit
-        </button>
-      </div>
+      </button>
 
     </form>
 
   </div>
+
 </div>
 
-<!-- JS -->
 <script>
-function changeImage(el) {
+
+function changeImage(el){
   document.getElementById("mainImage").src = el.src;
 }
 
-function openBooking() {
+function openBooking(){
   document.getElementById("bookingModal").classList.remove("hidden");
   document.getElementById("bookingModal").classList.add("flex");
 }
 
-function closeBooking() {
+function closeBooking(){
   document.getElementById("bookingModal").classList.add("hidden");
 }
+
 </script>
 
 {% endblock %}

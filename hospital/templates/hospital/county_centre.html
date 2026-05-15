@@ -1,56 +1,70 @@
 {% extends 'base.html' %}
 {% load static %}
-{% load humanize %}
 
 {% block content %}
 
 <div class="max-w-7xl mx-auto py-6">
 
-  <!-- 🔝 HEADER -->
-  <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-6 gap-3">
+  <!-- HEADER -->
+  <div class="mb-4">
 
-    <div>
-      <h1 class="text-2xl font-bold" style="color: #17d211;">
-        {{ county.name }} Dialysis Centers
-      </h1>
-      <p class="text-sm text-gray-500">
-        {{ hospital|length }} centers available
-      </p>
-    </div>
+    <!-- TITLE -->
+    <h1 class="text-2xl font-bold text-green-600">
+      {{ county.name }} Dialysis Centers
+    </h1>
 
-    <!-- OPTIONAL FILTER -->
-    <form method="GET" class="flex gap-2 w-full lg:w-auto">
-      <input type="text" name="q"
-             placeholder="Search within county..."
-             class="border p-2 rounded w-full lg:w-64 focus:ring-2 focus:ring-orange-400">
-
-      <button class="bg-orange-500 text-white px-4 rounded hover:bg-orange-600">
-        Search
-      </button>
-    </form>
+    <p class="text-sm text-gray-500">
+      <span id="count">{{ hospital|length }}</span> centers available
+    </p>
 
   </div>
 
-  <!-- 🏥 GRID -->
-  {% if hospital %}
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+  <!-- 🔍 FILTERS (LEFT SIDE UNDER TITLE) -->
+  <div class="mb-6">
+
+    <div class="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-3 max-w-3xl">
+
+      <input type="text"
+             id="name"
+             placeholder="Search hospital name"
+             class="border p-2 rounded focus:ring-2 focus:ring-orange-400">
+
+      <input type="text"
+             id="constituent"
+             placeholder="Constituent"
+             class="border p-2 rounded focus:ring-2 focus:ring-orange-400">
+
+      <input type="text"
+             id="ward"
+             placeholder="Ward"
+             class="border p-2 rounded focus:ring-2 focus:ring-orange-400">
+
+      <!-- optional reset -->
+      <button onclick="resetFilters()"
+              class="bg-gray-200 text-gray-700 rounded px-3 py-2 hover:bg-gray-300">
+        Clear
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- 🏥 RESULTS GRID -->
+  <div id="results"
+       class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
 
     {% for hospital in hospital %}
-    <div class="bg-white rounded-xl shadow-sm hover:shadow-lg transition duration-300 overflow-hidden">
+    <div class="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden">
 
-      <!-- IMAGE -->
       <a href="{% url 'centre_detail' pk=hospital.pk %}">
         {% if hospital.image %}
-          <img src="{{ hospital.image.url }}"
-               class="w-full h-44 object-cover">
+          <img src="{{ hospital.image.url }}" class="w-full h-44 object-cover">
         {% else %}
-          <img src="{% static 'placeholder.png' %}"
-               class="w-full h-44 object-cover">
+          <img src="{% static 'placeholder.png' %}" class="w-full h-44 object-cover">
         {% endif %}
       </a>
 
-      <!-- CONTENT -->
-      <div class="p-4 space-y-2">
+      <div class="p-4 space-y-1">
 
         <h2 class="font-semibold text-gray-800 truncate">
           {{ hospital.name }}
@@ -60,28 +74,6 @@
           📍 {{ hospital.location }}
         </p>
 
-        {% if hospital.distance %}
-        <p class="text-green-600 text-xs font-medium">
-          {{ hospital.distance }} km away
-        </p>
-        {% endif %}
-
-        <!-- ACTIONS -->
-        <div class="flex justify-between items-center pt-2">
-
-          <a href="{{ hospital.google_pin }}"
-             target="_blank"
-             class="text-xs text-orange-500 hover:underline">
-            View Location
-          </a>
-
-          <a href="{% url 'centre_detail' pk=hospital.pk %}"
-             class="text-xs bg-orange-500 text-white px-3 py-1 rounded hover:bg-orange-600">
-            Details
-          </a>
-
-        </div>
-
       </div>
 
     </div>
@@ -89,21 +81,83 @@
 
   </div>
 
-  {% else %}
-
-  <!-- EMPTY STATE -->
-  <div class="text-center py-20">
-    <img src="{% static 'empty.png' %}" class="mx-auto h-32 mb-4">
-    <h2 class="text-lg font-semibold text-gray-700">
-      No centers found in {{ county.name }}
-    </h2>
-    <p class="text-gray-500 text-sm">
-      Try searching or check another county.
-    </p>
-  </div>
-
-  {% endif %}
-
 </div>
+
+<!-- ================= AJAX SCRIPT ================= -->
+<script>
+
+let timeout = null;
+
+function fetchData() {
+
+  const name = document.getElementById("name").value;
+  const constituent = document.getElementById("constituent").value;
+  const ward = document.getElementById("ward").value;
+
+  fetch(window.location.pathname + `?name=${name}&constituent=${constituent}&ward=${ward}`, {
+    headers: {
+      "X-Requested-With": "XMLHttpRequest"
+    }
+  })
+  .then(res => res.json())
+  .then(data => {
+
+    const container = document.getElementById("results");
+    container.innerHTML = "";
+
+    document.getElementById("count").innerText = data.hospitals.length;
+
+    if (data.hospitals.length === 0) {
+      container.innerHTML = `
+        <div class="col-span-full text-center text-gray-500 py-10">
+          No centers found
+        </div>
+      `;
+      return;
+    }
+
+    data.hospitals.forEach(h => {
+
+      container.innerHTML += `
+        <div class="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden">
+
+          <a href="/${h.id}/centre_detail">
+            <img src="${h.image || '/static/placeholder.png'}"
+                 class="w-full h-44 object-cover">
+          </a>
+
+          <div class="p-4">
+            <h2 class="font-semibold truncate">${h.name}</h2>
+            <p class="text-sm text-gray-500">📍 ${h.location}</p>
+          </div>
+
+        </div>
+      `;
+    });
+
+  });
+
+}
+
+// debounce
+function triggerSearch() {
+  clearTimeout(timeout);
+  timeout = setTimeout(fetchData, 400);
+}
+
+// events
+document.getElementById("name").addEventListener("input", triggerSearch);
+document.getElementById("constituent").addEventListener("input", triggerSearch);
+document.getElementById("ward").addEventListener("input", triggerSearch);
+
+// reset filters
+function resetFilters() {
+  document.getElementById("name").value = "";
+  document.getElementById("constituent").value = "";
+  document.getElementById("ward").value = "";
+  fetchData();
+}
+
+</script>
 
 {% endblock %}

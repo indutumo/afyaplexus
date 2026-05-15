@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+
+<div class="max-w-7xl mx-auto py-6">
+
+  <!-- 🔝 HEADER -->
+  <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-6 gap-3">
+
+    <div>
+      <h1 class="text-2xl font-bold" style="color: #17d211;">
+        Dialysis Centers
+      </h1>
+
+      <p class="text-sm text-gray-500">
+        {{ hospital|length }} centers available
+      </p>
+    </div>
+
+    <!-- 🔍 SEARCH + LOCATION -->
+    <div class="flex gap-2 w-full lg:w-auto">
+
+      <input type="text"
+             id="searchInput"
+             placeholder="Search hospitals..."
+             class="w-full lg:w-72 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400">
+
+      <button onclick="getLocation()"
+              class="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 text-sm">
+        📍 Near Me
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- 🏥 GRID -->
+  <div id="hospitalList"
+       class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+
+    {% include 'partials/hospital_grid.html' %}
+
+  </div>
+
+</div>
+
+<!-- ⚡ AJAX SCRIPT -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+
+let lat = null;
+let lng = null;
+
+/* 📍 GET USER LOCATION */
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            lat = position.coords.latitude;
+            lng = position.coords.longitude;
+
+            loadHospitals();
+        }, function() {
+            alert("Unable to get your location.");
+        });
+    } else {
+        alert("Geolocation not supported by your browser.");
+    }
+}
+
+/* 🔍 LIVE SEARCH */
+$("#searchInput").on("keyup", function () {
+    loadHospitals();
+});
+
+/* 🚀 LOAD DATA VIA AJAX */
+function loadHospitals() {
+    let query = $("#searchInput").val();
+
+    $.ajax({
+        url: window.location.pathname,
+        type: "GET",
+        data: {
+            q: query,
+            lat: lat,
+            lng: lng
+        },
+        success: function (response) {
+            $("#hospitalList").html(response);
+        }
+    });
+}
+
+</script>
+
+{% endblock %}

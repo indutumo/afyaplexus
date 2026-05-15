@@ -108,16 +108,16 @@
     <div class="col-span-2 relative rounded overflow-hidden h-[350px]">
 
       <div class="absolute inset-0 bg-cover bg-center"
-           style="background-image: url('{% static "cover.jpeg" %}');"></div>
+           style="background-image: url('{% static "knh.jpg" %}');"></div>
 
       <div class="absolute inset-0 bg-gradient-to-r from-black/70 to-transparent"></div>
 
       <div class="relative z-10 h-full flex flex-col justify-center p-6 text-white max-w-sm">
         <h2 class="text-1xl font-bold mb-2">
-          {{blog.title}}
+          KNH Dialysis Centre
         </h2>
         <p class="mb-4 text-sm">
-          Author: {{blog.user}}
+          The Kenyatta National Hospital dialysis centre is a specialized unit within the renal department that provides life-sustaining haemodialysis and comprehensive kidney care for patients with kidney failure in Kenya.
         </p>
         <button class="bg-red-500 px-0 py-1 rounded hover:bg-blue-600">
           <a href="{% url 'blog_detail' pk=blog.pk %}"> Learn more about CKD & Dialysis Here </a>

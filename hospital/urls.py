@@ -15,4 +15,5 @@ urlpatterns = [
     path('donate/', TemplateView.as_view(template_name="hospital/get_involved.html"), name='donate'),
     path('appointment_list', views.appointment_list, name='appointment_list'),
     path('<uuid:pk>/add_appointment', views.add_appointment, name='add_appointment'),
+    path('hospital_list', views.hospital_list, name='hospital_list'),
 	]

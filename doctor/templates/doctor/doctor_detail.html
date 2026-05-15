@@ -1,65 +1,64 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<div class="max-w-5xl mx-auto py-10">
+<div class="max-w-5xl mx-auto py-10 px-4">
 
-  <!-- 🔙 BACK -->
+  <!-- BACK -->
   <a href="{% url 'doctor_list' %}"
      class="text-sm text-gray-500 hover:text-orange-500 mb-6 inline-block">
     ← Back to Doctors
   </a>
 
-  <!-- CARD -->
-  <div class="bg-white rounded-2xl shadow p-6 md:p-8">
+  <!-- MAIN CARD -->
+  <div class="bg-white rounded-2xl shadow-lg p-6 md:p-10">
 
     <div class="flex flex-col md:flex-row gap-8">
 
-      <!-- 👤 PROFILE IMAGE -->
+      <!-- PROFILE IMAGE -->
       <div class="flex-shrink-0">
 
         {% if doctor.profile_picture %}
           <img src="{{ doctor.profile_picture.url }}"
-               class="w-40 h-40 object-cover rounded-xl shadow">
+               class="w-44 h-44 object-cover rounded-2xl shadow">
         {% else %}
-          <!-- FALLBACK AVATAR -->
-          <div class="w-40 h-40 bg-gray-200 rounded-xl flex items-center justify-center text-4xl font-bold text-gray-500">
+          <div class="w-44 h-44 bg-gray-100 rounded-2xl flex items-center justify-center text-4xl font-bold text-gray-400">
             {{ doctor.name|slice:":1" }}
           </div>
         {% endif %}
 
       </div>
 
-      <!-- 📄 DETAILS -->
+      <!-- DETAILS -->
       <div class="flex-1">
 
-        <h1 class="text-3xl font-bold mb-1">
+        <h1 class="text-3xl font-bold">
           {{ doctor.title }} {{ doctor.name }}
         </h1>
 
-        <p class="text-gray-500 mb-4">
-          {{ doctor.hospital|default:"No hospital specified" }}
+        <p class="text-gray-500 mt-1">
+          🏥 {{ doctor.hospital|default:"No hospital specified" }}
         </p>
 
         <!-- INFO GRID -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 text-sm">
 
-          <div>
-            <p class="text-gray-400">📍 Location</p>
+          <div class="bg-gray-50 p-3 rounded-lg">
+            <p class="text-gray-400 text-xs">📍 Location</p>
             <p class="font-medium">{{ doctor.location }}</p>
           </div>
 
-          <div>
-            <p class="text-gray-400">📞 Phone</p>
+          <div class="bg-gray-50 p-3 rounded-lg">
+            <p class="text-gray-400 text-xs">📞 Phone</p>
             <p class="font-medium">{{ doctor.mobile_number }}</p>
           </div>
 
-          <div>
-            <p class="text-gray-400">📧 Email</p>
-            <p class="font-medium">{{ doctor.email_address }}</p>
+          <div class="bg-gray-50 p-3 rounded-lg">
+            <p class="text-gray-400 text-xs">📧 Email</p>
+            <p class="font-medium break-all">{{ doctor.email_address }}</p>
           </div>
 
-          <div>
-            <p class="text-gray-400">License Number</p>
+          <div class="bg-gray-50 p-3 rounded-lg">
+            <p class="text-gray-400 text-xs">License Number</p>
             <p class="font-medium">
               {{ doctor.license_number|default:"-" }}
             </p>
@@ -68,19 +67,34 @@
         </div>
 
         <!-- ACTIONS -->
-        <div class="mt-6 flex gap-3">
+        <div class="mt-8 flex flex-wrap gap-3">
 
+          <!-- CALL -->
           {% if doctor.mobile_number %}
           <a href="tel:{{ doctor.mobile_number }}"
-             class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 text-sm">
-            Call
+             class="flex items-center justify-center gap-2 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 text-sm transition">
+
+            📞 Call
+
           </a>
           {% endif %}
 
+          <!-- WHATSAPP (FIXED + CONSISTENT STYLE) -->
+          <a href="https://wa.me/{{ doctor.mobile_number|cut:'+'|cut:' '|cut:'-' }}"
+             target="_blank"
+             class="flex items-center justify-center gap-2 bg-emerald-500 text-white px-4 py-2 rounded-lg hover:bg-emerald-600 text-sm transition">
+
+            💬 WhatsApp
+
+          </a>
+
+          <!-- EMAIL -->
           {% if doctor.email_address %}
           <a href="mailto:{{ doctor.email_address }}"
-             class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 text-sm">
-            Email
+             class="flex items-center justify-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 text-sm transition">
+
+            ✉️ Email
+
           </a>
           {% endif %}
 
@@ -89,11 +103,15 @@
         <!-- LICENSE -->
         {% if doctor.license %}
         <div class="mt-6">
+
           <a href="{{ doctor.license.url }}"
              target="_blank"
-             class="text-orange-500 text-sm underline hover:text-orange-600">
-            View License Document
+             class="text-orange-500 text-sm font-medium hover:underline">
+
+            📄 View License Document →
+
           </a>
+
         </div>
         {% endif %}
 

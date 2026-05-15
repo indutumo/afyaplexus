@@ -10,6 +10,7 @@ from django.db.models import Q
 from math import radians, cos, sin, asin, sqrt
 from django.core.paginator import Paginator
 from django.db.models import Count
+from django.http import JsonResponse
 
 def is_valid_queryparam(param):
     return param != '' and param is not None
@@ -61,39 +62,69 @@ def distance(lat1, lon1, lat2, lon2):
     km = 6371 * c
     return km
 
-def hospital_search(request):
-    hospitals = Hospital.objects.all()
+from django.db.models import Q
+from django.shortcuts import render
 
-    query = request.GET.get('q')
+def hospital_search(request):
+
+    hospitals = Hospital.objects.filter(status='active')
+
+    query = request.GET.get('q', '').strip()
+
     user_lat = request.GET.get('lat')
     user_lng = request.GET.get('lng')
-
-    # 🔍 TEXT SEARCH
     if query:
+
         hospitals = hospitals.filter(
             Q(name__icontains=query) |
-            Q(location__icontains=query)
-        )
+            Q(county__icontains=query) |
+            Q(location__icontains=query) |
+            Q(constituent__icontains=query) |
+            Q(ward__icontains=query)
+        ).distinct()
 
-    # 📍 NEAR ME FILTER
+    # 📍 NEAR ME SEARCH
     if user_lat and user_lng:
-        user_lat = float(user_lat)
-        user_lng = float(user_lng)
 
-        nearby = []
-        for h in hospitals:
-            if h.latitude and h.longitude:
-                dist = distance(user_lat, user_lng, h.latitude, h.longitude)
-                if dist <= 30:  # 20km radius
-                    h.distance = round(dist, 2)
-                    nearby.append(h)
+        try:
+            user_lat = float(user_lat)
+            user_lng = float(user_lng)
 
-        hospitals = sorted(nearby, key=lambda x: x.distance)
+            nearby = []
+
+            for h in hospitals:
+
+                if h.latitude and h.longitude:
+
+                    dist = distance(
+                        user_lat,
+                        user_lng,
+                        h.latitude,
+                        h.longitude
+                    )
+
+                    # 30 KM RADIUS
+                    if dist <= 30:
+
+                        h.distance = round(dist, 2)
+
+                        nearby.append(h)
+
+            # SORT BY DISTANCE
+            hospitals = sorted(
+                nearby,
+                key=lambda x: x.distance
+            )
+
+        except ValueError:
+            pass
 
     context = {
-        'hospital': hospitals
+        'hospital': hospitals,
+        'query': query
     }
-    return render(request, 'hospital/hospital_search.html', context)
+
+    return render(request,'hospital/hospital_search.html',context)
 
 @login_required
 def add_centre(request):
@@ -137,29 +168,38 @@ def add_centre(request):
 
 
 
-def county_centre(request,pk):
-	county = get_object_or_404(County,pk=pk)
-	county_name = (county.name).capitalize()
-	qs = Hospital.objects.filter(county=county_name)
+def county_centre(request, pk):
+    county = get_object_or_404(County, pk=pk)
+    county_name = county.name.capitalize()
 
-	name = request.GET.get('name')
-	constituent = request.GET.get('constituent')
-	ward = request.GET.get('ward')
+    qs = Hospital.objects.filter(county=county_name)
 
-	if is_valid_queryparam(name):
-		qs = qs.filter(name__icontains=name)
+    name = request.GET.get('name')
+    constituent = request.GET.get('constituent')
+    ward = request.GET.get('ward')
 
-	if is_valid_queryparam(constituent):
-		qs = qs.filter(constituent__icontains=constituent)
+    if name:
+        qs = qs.filter(name__icontains=name)
 
-	if is_valid_queryparam(ward):
-		qs = qs.filter(ward__icontains=ward)
+    if constituent:
+        qs = qs.filter(constituent__icontains=constituent)
 
-	context = {
-		'county':county,
-		'hospital':qs,
-	}
-	return render(request, 'hospital/county_centre.html', context)
+    if ward:
+        qs = qs.filter(ward__icontains=ward)
+
+    # 🔥 AJAX response
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        data = []
+        for h in qs:
+            data.append({
+                "id": h.id,
+                "name": h.name,
+                "location": h.location,
+                "image": h.image.url if h.image else "",
+            })
+        return JsonResponse({"hospitals": data})
+
+    return render(request, 'hospital/county_centre.html', {'county': county,'hospital': qs,})
 
 
 
@@ -211,9 +251,8 @@ def appointment_list(request):
 
     return render(request, 'hospital/appointment_list.html', {'page_obj': page_obj,'query': query})
 
-@login_required
+
 def add_appointment(request,pk):
-    login_url = '/'
     hospital = get_object_or_404(Hospital,pk=pk)
     if request.method == "POST":
         form = AppointmentForm(request.POST, request.FILES)
@@ -236,3 +275,58 @@ def add_appointment(request,pk):
         'form': form,
         }
     return render(request, 'hospital/appointment_list.html', context)
+
+
+def hospital_list(request):
+    hospitals = Hospital.objects.filter(status='active')
+
+    query = request.GET.get('q', '').strip()
+    user_lat = request.GET.get('lat')
+    user_lng = request.GET.get('lng')
+
+    # 🔍 SEARCH FILTER
+    if query:
+        hospitals = hospitals.filter(
+            Q(name__icontains=query) |
+            Q(county__icontains=query) |
+            Q(location__icontains=query) |
+            Q(constituent__icontains=query) |
+            Q(ward__icontains=query)
+        ).distinct()
+
+    # 📍 NEAR ME FILTER
+    if user_lat and user_lng:
+        try:
+            user_lat = float(user_lat)
+            user_lng = float(user_lng)
+
+            nearby = []
+
+            for h in hospitals:
+                if h.latitude and h.longitude:
+                    dist = distance(
+                        user_lat,
+                        user_lng,
+                        h.latitude,
+                        h.longitude
+                    )
+
+                    if dist <= 30:  # 30km radius
+                        h.distance = round(dist, 1)
+                        nearby.append(h)
+
+            hospitals = sorted(nearby, key=lambda x: x.distance)
+
+        except (ValueError, TypeError):
+            pass
+
+    context = {
+        'hospital': hospitals,
+        'query': query,
+    }
+
+    # ⚡ AJAX SUPPORT (IMPORTANT FOR YOUR DESIGN)
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return render(request, 'partials/hospital_grid.html', context)
+
+    return render(request, 'hospital/hospital_list.html', context)
