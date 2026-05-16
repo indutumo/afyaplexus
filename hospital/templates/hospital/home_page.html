@@ -7,7 +7,9 @@
 <div class="lg:px-10 lg:py-6">
 
   <!-- 🔍 SEARCH BAR -->
-  <form method="GET" class="flex flex-col lg:flex-row items-center gap-3 mb-6" action="{% url 'hospital_search' %}">
+  <form method="GET"
+        class="flex flex-col lg:flex-row items-center gap-3 mb-6"
+        action="{% url 'hospital_search' %}">
 
     <input type="text" name="q"
            placeholder="Search hospitals by name or location..."
@@ -17,42 +19,38 @@
     <input type="hidden" name="lng" id="lng">
 
     <div class="flex gap-2 w-full lg:w-auto">
+
       <button type="submit"
               id="searchBtn"
-              class="bg-orange-500 text-white px-5 py-2 rounded whitespace-nowrap hover:bg-orange-600">
+              class="bg-orange-500 text-white px-5 py-2 rounded hover:bg-orange-600 whitespace-nowrap">
         <span id="searchText">Search</span>
       </button>
 
       <button type="button"
               id="locationBtn"
               onclick="getLocation()"
-              class="bg-blue-500 text-white px-5 py-2 rounded whitespace-nowrap hover:bg-blue-600">
+              class="bg-blue-500 text-white px-5 py-2 rounded hover:bg-blue-600 whitespace-nowrap">
         <span id="locationText">📍 Near Me</span>
       </button>
-    </div>
 
+    </div>
   </form>
 
-<!-- 🌫 PAGE LOADER -->
-<div id="pageLoader"
-     class="fixed inset-0 bg-black/40 hidden items-center justify-center z-50">
+  <!-- 🌫 LOADER -->
+  <div id="pageLoader"
+       class="fixed inset-0 bg-black/40 hidden items-center justify-center z-50">
 
-  <div class="bg-white p-5 rounded shadow text-center">
-    <svg class="animate-spin h-6 w-6 mx-auto text-orange-500 mb-2"
-         xmlns="http://www.w3.org/2000/svg"
-         fill="none"
-         viewBox="0 0 24 24">
-      <circle cx="12" cy="12" r="10"
-              stroke="currentColor"
-              stroke-width="4"
-              class="opacity-25"></circle>
-      <path fill="currentColor"
-            class="opacity-75"
-            d="M4 12a8 8 0 018-8v8z"></path>
-    </svg>
-    <p class="text-sm">Loading...</p>
+    <div class="bg-white p-5 rounded shadow text-center">
+      <svg class="animate-spin h-6 w-6 mx-auto text-orange-500 mb-2"
+           xmlns="http://www.w3.org/2000/svg"
+           fill="none"
+           viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" class="opacity-25"></circle>
+        <path fill="currentColor" class="opacity-75" d="M4 12a8 8 0 018-8v8z"></path>
+      </svg>
+      <p class="text-sm">Loading...</p>
+    </div>
   </div>
-</div>
 
   <!-- GRID -->
   <div class="grid lg:grid-cols-4 gap-4">
@@ -60,47 +58,39 @@
     <!-- SIDEBAR -->
     <aside class="hidden lg:block bg-white p-5 rounded shadow">
       <ul class="space-y-3 text-sm">
-        
-        <p style="color: #17d211; font-weight: bold;">
+
+        <p style="color:#17d211;font-weight:bold;">
           Dialysis Centre Per County
         </p>
         <hr>
 
         {% for county in counties %}
-          <li>
-            <a href="{% url 'county_centre' pk=county.pk %}"
-               class="hover:text-orange-500">
-              
-              {{ county.name }}
-
-              <span style="color: red;">
-                ({{ county.hospital_count }})
-              </span>
-
-            </a>
-          </li>
+        <li>
+          <a href="{% url 'county_centre' pk=county.pk %}" class="hover:text-orange-500">
+            {{ county.name }}
+            <span style="color:red;">({{ county.hospital_count }})</span>
+          </a>
+        </li>
         {% endfor %}
-      <div class="flex gap-2 mt-4 items-center text-sm">
-        
-        {% if counties.has_previous %}
+
+        <div class="flex gap-2 mt-4 items-center text-sm">
+
+          {% if counties.has_previous %}
           <a href="?page={{ counties.previous_page_number }}"
-             class="px-3 py-1 bg-gray-200 rounded">
-            Prev
-          </a>
-        {% endif %}
+             class="px-3 py-1 bg-gray-200 rounded">Prev</a>
+          {% endif %}
 
-        <span>
-          Page {{ counties.number }} of {{ counties.paginator.num_pages }}
-        </span>
+          <span>
+            Page {{ counties.number }} of {{ counties.paginator.num_pages }}
+          </span>
 
-        {% if counties.has_next %}
+          {% if counties.has_next %}
           <a href="?page={{ counties.next_page_number }}"
-             class="px-3 py-1 bg-gray-200 rounded">
-            Next
-          </a>
-        {% endif %}
+             class="px-3 py-1 bg-gray-200 rounded">Next</a>
+          {% endif %}
 
-      </div>
+        </div>
+
       </ul>
     </aside>
 
@@ -113,17 +103,18 @@
       <div class="absolute inset-0 bg-gradient-to-r from-black/70 to-transparent"></div>
 
       <div class="relative z-10 h-full flex flex-col justify-center p-6 text-white max-w-sm">
-        <h2 class="text-1xl font-bold mb-2">
-          KNH Dialysis Centre
-        </h2>
+        <h2 class="text-xl font-bold mb-2">KNH Dialysis Centre</h2>
+
         <p class="mb-4 text-sm">
-          The Kenyatta National Hospital dialysis centre is a specialized unit within the renal department that provides life-sustaining haemodialysis and comprehensive kidney care for patients with kidney failure in Kenya.
+          The Kenyatta National Hospital dialysis centre is a specialized unit within the renal department that provides haemodialysis and kidney care in Kenya.
         </p>
-        <button class="bg-red-500 px-0 py-1 rounded hover:bg-blue-600">
-          <a href="{% url 'blog_detail' pk=blog.pk %}"> Learn more about CKD & Dialysis Here </a>
+
+        <button class="bg-red-500 px-3 py-1 rounded hover:bg-blue-600">
+          <a href="{% url 'blog_detail' pk=blog.pk %}">
+            Learn more about CKD & Dialysis Here
+          </a>
         </button>
       </div>
-
     </div>
 
     <!-- RIGHT PANEL -->
@@ -136,25 +127,17 @@
         <a href="https://wa.me/254713469929"
            target="_blank"
            class="flex items-center justify-center gap-2 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 text-sm">
-
-          <!-- WhatsApp Icon -->
-          <svg xmlns="http://www.w3.org/2000/svg" 
-               class="w-4 h-4" 
-               fill="currentColor" 
-               viewBox="0 0 24 24">
-            <path d="M20.52 3.48A11.78 11.78 0 0012.01 0C5.38 0 .02 5.36.02 11.98c0 2.11.55 4.17 1.6 5.99L0 24l6.18-1.62a11.93 11.93 0 005.83 1.48h.01c6.63 0 12-5.36 12-11.98 0-3.2-1.25-6.21-3.5-8.4zM12 21.7c-1.8 0-3.55-.48-5.08-1.38l-.36-.21-3.67.96.98-3.57-.23-.37a9.8 9.8 0 01-1.5-5.25C2.14 6.48 6.48 2.14 12 2.14c2.64 0 5.12 1.03 6.98 2.9a9.8 9.8 0 012.88 6.94c-.01 5.52-4.35 9.86-9.86 9.86zm5.41-7.39c-.3-.15-1.77-.87-2.04-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.47-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.48-.5-.67-.51l-.57-.01c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48 0 1.45 1.06 2.85 1.21 3.05.15.2 2.08 3.18 5.03 4.46.7.3 1.25.48 1.67.62.7.22 1.34.19 1.85.12.56-.08 1.77-.72 2.02-1.41.25-.7.25-1.29.17-1.41-.08-.12-.27-.2-.57-.35z"/>
-          </svg>
-
           WhatsApp Us
         </a>
       </div>
 
       <div class="bg-gray-900 text-white p-4 rounded shadow">
-        <h2 style="color: red; font-weight: bold;">Nephrologist Directory</h2>
+        <h2 style="color:red;font-weight:bold;">Nephrologist Directory</h2>
         <hr>
-        <p>A nephrologist is a medical doctor who specializes in diagnosing and treating kidney diseases, managing chronic kidney failure, and overseeing dialysis or transplant care.</p>
+        <p>A nephrologist is a kidney specialist who manages kidney disease and dialysis care.</p>
+
         <button class="bg-red-500 px-2 py-1 rounded hover:bg-blue-600">
-          <a href="{% url 'doctor_list' %}"> Explore Now </a>
+          <a href="{% url 'doctor_list' %}">Explore Now</a>
         </button>
       </div>
 
@@ -162,25 +145,22 @@
 
   </div>
 
-  <!-- 🏥 RESULTS SLIDER -->
+  <!-- RESULTS SLIDER -->
   <div class="mt-8 relative">
 
     <button id="prev" class="nav-btn left-0">❮</button>
 
     <div class="overflow-hidden">
-      <div id="categorySlider"
-           class="flex gap-4 px-8">
+      <div id="categorySlider" class="flex gap-4 px-8">
 
         {% for hospital in hospital %}
         <div class="cat-card bg-white rounded shadow p-2 min-w-[220px]">
 
           <a href="{% url 'centre_detail' pk=hospital.pk %}">
             {% if hospital.image %}
-              <img src="{{ hospital.image.url }}"
-                   class="w-full h-40 object-cover rounded">
+              <img src="{{ hospital.image.url }}" class="w-full h-40 object-cover rounded">
             {% else %}
-              <img href="{% static 'hospital.jpg' %}"
-                   class="w-full h-40 object-cover rounded">
+              <img src="{% static 'hospital.jpg' %}" class="w-full h-40 object-cover rounded">
             {% endif %}
           </a>
 
@@ -189,14 +169,11 @@
             <p class="text-gray-500 truncate">{{ hospital.location }}</p>
 
             {% if hospital.distance %}
-            <p class="text-green-600 text-xs">
-              {{ hospital.distance }} km away
-            </p>
+              <p class="text-green-600 text-xs">{{ hospital.distance }} km away</p>
             {% endif %}
 
-            <a href="{{ hospital.google_pin }}"
-               class="text-orange-500 text-xs hover:underline">
-               View Location
+            <a href="{{ hospital.google_pin }}" class="text-orange-500 text-xs hover:underline">
+              View Location
             </a>
           </div>
 
@@ -207,7 +184,6 @@
     </div>
 
     <button id="next" class="nav-btn right-0">❯</button>
-
   </div>
 
 </div>
@@ -230,121 +206,70 @@
   min-width: 220px;
   transition: 0.3s;
 }
+
 .cat-card:hover {
   transform: translateY(-5px);
-}
-#categorySlider {
-  will-change: transform;
 }
 </style>
 
 <!-- JS -->
 <script>
 
-// 🔄 SHOW LOADER
 function showLoader() {
   const loader = document.getElementById("pageLoader");
   loader.classList.remove("hidden");
   loader.classList.add("flex");
 }
 
-// 🔍 FORM SUBMIT LOADING
+/* 🔍 SEARCH LOADER */
 document.querySelector("form").addEventListener("submit", function () {
-
   document.getElementById("searchText").textContent = "Searching...";
   document.getElementById("searchBtn").disabled = true;
-
   showLoader();
 });
 
-// 📍 GEOLOCATION
+/* 📍 NEAR ME */
 function getLocation() {
 
   document.getElementById("locationText").textContent = "Locating...";
   document.getElementById("locationBtn").disabled = true;
 
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition((pos) => {
-
-      document.getElementById("lat").value = pos.coords.latitude;
-      document.getElementById("lng").value = pos.coords.longitude;
-
-      showLoader();
-      document.querySelector("form").submit();
-
-    }, () => {
-      alert("Location access denied");
-
-      // reset button
-      document.getElementById("locationText").textContent = "📍 Near Me";
-      document.getElementById("locationBtn").disabled = false;
-    });
+  if (!navigator.geolocation) {
+    alert("Geolocation not supported");
+    return;
   }
+
+  navigator.geolocation.getCurrentPosition((pos) => {
+
+    document.getElementById("lat").value = pos.coords.latitude;
+    document.getElementById("lng").value = pos.coords.longitude;
+
+    showLoader();
+    document.querySelector("form").submit();
+
+  }, () => {
+
+    alert("Location access denied");
+
+    document.getElementById("locationText").textContent = "📍 Near Me";
+    document.getElementById("locationBtn").disabled = false;
+  });
 }
 
+/* 🔥 FIX BACK BUTTON LOADER BUG */
+window.addEventListener("pageshow", function () {
 
-// 🔥 INFINITE SLIDER
-const slider = document.getElementById("categorySlider");
-const cards = document.querySelectorAll(".cat-card");
-const next = document.getElementById("next");
-const prev = document.getElementById("prev");
+  const loader = document.getElementById("pageLoader");
+  loader.classList.add("hidden");
+  loader.classList.remove("flex");
 
-let index = 1;
-let isMoving = false;
+  document.getElementById("searchText").textContent = "Search";
+  document.getElementById("searchBtn").disabled = false;
 
-// CLONE
-const firstClone = cards[0].cloneNode(true);
-const lastClone = cards[cards.length - 1].cloneNode(true);
-
-slider.appendChild(firstClone);
-slider.insertBefore(lastClone, slider.firstChild);
-
-const allCards = document.querySelectorAll(".cat-card");
-
-const cardWidth = allCards[0].offsetWidth + 16;
-
-// START POSITION
-slider.style.transform = `translateX(-${cardWidth * index}px)`;
-
-// MOVE
-function move(dir) {
-  if (isMoving) return;
-  isMoving = true;
-
-  index += dir;
-
-  slider.style.transition = "transform 0.4s ease";
-  slider.style.transform = `translateX(-${cardWidth * index}px)`;
-}
-
-next.onclick = () => move(1);
-prev.onclick = () => move(-1);
-
-// LOOP FIX
-slider.addEventListener("transitionend", () => {
-
-  if (allCards[index].isEqualNode(firstClone)) {
-    slider.style.transition = "none";
-    index = 1;
-    slider.style.transform = `translateX(-${cardWidth * index}px)`;
-  }
-
-  if (allCards[index].isEqualNode(lastClone)) {
-    slider.style.transition = "none";
-    index = allCards.length - 2;
-    slider.style.transform = `translateX(-${cardWidth * index}px)`;
-  }
-
-  isMoving = false;
+  document.getElementById("locationText").textContent = "📍 Near Me";
+  document.getElementById("locationBtn").disabled = false;
 });
 
-// AUTO
-let auto = setInterval(() => move(1), 3000);
-
-slider.addEventListener("mouseenter", () => clearInterval(auto));
-slider.addEventListener("mouseleave", () => {
-  auto = setInterval(() => move(1), 3000);
-});
 </script>
 
 {% endblock %}
