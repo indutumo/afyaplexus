@@ -35,3 +35,46 @@ class Doctor(models.Model):
 
 	def __str__(self):
 		return self.name
+
+
+class Partner(models.Model):
+	id = models.UUIDField(primary_key=True, default=uuid.uuid1, editable=False)
+	name = models.CharField(max_length=200)
+	contact_person = models.CharField(max_length=200)
+	mobile_number = models.CharField(max_length=20)
+	email_address = models.CharField(max_length=100)
+	partnership_type = models.CharField(max_length=200,default='Healthcare Partnership')
+	date = models.DateField(default=timezone.now)
+	status = models.CharField(max_length=50,default='Pending')
+	notes = models.TextField(null=True,blank=True)
+
+	def __str__(self):
+		return self.name
+
+class PatientSupport(models.Model):
+	id = models.UUIDField(primary_key=True, default=uuid.uuid1, editable=False)
+	name = models.CharField(max_length=200)
+	mobile_number = models.CharField(max_length=20)
+	email_address = models.CharField(max_length=100)
+	support_type = models.CharField(max_length=200,default='Monetary Donation')
+	contact_method = models.CharField(max_length=200,default='Phone')
+	date = models.DateField(default=timezone.now)
+	status = models.CharField(max_length=50,default='Pending')
+	notes = models.TextField(null=True,blank=True)
+
+	def __str__(self):
+		return self.name
+
+
+class Volunteer(models.Model):
+	id = models.UUIDField(primary_key=True, default=uuid.uuid1, editable=False)
+	name = models.CharField(max_length=200)
+	mobile_number = models.CharField(max_length=20)
+	email_address = models.CharField(max_length=100)
+	area_of_interest = models.CharField(max_length=200,default='Community Outreach')
+	date = models.DateField(default=timezone.now)
+	status = models.CharField(max_length=50,default='Pending')
+	notes = models.TextField(null=True,blank=True)
+
+	def __str__(self):
+		return self.name

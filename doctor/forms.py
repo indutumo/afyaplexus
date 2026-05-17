@@ -1,5 +1,5 @@
 from django import forms
-from .models import Doctor
+from .models import *
 
 class DoctorForm(forms.ModelForm):
     class Meta:
@@ -26,3 +26,19 @@ class DoctorForm(forms.ModelForm):
             'license_number': forms.TextInput(attrs={'class': 'input'}),
             'hospital': forms.TextInput(attrs={'class': 'input'}),
         }
+
+
+class PartnerForm(forms.ModelForm):
+    class Meta:
+        model = Partner
+        fields = ['name','contact_person','mobile_number','email_address','partnership_type']
+
+class PatientSupportForm(forms.ModelForm):
+    class Meta:
+        model = PatientSupport
+        fields = ['name','mobile_number','email_address','support_type','contact_method']
+
+class VolunteerForm(forms.ModelForm):
+    class Meta:
+        model = Volunteer
+        fields = ['name','mobile_number','email_address','area_of_interest']

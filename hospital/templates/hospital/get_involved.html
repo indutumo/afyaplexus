@@ -3,148 +3,459 @@
 
 {% block content %}
 
-<div class="max-w-6xl mx-auto py-10 px-4">
+<div class="max-w-7xl mx-auto py-2 px-2">
 
-  <!-- ❤️ CTA SECTION -->
-  <div class="bg-green-500 text-white rounded-2xl p-10 text-center mb-12">
+	<!-- HERO SECTION -->
+	<div class="bg-gradient-to-r from-green-600 via-green-500 to-emerald-500 text-white rounded-2xl p-6 md:p-4 text-center shadow-2xl mb-10">
 
-    <h2 class="text-3xl font-bold mb-3">
-      Together We Can Save Lives
-    </h2>
+	    <p class="max-w-2xl mx-auto text-sm md:text-base text-green-50 leading-relaxed mb-0">
+	        Every contribution matters. Join Afya Plexus today and help transform
+	        access to dialysis care across Kenya.
+	    </p>
+        <div class="divider" style="margin: 0.8rem 0;"></div>
+	    
+	    <!-- Donation Methods -->
+	    <div class="grid md:grid-cols-3 gap-2 text-left">
 
-    <p class="mb-8 max-w-2xl mx-auto text-orange-100">
-      Every contribution matters. Join Afya Plexus today and help transform
-      access to dialysis care across Kenya.
-    </p>
+	        <!-- PayPal -->
+	        <div class="bg-blue-600/80 backdrop-blur-lg border border-white/10 rounded-2xl p-5 shadow-lg hover:scale-[1.02] transition duration-300">
 
-  <!-- Donation Methods -->
-  <div class="grid md:grid-cols-3 gap-6 text-left">
+	            <div class="flex items-center gap-3 mb-3">
+	                <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center text-2xl">
+	                    💳
+	                </div>
 
-    <!-- 💙 PayPal (Blue) -->
-    <div class="bg-blue-600/90 backdrop-blur-sm rounded-xl p-6 text-white shadow-lg">
+	                <div>
+	                    <h3 class="text-lg font-bold">PayPal</h3>
+	                    <p class="text-xs text-blue-100">Secure Online Donations</p>
+	                </div>
+	            </div>
 
-      <h3 class="text-xl font-semibold mb-4">💳 PayPal</h3>
+	            <p class="text-sm break-all font-medium">
+	                donations@afyaplexus.org
+	            </p>
+	        </div>
 
-      <p class="text-sm text-blue-100 mb-2">
-        Send donations via PayPal:
-      </p>
+	        <!-- Bank -->
+	        <div class="bg-orange-500/80 backdrop-blur-lg border border-white/10 rounded-2xl p-5 shadow-lg hover:scale-[1.02] transition duration-300">
 
-      <p class="font-medium break-all text-white">
-        donations@afyaplexus.org
-      </p>
+	            <div class="flex items-center gap-3 mb-3">
+	                <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center text-2xl">
+	                    🏦
+	                </div>
+
+	                <div>
+	                    <h3 class="text-lg font-bold">Bank Account</h3>
+	                    <p class="text-xs text-orange-100">Direct Bank Transfer</p>
+	                </div>
+	            </div>
+
+	            <div class="space-y-1 text-sm">
+	                <p><span class="font-semibold">Bank:</span> NCBA Bank</p>
+
+	                <p>
+	                    <span class="font-semibold">Account:</span>
+	                    Afya Plexus and Wellness Foundation
+	                </p>
+
+	                <p>
+	                    <span class="font-semibold">A/C No:</span>
+	                    9789850018
+	                </p>
+	            </div>
+	        </div>
+
+	        <!-- M-Pesa -->
+	        <div class="bg-emerald-600/80 backdrop-blur-lg border border-white/10 rounded-2xl p-5 shadow-lg hover:scale-[1.02] transition duration-300">
+
+	            <div class="flex items-center gap-3 mb-3">
+	                <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center text-2xl">
+	                    📱
+	                </div>
+
+	                <div>
+	                    <h3 class="text-lg font-bold">M-Pesa</h3>
+	                    <p class="text-xs text-emerald-100">Mobile Money</p>
+	                </div>
+	            </div>
+
+	            <div class="space-y-1 text-sm">
+	                <p>
+	                    <span class="font-semibold">Till No:</span>
+	                    4619256
+	                </p>
+	                <p>
+	                    <span class="font-semibold">Pay Bill:</span>
+	                    880100
+	                </p>
+
+	                <p>
+	                    <span class="font-semibold">Account:</span>
+	                    818818
+	                </p>
+	            </div>
+	        </div>
+
+	    </div>
+	</div>
+
+    <!-- OPTIONS -->
+    <div class="grid md:grid-cols-3 gap-8">
+
+        <!-- PARTNER -->
+        <div class="bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition duration-300 border border-gray-100">
+
+	        <div class="flex items-center gap-3 mb-3">
+	            <div class="w-12 h-12 rounded-2xl bg-green-100 flex items-center justify-center text-3xl mb-5">
+	                🤝
+	            </div>
+	            <h3 class="text-2xl font-bold mb-4 text-gray-800">Partner With Us</h3>
+	        </div>
+
+            <p class="text-gray-600 leading-relaxed mb-6">
+                Collaborate with us as an organization, NGO, or institution
+                to expand healthcare access.
+            </p>
+
+            <button onclick="openModal('partnerModal')"
+                    class="bg-green-500 hover:bg-green-600 text-white px-5 py-3 rounded-xl font-semibold transition">
+                + Become a Partner
+            </button>
+        </div>
+
+        <!-- PATIENT -->
+        <div class="bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition duration-300 border border-gray-100">
+
+	        <div class="flex items-center gap-3 mb-3">
+	            <div class="w-12 h-12 rounded-2xl bg-orange-100 flex items-center justify-center text-3xl mb-5">
+	                💰
+	            </div>
+
+	            <h3 class="text-2xl font-bold mb-4 text-gray-800">
+	                Patient Support
+	            </h3>
+	        </div>
+
+            <p class="text-gray-600 leading-relaxed mb-6">
+                Support dialysis patients and healthcare programs
+                through your contributions.
+            </p>
+
+            <button onclick="openModal('patientModal')"
+                    class="bg-orange-500 hover:bg-orange-600 text-white px-5 py-3 rounded-xl font-semibold transition">
+                + Register Patient
+            </button>
+        </div>
+
+        <!-- VOLUNTEER -->
+        <div class="bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition duration-300 border border-gray-100">
+	        <div class="flex items-center gap-3 mb-3">
+	            <div class="w-12 h-12 rounded-2xl bg-purple-100 flex items-center justify-center text-3xl mb-5">
+	                🙋
+	            </div>
+
+	            <h3 class="text-2xl font-bold mb-4 text-gray-800">
+	                Volunteer
+	            </h3>
+	        </div>
+
+            <p class="text-gray-600 leading-relaxed mb-6">
+                Offer your time and skills to support awareness
+                and outreach programs.
+            </p>
+
+            <button onclick="openModal('volunteerModal')"
+                    class="bg-purple-500 hover:bg-purple-600 text-white px-5 py-3 rounded-xl font-semibold transition">
+                + Join as Volunteer
+            </button>
+        </div>
 
     </div>
-
-    <!-- 🟠 Bank (Orange) -->
-    <div class="bg-orange-500/90 backdrop-blur-sm rounded-xl p-6 text-white shadow-lg">
-
-      <h3 class="text-xl font-semibold mb-4">🏦 Bank Account</h3>
-
-      <div class="space-y-2 text-sm text-orange-50">
-
-        <p><span class="font-semibold text-white">Bank:</span> NCBA Bank</p>
-
-        <p>
-          <span class="font-semibold text-white">Account Name:</span><br>
-          Afya Plexus and Wellness Foundation
-        </p>
-
-        <p>
-          <span class="font-semibold text-white">Account No:</span>
-          9789850018
-        </p>
-
-      </div>
-
-    </div>
-
-    <!-- ❤️ Mpesa (Red) -->
-    <div class="bg-red-600/90 backdrop-blur-sm rounded-xl p-6 text-white shadow-lg">
-
-      <h3 class="text-xl font-semibold mb-4">📱 M-Pesa</h3>
-
-      <div class="space-y-2 text-sm text-red-100">
-
-        <p>
-          <span class="font-semibold text-white">Pay Bill:</span>
-          880100
-        </p>
-
-        <p>
-          <span class="font-semibold text-white">Account No:</span>
-          818818
-        </p>
-
-      </div>
-
-    </div>
-
-  </div>
-
-  </div>
-
-  <!-- 💡 OPTIONS GRID -->
-  <div class="grid md:grid-cols-3 gap-6">
-
-    <!-- 🤝 PARTNER -->
-    <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
-      <div class="text-3xl mb-3">🤝</div>
-
-      <h3 class="font-bold text-lg mb-2">
-        Partner With Us
-      </h3>
-
-      <p class="text-gray-600 text-sm mb-4">
-        Collaborate with us as an organization, NGO, or institution
-        to expand healthcare access.
-      </p>
-
-      <a href="#"
-         class="text-orange-500 font-medium hover:underline">
-        Become a Partner →
-      </a>
-    </div>
-
-    <!-- 💰 DONATE -->
-    <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
-      <div class="text-3xl mb-3">💰</div>
-
-      <h3 class="font-bold text-lg mb-2">
-        Donate
-      </h3>
-
-      <p class="text-gray-600 text-sm mb-4">
-        Support dialysis patients and healthcare programs
-        through your contributions.
-      </p>
-
-      <a href="#"
-         class="text-orange-500 font-medium hover:underline">
-        Donate Now →
-      </a>
-    </div>
-
-    <!-- 🙋 VOLUNTEER -->
-    <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
-      <div class="text-3xl mb-3">🙋</div>
-
-      <h3 class="font-bold text-lg mb-2">
-        Volunteer
-      </h3>
-
-      <p class="text-gray-600 text-sm mb-4">
-        Offer your time and skills to support awareness
-        and patient outreach programs.
-      </p>
-
-      <a href="#"
-         class="text-orange-500 font-medium hover:underline">
-        Join as Volunteer →
-      </a>
-    </div>
-
-  </div>
-
 </div>
+
+<!-- ================================= -->
+<!-- MODAL BASE STYLE -->
+<!-- ================================= -->
+
+<style>
+    .modal-input {
+        @apply w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent;
+    }
+</style>
+
+<!-- ================================= -->
+<!-- PARTNER MODAL -->
+<!-- ================================= -->
+
+<div id="partnerModal" class="fixed inset-0 hidden z-50 bg-black/60 backdrop-blur-sm items-center justify-center p-4 overflow-y-auto">
+
+    <div class="bg-white w-full max-w-3xl rounded-3xl shadow-2xl p-8 relative animate-fadeIn">
+
+        <button onclick="closeModal('partnerModal')"
+                class="absolute top-5 right-5 text-gray-500 hover:text-red-500 text-3xl">
+            ×
+        </button>
+
+        <h2 class="text-3xl font-bold text-gray-800 mb-2">
+            Partner With Us
+        </h2>
+
+        <p class="text-gray-500 mb-8">
+            Fill in the form below and our team will contact you shortly.
+        </p>
+
+        <form method="POST" action="{% url 'add_partner' %}" class="space-y-6">
+            {% csrf_token %}
+
+            <div class="grid md:grid-cols-2 gap-6">
+
+                <div>
+                    <label class="block mb-2 font-medium">Organization Name</label>
+                    <input type="text" name="name" placeholder="Enter organization name"
+                           class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-green-400">
+                </div>
+
+                <div>
+                    <label class="block mb-2 font-medium">Contact Person</label>
+                    <input type="text" name="contact_person" placeholder="Enter contact person"
+                           class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-green-400">
+                </div>
+
+                <div>
+                    <label class="block mb-2 font-medium">Email Address</label>
+                    <input type="email" name="email_address" placeholder="example@email.com"
+                           class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-green-400">
+                </div>
+
+                <div>
+                    <label class="block mb-2 font-medium">Mobile Number</label>
+                    <input type="text" name="mobile_number" placeholder="+254..."
+                           class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-green-400">
+                </div>
+
+                <div class="md:col-span-2">
+                    <label class="block mb-2 font-medium">Partnership Type</label>
+
+                    <select name="partnership_type"
+                            class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-green-400">
+
+                        <option value="">Select Partnership Type</option>
+                        <option value="Healthcare Partnership">Healthcare Partnership</option>
+                        <option value="Corporate Sponsorship">Corporate Sponsorship</option>
+                        <option value="Event Collaboration">Event Collaboration</option>
+                        <option value="Technology Partnership">Technology Partnership</option>
+                        <option value="Other">Other</option>
+
+                    </select>
+                </div>
+
+            </div>
+
+            <button type="submit"
+                    class="w-full bg-green-500 hover:bg-green-600 text-white py-4 rounded-xl font-semibold text-lg transition">
+                Submit Partnership Interest
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- ================================= -->
+<!-- PATIENT MODAL -->
+<!-- ================================= -->
+
+<div id="patientModal" class="fixed inset-0 hidden z-50 bg-black/60 backdrop-blur-sm items-center justify-center p-4 overflow-y-auto">
+
+    <div class="bg-white w-full max-w-3xl rounded-3xl shadow-2xl p-8 relative">
+
+        <button onclick="closeModal('patientModal')"
+                class="absolute top-5 right-5 text-gray-500 hover:text-red-500 text-3xl">
+            ×
+        </button>
+
+        <h2 class="text-3xl font-bold text-gray-800 mb-2">
+            Patient Support Registration
+        </h2>
+
+        <p class="text-gray-500 mb-8">
+            Help support dialysis patients and healthcare programs.
+        </p>
+
+        <form method="POST" action="{% url 'add_patient' %}" class="space-y-6">
+
+            {% csrf_token %}
+
+            <div class="grid md:grid-cols-2 gap-6">
+
+                <div>
+                    <label class="block mb-2 font-medium">Full Name</label>
+                    <input type="text" name="name" placeholder="Enter full name"
+                           class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-orange-400">
+                </div>
+
+                <div>
+                    <label class="block mb-2 font-medium">Mobile Number</label>
+                    <input type="text" name="mobile_number" placeholder="+254..."
+                           class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-orange-400">
+                </div>
+
+                <div>
+                    <label class="block mb-2 font-medium">Email Address</label>
+                    <input type="email" name="email_address" placeholder="example@email.com"
+                           class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-orange-400">
+                </div>
+
+                <div>
+                    <label class="block mb-2 font-medium">Support Type</label>
+
+                    <select name="support_type"
+                            class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-orange-400">
+
+                        <option value="">Select Support Type</option>
+                        <option value="Monetary Donation">Monetary Donation</option>
+                        <option value="In-Kind Support">In-Kind Support</option>
+                        <option value="Sponsorship">Sponsorship</option>
+
+                    </select>
+                </div>
+
+                <div class="md:col-span-2">
+                    <label class="block mb-2 font-medium">Preferred Contact Method</label>
+
+                    <select name="contact_method"
+                            class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-orange-400">
+
+                        <option value="">Select Contact Method</option>
+                        <option value="Phone">Phone</option>
+                        <option value="Email">Email</option>
+                        <option value="WhatsApp">WhatsApp</option>
+
+                    </select>
+                </div>
+
+            </div>
+
+            <button type="submit"
+                    class="w-full bg-orange-500 hover:bg-orange-600 text-white py-4 rounded-xl font-semibold text-lg transition">
+                Support a Patient
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- ================================= -->
+<!-- VOLUNTEER MODAL -->
+<!-- ================================= -->
+
+<div id="volunteerModal" class="fixed inset-0 hidden z-50 bg-black/60 backdrop-blur-sm items-center justify-center p-4 overflow-y-auto">
+
+    <div class="bg-white w-full max-w-3xl rounded-3xl shadow-2xl p-8 relative">
+
+        <button onclick="closeModal('volunteerModal')"
+                class="absolute top-5 right-5 text-gray-500 hover:text-red-500 text-3xl">
+            ×
+        </button>
+
+        <h2 class="text-3xl font-bold text-gray-800 mb-2">
+            Volunteer Registration
+        </h2>
+
+        <p class="text-gray-500 mb-8">
+            Join our outreach and awareness programs.
+        </p>
+
+        <form method="POST" action="{% url 'add_volunteer' %}" class="space-y-6">
+
+            {% csrf_token %}
+
+            <div class="grid md:grid-cols-2 gap-6">
+
+                <div>
+                    <label class="block mb-2 font-medium">Full Name</label>
+                    <input type="text" name="name" placeholder="Enter full name"
+                           class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-purple-400">
+                </div>
+
+                <div>
+                    <label class="block mb-2 font-medium">Mobile Number</label>
+                    <input type="text" name="mobile_number" placeholder="+254..."
+                           class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-purple-400">
+                </div>
+
+                <div>
+                    <label class="block mb-2 font-medium">Email Address</label>
+                    <input type="email" name="email_address" placeholder="example@email.com"
+                           class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-purple-400">
+                </div>
+
+                <div>
+                    <label class="block mb-2 font-medium">Area of Interest</label>
+
+                    <select name="area_of_interest"
+                            class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-purple-400">
+
+                        <option value="">Select Area of Interest</option>
+                        <option value="Community Outreach">Community Outreach</option>
+                        <option value="Patient Support">Patient Support</option>
+                        <option value="Medical Volunteer">Medical Volunteer</option>
+                        <option value="Marketing & Media">Marketing & Media</option>
+                        <option value="Technology Support">Technology Support</option>
+                        <option value="Events & Logistics">Events & Logistics</option>
+
+                    </select>
+                </div>
+
+            </div>
+
+            <button type="submit"
+                    class="w-full bg-purple-500 hover:bg-purple-600 text-white py-4 rounded-xl font-semibold text-lg transition">
+                Join the Movement
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- ================================= -->
+<!-- MODAL SCRIPT -->
+<!-- ================================= -->
+
+<script>
+    function openModal(id) {
+        const modal = document.getElementById(id);
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        document.body.classList.add('overflow-hidden');
+    }
+
+    function closeModal(id) {
+        const modal = document.getElementById(id);
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        document.body.classList.remove('overflow-hidden');
+    }
+
+    // close outside click
+    document.addEventListener('click', function(e) {
+
+        ['partnerModal', 'patientModal', 'volunteerModal'].forEach(id => {
+
+            const modal = document.getElementById(id);
+
+            if (e.target === modal) {
+                closeModal(id);
+            }
+        });
+    });
+
+    // ESC close
+    document.addEventListener('keydown', function(e) {
+
+        if (e.key === 'Escape') {
+
+            ['partnerModal', 'patientModal', 'volunteerModal'].forEach(id => {
+                closeModal(id);
+            });
+        }
+    });
+</script>
 
 {% endblock %}

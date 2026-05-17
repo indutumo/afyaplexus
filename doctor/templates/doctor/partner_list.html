@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="max-w-7xl mx-auto py-0">
+
+  <!-- HEADER -->
+  <div class="flex flex-col lg:flex-row justify-between items-center gap-4 mb-6">
+
+    <h1 class="text-xl font-bold">Partner List</h1>
+
+  </div>
+
+  <!-- 🔍 FILTERS -->
+  <div class="bg-white p-4 rounded-xl shadow mb-6 grid grid-cols-1 md:grid-cols-4 gap-3">
+
+    <input type="text" id="q" placeholder="Search doctor..."
+           class="border p-2 rounded">
+
+    <input type="text" id="hospital" placeholder="Hospital..."
+           class="border p-2 rounded">
+
+    <input type="text" id="location" placeholder="Location..."
+           class="border p-2 rounded">
+
+    <!-- ACTION BUTTONS -->
+    <div class="flex gap-2">
+
+      <button onclick="fetchDoctors()"
+              class="bg-orange-500 text-white px-3 py-2 rounded hover:bg-orange-600 w-full">
+        Search
+      </button>
+
+      <button onclick="clearFilters()"
+              class="bg-gray-200 text-gray-700 px-3 py-2 rounded hover:bg-gray-300 w-full">
+        Clear
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- RESULTS COUNT -->
+  <p class="text-sm text-gray-500 mb-2">
+    <span id="count">{{ page_obj|length }}</span> doctors found
+  </p>
+
+  <!-- TABLE -->
+  <div class="bg-white rounded-xl shadow overflow-x-auto">
+
+    <table class="w-full text-sm">
+
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="p-3 text-left">Doctor</th>
+          <th class="p-3 text-left">Hospital</th>
+          <th class="p-3 text-left">Location</th>
+          <th class="p-3 text-left">Contact</th>
+          <th class="p-3 text-left">Email</th>
+        </tr>
+      </thead>
+
+      <tbody id="table-body">
+
+        {% for doctor in page_obj %}
+        <tr class="border-t">
+
+          <td class="p-3 font-semibold text-orange-500">
+            <a href="{% url 'doctor_detail' pk=doctor.pk %}">
+              {{ doctor.title }} {{ doctor.name }}
+            </a>
+          </td>
+
+          <td class="p-3">{{ doctor.hospital|default:"-" }}</td>
+          <td class="p-3">{{ doctor.location|default:"-" }}</td>
+          <td class="p-3">{{ doctor.mobile_number }}</td>
+          <td class="p-3">{{ doctor.email_address }}</td>
+
+        </tr>
+        {% endfor %}
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>
+
+<!-- ================= AJAX SCRIPT ================= -->
+<script>
+
+let timeout = null;
+
+function fetchDoctors() {
+
+  const q = document.getElementById("q").value;
+  const hospital = document.getElementById("hospital").value;
+  const location = document.getElementById("location").value;
+
+  fetch(`?q=${q}&hospital=${hospital}&location=${location}`, {
+    headers: {
+      "X-Requested-With": "XMLHttpRequest"
+    }
+  })
+  .then(res => res.json())
+  .then(data => {
+
+    const tbody = document.getElementById("table-body");
+    tbody.innerHTML = "";
+
+    document.getElementById("count").innerText = data.doctors.length;
+
+    if (data.doctors.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="5" class="text-center p-6 text-gray-500">
+            No doctors found
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    data.doctors.forEach(d => {
+      tbody.innerHTML += `
+        <tr class="border-t hover:bg-gray-50">
+
+          <td class="p-3 font-semibold text-orange-500">
+            <a href="/doctor/doctor_detail/${d.id}/" class="hover:underline">
+              ${d.name}
+            </a>
+          </td>
+
+          <td class="p-3">${d.hospital}</td>
+          <td class="p-3">${d.location}</td>
+          <td class="p-3">${d.mobile}</td>
+          <td class="p-3">${d.email}</td>
+
+        </tr>
+      `;
+    });
+
+  });
+
+}
+
+// LIVE SEARCH (debounce)
+function triggerSearch() {
+  clearTimeout(timeout);
+  timeout = setTimeout(fetchDoctors, 400);
+}
+
+// INPUT EVENTS
+document.getElementById("q").addEventListener("input", triggerSearch);
+document.getElementById("hospital").addEventListener("input", triggerSearch);
+document.getElementById("location").addEventListener("input", triggerSearch);
+
+// CLEAR BUTTON
+function clearFilters() {
+
+  document.getElementById("q").value = "";
+  document.getElementById("hospital").value = "";
+  document.getElementById("location").value = "";
+
+  fetchDoctors(); // reload all data
+}
+
+</script>
+
+{% endblock %}
