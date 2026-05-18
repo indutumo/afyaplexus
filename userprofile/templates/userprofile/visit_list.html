@@ -1,0 +1,153 @@
+{% extends "userprofile/base_analytics.html" %}
+
+{% block title %}
+Visitor List
+{% endblock %}
+
+{% block content %}
+
+<!-- HEADER -->
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
+
+    <div>
+
+        <h1 class="text-4xl font-extrabold">
+            Visitor List
+        </h1>
+
+        <p class="text-gray-500 mt-2 text-lg">
+            Monitor all website visitors
+        </p>
+
+    </div>
+
+    <!-- SEARCH -->
+    <form method="GET">
+
+        <input
+            type="text"
+            name="search"
+            value="{{ search }}"
+            placeholder="Search visitor..."
+            class="bg-white border border-gray-300 px-5 py-3 rounded-xl outline-none focus:ring-2 focus:ring-blue-500"
+        >
+
+    </form>
+
+</div>
+
+<!-- TABLE CARD -->
+<div class="bg-white rounded-2xl shadow-sm border overflow-hidden">
+
+    <div class="overflow-x-auto">
+
+        <table class="w-full text-sm">
+
+            <!-- HEADER -->
+            <thead class="bg-gray-50 border-b text-gray-600">
+
+                <tr>
+
+                    <th class="p-4 text-left flex items-center gap-2">
+                        Visitor
+                    </th>
+
+                    <th class="p-4 text-left">User</th>
+                    <th class="p-4 text-left">Country</th>
+                    <th class="p-4 text-left">City</th>
+                    <th class="p-4 text-left">IP Address</th>
+                    <th class="p-4 text-left">First Seen</th>
+                    <th class="p-4 text-left">Last Seen</th>
+                    <th class="p-4 text-left">Type</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for item in page_obj %}
+
+                <tr class="border-b hover:bg-gray-50">
+
+                    <td class="p-4 font-medium">
+                        {{ item.visitor.visitor_id }}
+                    </td>
+
+                    <td class="p-4">
+                        {% if item.visitor.user %}
+                            {{ item.visitor.user.username }}
+                        {% else %}
+                            Anonymous
+                        {% endif %}
+                    </td>
+
+                    <td class="p-4">
+                        {{ item.visitor.country|default:"-" }}
+                    </td>
+
+                    <td class="p-4">
+                        {{ item.visitor.city|default:"-" }}
+                    </td>
+
+                    <td class="p-4">
+                        {{ item.visitor.ip_address|default:"-" }}
+                    </td>
+
+                    <td class="p-4 text-gray-500">
+                        {{ item.visitor.first_seen }}
+                    </td>
+
+                    <td class="p-4 text-gray-500">
+                        {{ item.visitor.last_seen }}
+                    </td>
+
+                    <td class="p-4">
+
+                        {% if item.is_returning %}
+                            <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-semibold">
+                                Returning
+                            </span>
+                        {% else %}
+                            <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-semibold">
+                                New
+                            </span>
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<!-- PAGINATION -->
+<div class="flex justify-center items-center gap-3 mt-8">
+
+    {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}"
+           class="px-5 py-2 bg-white rounded-xl shadow">
+            Previous
+        </a>
+    {% endif %}
+
+    <span class="px-5 py-2 bg-blue-600 text-white rounded-xl">
+        {{ page_obj.number }}
+    </span>
+
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}"
+           class="px-5 py-2 bg-white rounded-xl shadow">
+            Next
+        </a>
+    {% endif %}
+
+</div>
+
+{% endblock %}

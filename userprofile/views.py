@@ -306,68 +306,288 @@ def track_funnel(request):
         return JsonResponse({"error": str(e)}, status=500)
 
 
+
 def analytics_dashboard(request):
 
-    last_7_days = now() - timedelta(days=7)
+    # --------------------------------
+    # FILTERS
+    # --------------------------------
+    period = request.GET.get("period", "7d")
 
-    # ------------------------
+    if period == "24h":
+        start_date = now() - timedelta(days=1)
+
+    elif period == "30d":
+        start_date = now() - timedelta(days=30)
+
+    else:
+        start_date = now() - timedelta(days=7)
+
+    # --------------------------------
     # BASIC STATS
-    # ------------------------
-    total_visitors = Visitor.objects.count()
-    total_pageviews = PageView.objects.count()
-    total_clicks = ClickEvent.objects.count()
+    # --------------------------------
+    visitors = Visitor.objects.filter(
+        first_seen__gte=start_date
+    ).count()
 
-    # ------------------------
-    # TOP DATA
-    # ------------------------
+    pageviews = PageView.objects.filter(
+        timestamp__gte=start_date
+    ).count()
+
+    clicks = ClickEvent.objects.filter(
+        timestamp__gte=start_date
+    ).count()
+
+    # --------------------------------
+    # NEW VISITS
+    # --------------------------------
+    new_visits = Visitor.objects.filter(
+        first_seen__gte=start_date
+    ).count()
+
+    # --------------------------------
+    # RETURNING VISITS
+    # --------------------------------
+    revisit_count = Visitor.objects.filter(
+        last_seen__gt=start_date
+    ).exclude(
+        first_seen__gte=start_date
+    ).count()
+
+    # --------------------------------
+    # TOP PAGES
+    # --------------------------------
     top_pages = (
-        PageView.objects.values("path")
+        PageView.objects.filter(timestamp__gte=start_date)
+        .values("path")
         .annotate(total=Count("id"))
         .order_by("-total")[:10]
     )
 
+    # --------------------------------
+    # TOP CLICKS
+    # --------------------------------
     top_clicks = (
-        ClickEvent.objects.values("label")
+        ClickEvent.objects.filter(timestamp__gte=start_date)
+        .values("label")
         .annotate(total=Count("id"))
         .order_by("-total")[:10]
     )
 
-    top_countries = (
-        Visitor.objects.values("country")
+    # --------------------------------
+    # MOST VISITED PAGE
+    # --------------------------------
+    top_page = (
+        PageView.objects.filter(timestamp__gte=start_date)
+        .values("path")
+        .annotate(total=Count("id"))
+        .order_by("-total")
+        .first()
+    )
+
+    # --------------------------------
+    # MOST CLICKED ITEM
+    # --------------------------------
+    top_click = (
+        ClickEvent.objects.filter(timestamp__gte=start_date)
+        .values("label")
+        .annotate(total=Count("id"))
+        .order_by("-total")
+        .first()
+    )
+
+    # --------------------------------
+    # COUNTRY STATS
+    # --------------------------------
+    country_stats = (
+        Visitor.objects.filter(first_seen__gte=start_date)
+        .values("country")
         .annotate(total=Count("id"))
         .order_by("-total")[:10]
     )
 
-    # ------------------------
-    # DAILY PAGEVIEWS (7 DAYS)
-    # ------------------------
-    pageviews_by_day = (
-        PageView.objects.filter(timestamp__gte=last_7_days)
+    # --------------------------------
+    # DAILY PAGE TRENDS
+    # --------------------------------
+    trend_days = 7
+
+    daily_pages = (
+        PageView.objects.filter(
+            timestamp__gte=now() - timedelta(days=trend_days)
+        )
         .extra(select={"day": "date(timestamp)"})
         .values("day")
         .annotate(total=Count("id"))
         .order_by("day")
     )
 
-    clicks_by_day = (
-        ClickEvent.objects.filter(timestamp__gte=last_7_days)
+    # --------------------------------
+    # DAILY CLICK TRENDS
+    # --------------------------------
+    daily_clicks = (
+        ClickEvent.objects.filter(
+            timestamp__gte=now() - timedelta(days=trend_days)
+        )
         .extra(select={"day": "date(timestamp)"})
         .values("day")
         .annotate(total=Count("id"))
         .order_by("day")
     )
 
+    # --------------------------------
+    # CONTEXT
+    # --------------------------------
     context = {
-        "total_visitors": total_visitors,
-        "total_pageviews": total_pageviews,
-        "total_clicks": total_clicks,
 
-        "top_pages": top_pages,
-        "top_clicks": top_clicks,
-        "top_countries": top_countries,
+        # KPI
+        "visitors": visitors,
+        "pageviews": pageviews,
+        "clicks": clicks,
+        "new_visits": new_visits,
+        "revisit_count": revisit_count,
 
-        "pageviews_by_day": list(pageviews_by_day),
-        "clicks_by_day": list(clicks_by_day),
+        # TOP STATS
+        "top_page": top_page,
+        "top_click": top_click,
+
+        # TABLES
+        "top_pages": list(top_pages),
+        "top_clicks": list(top_clicks),
+
+        # CHARTS
+        "country_stats": list(country_stats),
+        "daily_pages": list(daily_pages),
+        "daily_clicks": list(daily_clicks),
+
+        # FILTER
+        "period": period,
     }
 
-    return render(request, "userprofile/analytics_dashboard.html", context)
+    return render(request,"userprofile/analytics_dashboard.html",context)
+
+
+def visit_list(request):
+
+    search = request.GET.get("search", "")
+
+    visitors = Visitor.objects.all().order_by("-last_seen")
+
+    if search:
+        visitors = visitors.filter(
+            Q(visitor_id__icontains=search) |
+            Q(country__icontains=search) |
+            Q(city__icontains=search) |
+            Q(ip_address__icontains=search)
+        )
+
+    # Detect returning visitors
+    visitor_data = []
+
+    for visitor in visitors:
+        is_returning = (
+            visitor.last_seen - visitor.first_seen
+        ) > timedelta(minutes=30)
+
+        visitor_data.append({
+            "visitor": visitor,
+            "is_returning": is_returning
+        })
+
+    paginator = Paginator(visitor_data, 20)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        "page_obj": page_obj,
+        "search": search
+    }
+
+    return render(
+        request,
+        "userprofile/visit_list.html",
+        context
+    )
+
+
+def pageview_list(request):
+
+    search = request.GET.get("search", "")
+    method = request.GET.get("method", "")
+
+    pageviews = PageView.objects.select_related("visitor").order_by("-timestamp")
+
+    # ----------------------------
+    # SEARCH FILTER
+    # ----------------------------
+    if search:
+        pageviews = pageviews.filter(
+            Q(path__icontains=search) |
+            Q(view_name__icontains=search) |
+            Q(referrer__icontains=search) |
+            Q(visitor__visitor_id__icontains=search)
+        )
+
+    # ----------------------------
+    # METHOD FILTER
+    # ----------------------------
+    if method:
+        pageviews = pageviews.filter(method=method)
+
+    # ----------------------------
+    # PAGINATION
+    # ----------------------------
+    paginator = Paginator(pageviews, 25)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        "page_obj": page_obj,
+        "search": search,
+        "method": method,
+    }
+
+    return render(request, "userprofile/pageview_list.html", context)
+
+
+def click_event_list(request):
+
+    search = request.GET.get("search", "")
+    event_type = request.GET.get("event_type", "")
+
+    clicks = ClickEvent.objects.select_related("visitor").order_by("-timestamp")
+
+    # --------------------------
+    # SEARCH FILTER
+    # --------------------------
+    if search:
+        clicks = clicks.filter(
+            Q(label__icontains=search) |
+            Q(page__icontains=search) |
+            Q(event_type__icontains=search) |
+            Q(visitor__visitor_id__icontains=search)
+        )
+
+    # --------------------------
+    # EVENT TYPE FILTER
+    # --------------------------
+    if event_type:
+        clicks = clicks.filter(event_type=event_type)
+
+    # --------------------------
+    # PAGINATION
+    # --------------------------
+    paginator = Paginator(clicks, 25)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        "page_obj": page_obj,
+        "search": search,
+        "event_type": event_type,
+    }
+
+    return render(
+        request,
+        "userprofile/click_event_list.html",
+        context
+    )

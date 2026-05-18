@@ -1,0 +1,187 @@
+{% extends "userprofile/base_analytics.html" %}
+
+{% block title %}Click Events{% endblock %}
+
+{% block content %}
+
+<!-- HEADER -->
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
+
+    <div>
+        <h1 class="text-3xl font-bold">Click Events</h1>
+        <p class="text-gray-500 mt-1">Track user interactions across your site</p>
+    </div>
+
+    <div class="flex gap-3">
+
+        <!-- FILTER BUTTON -->
+        <button class="px-4 py-2 bg-white border rounded-xl shadow-sm flex items-center gap-2 hover:bg-gray-50">
+            <span>⚙️</span> Filters
+        </button>
+
+        <!-- EXPORT / ADD -->
+        <button class="px-4 py-2 bg-blue-600 text-white rounded-xl shadow hover:bg-blue-700 flex items-center gap-2">
+            <span>＋</span> Add Manual
+        </button>
+
+    </div>
+
+</div>
+
+<!-- SEARCH BAR -->
+<div class="flex items-center justify-between mb-5">
+
+    <form method="GET" class="flex items-center gap-3 w-full">
+
+        <div class="relative w-full max-w-md">
+
+            <span class="absolute left-3 top-3 text-gray-400">🔍</span>
+
+            <input
+                type="text"
+                name="search"
+                value="{{ search }}"
+                placeholder="Search transactions..."
+                class="w-full pl-10 pr-4 py-2 border rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
+            />
+
+        </div>
+
+    </form>
+
+</div>
+
+<!-- TABLE CARD -->
+<div class="bg-white rounded-2xl shadow-sm border overflow-hidden">
+
+    <!-- TABLE -->
+    <div class="overflow-x-auto">
+
+        <table class="w-full text-sm">
+
+            <!-- HEADER -->
+            <thead class="bg-gray-50 text-gray-600 border-b">
+
+                <tr>
+                    <th class="p-4 text-left">Visitor</th>
+                    <th class="p-4 text-left">Page</th>
+                    <th class="p-4 text-left">Event</th>
+                    <th class="p-4 text-left">Label</th>
+                    <th class="p-4 text-left">Coordinates</th>
+                    <th class="p-4 text-left">Screen</th>
+                    <th class="p-4 text-left">Time</th>
+
+                </tr>
+
+            </thead>
+
+            <!-- BODY -->
+            <tbody>
+
+                {% for click in page_obj %}
+
+                <tr class="border-b hover:bg-gray-50 transition">
+
+                    <!-- VISITOR -->
+                    <td class="p-4 text-gray-700">
+                        {{ click.visitor.visitor_id }}
+                    </td>
+
+                    <!-- PAGE -->
+                    <td class="p-4 text-blue-600 font-medium truncate max-w-[180px]">
+                        {{ click.page }}
+                    </td>
+
+                    <!-- EVENT TYPE -->
+                    <td class="p-4">
+
+                        {% if click.event_type == "click" %}
+                            <span class="px-3 py-1 text-xs rounded-full bg-green-100 text-green-700">
+                                Click
+                            </span>
+
+                        {% elif click.event_type == "scroll" %}
+                            <span class="px-3 py-1 text-xs rounded-full bg-yellow-100 text-yellow-700">
+                                Scroll
+                            </span>
+
+                        {% else %}
+                            <span class="px-3 py-1 text-xs rounded-full bg-purple-100 text-purple-700">
+                                {{ click.event_type }}
+                            </span>
+                        {% endif %}
+
+                    </td>
+
+                    <!-- LABEL -->
+                    <td class="p-4 text-gray-600">
+                        {{ click.label|default:"—" }}
+                    </td>
+
+                    <!-- COORDINATES -->
+                    <td class="p-4 text-gray-500">
+                        {% if click.x and click.y %}
+                            {{ click.x }}, {{ click.y }}
+                        {% else %}
+                            —
+                        {% endif %}
+                    </td>
+
+                    <!-- SCREEN -->
+                    <td class="p-4 text-gray-500">
+                        {% if click.screen_width %}
+                            {{ click.screen_width }}×{{ click.screen_height }}
+                        {% else %}
+                            —
+                        {% endif %}
+                    </td>
+
+                    <!-- TIME -->
+                    <td class="p-4 text-gray-500 whitespace-nowrap">
+                        {{ click.timestamp|date:"M d, H:i" }}
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<!-- PAGINATION -->
+<div class="flex items-center justify-between mt-6">
+
+    <div class="text-sm text-gray-500">
+        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+    </div>
+
+    <div class="flex gap-2">
+
+        {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}&search={{ search }}"
+           class="px-3 py-2 border rounded-lg hover:bg-gray-100">
+            ←
+        </a>
+        {% endif %}
+
+        <span class="px-4 py-2 bg-blue-600 text-white rounded-lg">
+            {{ page_obj.number }}
+        </span>
+
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}&search={{ search }}"
+           class="px-3 py-2 border rounded-lg hover:bg-gray-100">
+            →
+        </a>
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

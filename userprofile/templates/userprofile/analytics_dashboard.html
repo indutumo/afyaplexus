@@ -1,130 +1,242 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Advanced Analytics Dashboard</title>
+{% extends "userprofile/base_analytics.html" %}
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% block title %}
+Analytics Dashboard
+{% endblock %}
 
-    <style>
-        body {
-            font-family: Arial;
-            background: #f4f6fb;
-            margin: 0;
-            padding: 20px;
-        }
+{% block content %}
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-        }
+<!-- HEADER -->
+<div class="flex flex-col lg:flex-row justify-between gap-5 lg:items-center">
 
-        .card {
-            background: white;
-            padding: 15px;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-        }
+    <div>
 
-        .big {
-            font-size: 24px;
-            font-weight: bold;
-        }
+        <h1 class="text-4xl font-extrabold">
+            Dashboard Overview
+        </h1>
 
-        canvas {
-            margin-top: 10px;
-        }
-    </style>
-</head>
+        <p class="text-gray-500 mt-2 text-lg">
+            Monitor website traffic and analytics
+        </p>
 
-<body>
-
-<h1>📊 Advanced Analytics Dashboard</h1>
-
-<!-- SUMMARY -->
-<div class="grid">
-
-    <div class="card">
-        <h3>👤 Visitors</h3>
-        <div class="big">{{ total_visitors }}</div>
     </div>
 
-    <div class="card">
-        <h3>📄 Page Views</h3>
-        <div class="big">{{ total_pageviews }}</div>
+    <!-- FILTER -->
+    <form method="GET">
+
+        <select
+            name="period"
+            onchange="this.form.submit()"
+            class="bg-white border border-gray-300 px-5 py-3 rounded-xl outline-none focus:ring-2 focus:ring-blue-500"
+        >
+
+            <option value="24h" {% if period == "24h" %}selected{% endif %}>
+                Last 24 Hours
+            </option>
+
+            <option value="7d" {% if period == "7d" %}selected{% endif %}>
+                Last 7 Days
+            </option>
+
+            <option value="30d" {% if period == "30d" %}selected{% endif %}>
+                Last 30 Days
+            </option>
+
+        </select>
+
+    </form>
+
+</div>
+
+<!-- STATS -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-5 mt-10">
+
+    <div class="card p-6">
+        <div class="text-gray-500 text-sm">Total Visits</div>
+        <div class="text-4xl font-extrabold mt-3 text-blue-600">
+            {{ pageviews }}
+        </div>
     </div>
 
-    <div class="card">
-        <h3>🖱 Clicks</h3>
-        <div class="big">{{ total_clicks }}</div>
+    <div class="card p-6">
+        <div class="text-gray-500 text-sm">Unique Visitors</div>
+        <div class="text-4xl font-extrabold mt-3 text-green-600">
+            {{ visitors }}
+        </div>
+    </div>
+
+    <div class="card p-6">
+        <div class="text-gray-500 text-sm">New Visits</div>
+        <div class="text-4xl font-extrabold mt-3 text-cyan-600">
+            {{ new_visits }}
+        </div>
+    </div>
+
+    <div class="card p-6">
+        <div class="text-gray-500 text-sm">Returning Visitors</div>
+        <div class="text-4xl font-extrabold mt-3 text-pink-600">
+            {{ revisit_count }}
+        </div>
+    </div>
+
+    <div class="card p-6">
+        <div class="text-gray-500 text-sm">Total Clicks</div>
+        <div class="text-4xl font-extrabold mt-3 text-orange-500">
+            {{ clicks }}
+        </div>
     </div>
 
 </div>
 
-<!-- LINE CHART -->
-<div class="card" style="margin-top:20px;">
-    <h3>📈 Activity (Last 7 Days)</h3>
-    <canvas id="trendChart"></canvas>
+<!-- TOP SECTION -->
+<div class="grid grid-cols-1 xl:grid-cols-2 gap-5 mt-8">
+
+    <div class="card p-6">
+
+        <h2 class="text-2xl font-bold">
+            🔥 Most Visited Page
+        </h2>
+
+        <div class="mt-6">
+
+            <div class="text-xl font-bold">
+                {{ top_page.path }}
+            </div>
+
+            <div class="text-gray-500 mt-2">
+                {{ top_page.total }} visits
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="card p-6">
+
+        <h2 class="text-2xl font-bold">
+            🖱 Most Clicked Item
+        </h2>
+
+        <div class="mt-6">
+
+            <div class="text-xl font-bold">
+                {{ top_click.label }}
+            </div>
+
+            <div class="text-gray-500 mt-2">
+                {{ top_click.total }} clicks
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
 
-<!-- TOP CHART -->
-<div class="card" style="margin-top:20px;">
-    <h3>🌍 Top Countries</h3>
-    <canvas id="countryChart"></canvas>
+<!-- CHARTS -->
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-5 mt-8">
+
+    <div class="card p-6 xl:col-span-2">
+
+        <h2 class="text-2xl font-bold mb-5">
+            📈 Traffic Trends
+        </h2>
+
+        <canvas id="trendChart"></canvas>
+
+    </div>
+
+    <div class="card p-6">
+
+        <h2 class="text-2xl font-bold mb-5">
+            🌍 Countries
+        </h2>
+
+        <canvas id="countryChart"></canvas>
+
+    </div>
+
 </div>
+
+{% endblock %}
+
+{% block extra_js %}
 
 <script>
-    // -----------------------------
-    // DATA FROM DJANGO
-    // -----------------------------
 
-    const pageviews = {{ pageviews_by_day|safe }};
-    const clicks = {{ clicks_by_day|safe }};
+const pages = {{ daily_pages|safe }};
+const clicks = {{ daily_clicks|safe }};
 
-    // labels
-    const labels = pageviews.map(x => x.day);
+const labels = pages.map(x => x.day);
+const pageData = pages.map(x => x.total);
+const clickData = clicks.map(x => x.total);
 
-    const pageviewData = pageviews.map(x => x.total);
-    const clickData = clicks.map(x => x.total);
+new Chart(document.getElementById("trendChart"), {
 
-    // -----------------------------
-    // LINE CHART
-    // -----------------------------
-    new Chart(document.getElementById("trendChart"), {
-        type: "line",
-        data: {
-            labels: labels,
-            datasets: [
-                {
-                    label: "Pageviews",
-                    data: pageviewData,
-                },
-                {
-                    label: "Clicks",
-                    data: clickData,
-                }
+    type: "line",
+
+    data: {
+
+        labels: labels,
+
+        datasets: [
+
+            {
+                label: "Pageviews",
+                data: pageData,
+                borderColor: "#2563eb",
+                backgroundColor: "rgba(37,99,235,0.1)",
+                fill: true,
+                tension: 0.4,
+                borderWidth: 3,
+            },
+
+            {
+                label: "Clicks",
+                data: clickData,
+                borderColor: "#ec4899",
+                backgroundColor: "rgba(236,72,153,0.1)",
+                fill: true,
+                tension: 0.4,
+                borderWidth: 3,
+            }
+
+        ]
+    }
+
+});
+
+const countryData = {{ country_stats|safe }};
+
+const countries = countryData.map(x => x.country || "Unknown");
+const values = countryData.map(x => x.total);
+
+new Chart(document.getElementById("countryChart"), {
+
+    type: "doughnut",
+
+    data: {
+
+        labels: countries,
+
+        datasets: [{
+            data: values,
+
+            backgroundColor: [
+                "#2563eb",
+                "#ec4899",
+                "#10b981",
+                "#f59e0b",
+                "#8b5cf6",
+                "#06b6d4",
+                "#ef4444",
+                "#84cc16"
             ]
-        }
-    });
+        }]
+    }
 
-    // -----------------------------
-    // COUNTRY CHART
-    // -----------------------------
-    const countries = {{ top_countries|safe }}.map(x => x.country || "Unknown");
-    const countryValues = {{ top_countries|safe }}.map(x => x.total);
-
-    new Chart(document.getElementById("countryChart"), {
-        type: "bar",
-        data: {
-            labels: countries,
-            datasets: [{
-                label: "Visitors",
-                data: countryValues
-            }]
-        }
-    });
+});
 
 </script>
 
-</body>
-</html>
+{% endblock %}

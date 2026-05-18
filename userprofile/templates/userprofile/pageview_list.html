@@ -1,0 +1,186 @@
+{% extends "userprofile/base_analytics.html" %}
+
+{% block title %}
+Page Views
+{% endblock %}
+
+{% block content %}
+
+<!-- HEADER -->
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
+
+    <div>
+        <h1 class="text-3xl font-bold">Page Views</h1>
+        <p class="text-gray-500 mt-1">Track all navigation activity</p>
+    </div>
+
+</div>
+
+<!-- SEARCH + FILTER BAR -->
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
+
+    <!-- SEARCH -->
+    <form method="GET" class="flex items-center w-full lg:max-w-md">
+
+        <div class="relative w-full">
+
+            <span class="absolute left-3 top-3 text-gray-400">🔍</span>
+
+            <input
+                type="text"
+                name="search"
+                value="{{ search }}"
+                placeholder="Search path, visitor, referrer..."
+                class="w-full pl-10 pr-4 py-2 border rounded-xl focus:ring-2 focus:ring-blue-500 outline-none bg-white"
+            >
+
+        </div>
+
+    </form>
+
+    <!-- FILTER -->
+    <form method="GET">
+
+        <select
+            name="method"
+            onchange="this.form.submit()"
+            class="px-4 py-2 border rounded-xl bg-white"
+        >
+
+            <option value="">All Methods</option>
+            <option value="GET" {% if method == "GET" %}selected{% endif %}>GET</option>
+            <option value="POST" {% if method == "POST" %}selected{% endif %}>POST</option>
+
+        </select>
+
+    </form>
+
+</div>
+
+<!-- TABLE CARD -->
+<div class="bg-white rounded-2xl shadow-sm border overflow-hidden">
+
+    <div class="overflow-x-auto">
+
+        <table class="w-full text-sm">
+
+            <!-- HEADER -->
+            <thead class="bg-gray-50 border-b text-gray-600">
+
+                <tr>
+
+                    <th class="p-4 text-left flex items-center gap-2">
+                        Visitor
+                    </th>
+
+                    <th class="p-4 text-left">Path</th>
+                    <th class="p-4 text-left">View Name</th>
+                    <th class="p-4 text-left">Method</th>
+                    <th class="p-4 text-left">Referrer</th>
+                    <th class="p-4 text-left">Duration</th>
+                    <th class="p-4 text-left">Time</th>
+
+                </tr>
+
+            </thead>
+
+            <!-- BODY -->
+            <tbody>
+
+                {% for pv in page_obj %}
+
+                <tr class="border-b hover:bg-gray-50 transition">
+
+                    <!-- VISITOR -->
+                    <td class="p-4 font-medium text-gray-800">
+                        {{ pv.visitor.visitor_id }}
+                    </td>
+
+                    <!-- PATH -->
+                    <td class="p-4 text-blue-600 font-medium truncate max-w-[200px]">
+                        {{ pv.path }}
+                    </td>
+
+                    <!-- VIEW NAME -->
+                    <td class="p-4 text-gray-600">
+                        {{ pv.view_name|default:"—" }}
+                    </td>
+
+                    <!-- METHOD -->
+                    <td class="p-4">
+
+                        {% if pv.method == "GET" %}
+                            <span class="px-3 py-1 text-xs rounded-full bg-green-100 text-green-700">
+                                GET
+                            </span>
+                        {% else %}
+                            <span class="px-3 py-1 text-xs rounded-full bg-yellow-100 text-yellow-700">
+                                POST
+                            </span>
+                        {% endif %}
+
+                    </td>
+
+                    <!-- REFERRER -->
+                    <td class="p-4 text-gray-500 truncate max-w-[220px]">
+                        {{ pv.referrer|default:"—" }}
+                    </td>
+
+                    <!-- DURATION -->
+                    <td class="p-4 text-gray-600">
+                        {% if pv.duration_ms %}
+                            {{ pv.duration_ms }} ms
+                        {% else %}
+                            —
+                        {% endif %}
+                    </td>
+
+                    <!-- TIME -->
+                    <td class="p-4 text-gray-500 whitespace-nowrap">
+                        {{ pv.timestamp|date:"M d, H:i" }}
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<!-- PAGINATION -->
+<div class="flex items-center justify-between mt-6">
+
+    <div class="text-sm text-gray-500">
+        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+    </div>
+
+    <div class="flex gap-2">
+
+        {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}&search={{ search }}&method={{ method }}"
+           class="px-3 py-2 border rounded-lg hover:bg-gray-100">
+            ←
+        </a>
+        {% endif %}
+
+        <span class="px-4 py-2 bg-blue-600 text-white rounded-lg">
+            {{ page_obj.number }}
+        </span>
+
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}&search={{ search }}&method={{ method }}"
+           class="px-3 py-2 border rounded-lg hover:bg-gray-100">
+            →
+        </a>
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}
