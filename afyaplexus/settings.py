@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-lb&c7dam0m7#*xd1l5k=1rxt1)k-w#t#rr=&!3jnth)32fgqdq'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -56,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'userprofile.middleware.AnalyticsMiddleware',
 ]
 
 ROOT_URLCONF = 'afyaplexus.urls'
@@ -173,3 +174,5 @@ JAZZMIN_UI_TWEEKS = {
     "theme": "flatly",
     "dark_mode_theme": "darkly",
 }
+#CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
+#CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/0'

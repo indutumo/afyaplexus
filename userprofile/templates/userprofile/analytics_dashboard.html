@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Analytics Dashboard</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #f5f6fa;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .big {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .section {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>📊 Analytics Dashboard</h1>
+
+<!-- SUMMARY CARDS -->
+<div class="grid">
+
+    <div class="card">
+        <h2>👤 Visitors</h2>
+        <div class="big">{{ total_visitors }}</div>
+        <p>Today: {{ visitors_today }}</p>
+    </div>
+
+    <div class="card">
+        <h2>📄 Page Views</h2>
+        <div class="big">{{ total_pageviews }}</div>
+    </div>
+
+    <div class="card">
+        <h2>🖱 Clicks</h2>
+        <div class="big">{{ total_clicks }}</div>
+    </div>
+
+</div>
+
+<!-- TOP COUNTRIES -->
+<div class="section card">
+    <h2>🌍 Top Countries</h2>
+
+    <table>
+        <tr>
+            <th>Country</th>
+            <th>Visitors</th>
+        </tr>
+
+        {% for c in top_countries %}
+        <tr>
+            <td>{{ c.country|default:"Unknown" }}</td>
+            <td>{{ c.total }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<!-- TOP PAGES -->
+<div class="section card">
+    <h2>📄 Top Pages</h2>
+
+    <table>
+        <tr>
+            <th>Page</th>
+            <th>Views</th>
+        </tr>
+
+        {% for p in top_pages %}
+        <tr>
+            <td>{{ p.path }}</td>
+            <td>{{ p.total }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<!-- TOP CLICKS -->
+<div class="section card">
+    <h2>🖱 Top Clicked Elements</h2>
+
+    <table>
+        <tr>
+            <th>Element</th>
+            <th>Clicks</th>
+        </tr>
+
+        {% for c in top_clicks %}
+        <tr>
+            <td>{{ c.label|default:"Unknown" }}</td>
+            <td>{{ c.total }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<!-- RECENT ACTIVITY -->
+<div class="section card">
+    <h2>⚡ Recent Clicks</h2>
+
+    <table>
+        <tr>
+            <th>Label</th>
+            <th>Page</th>
+            <th>Time</th>
+        </tr>
+
+        {% for c in recent_clicks %}
+        <tr>
+            <td>{{ c.label }}</td>
+            <td>{{ c.page }}</td>
+            <td>{{ c.timestamp }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<div class="section card">
+    <h2>📄 Recent Page Views</h2>
+
+    <table>
+        <tr>
+            <th>Path</th>
+            <th>Time</th>
+        </tr>
+
+        {% for p in recent_pageviews %}
+        <tr>
+            <td>{{ p.path }}</td>
+            <td>{{ p.timestamp }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+</body>
+</html>
