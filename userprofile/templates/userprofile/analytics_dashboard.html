@@ -6,7 +6,6 @@ Analytics Dashboard
 
 {% block content %}
 
-
 <!-- HEADER -->
 <div class="flex flex-col lg:flex-row justify-between gap-5 lg:items-center">
 
@@ -217,7 +216,7 @@ new Chart(document.getElementById("countryChart"), {
     type: "bar",
 
     data: {
-        labels: "Countries",
+        labels: countries,
         datasets: [{
             data: values,
             backgroundColor: [
