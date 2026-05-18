@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,7 +11,10 @@
     <title>
         {% block title %}Analytics{% endblock %}
     </title>
+      <title>Afya Plexus</title>
 
+      <link rel="apple-touch-icon" href="{% static 'afyaplexus.png' %}">
+      <link rel="shortcut icon" href="{% static 'afyaplexus.png' %}">
     <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
 
