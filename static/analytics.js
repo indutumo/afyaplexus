@@ -1,35 +1,37 @@
 (function () {
 
     // =========================
-    // CONFIG (match your Django URLs)
+    // CONFIG
     // =========================
     const ENDPOINTS = {
         click: "/userprofile/track_click/",
-        search: "/userprofile/track_search/"
+        search: "/userprofile/track_search/",
+        funnel: "/userprofile/track_funnel/"
     };
 
-    // prevent click spam
     let lastClickTime = 0;
 
     // =========================
-    // SAFE REQUEST FUNCTION
+    // SAFE FETCH WRAPPER
     // =========================
     function send(url, data) {
 
         fetch(url, {
             method: "POST",
-            credentials: "same-origin",   // IMPORTANT for Django session
             headers: {
                 "Content-Type": "application/json",
                 "X-Requested-With": "XMLHttpRequest"
             },
+
+            // 🔥 IMPORTANT: better for production than same-origin
+            credentials: "include",
+
             body: JSON.stringify(data)
         })
-        .then(res => {
+        .then(async res => {
             if (!res.ok) {
-                return res.text().then(t => {
-                    console.warn("Analytics error:", t);
-                });
+                const text = await res.text();
+                console.warn("Analytics error:", text);
             }
         })
         .catch(err => {
@@ -38,25 +40,22 @@
     }
 
     // =========================
-    // CLICK TRACKING
+    // CLICK TRACKING (FIXED)
     // =========================
     document.addEventListener("click", function (e) {
 
         const now = Date.now();
-
-        // debounce clicks (prevents spam)
-        if (now - lastClickTime < 200) return;
+        if (now - lastClickTime < 250) return;
         lastClickTime = now;
 
         const target = e.target;
-
         if (!target) return;
 
-        // ignore body/html clicks
         if (target.tagName === "HTML" || target.tagName === "BODY") return;
 
         const label =
             target.getAttribute("data-track") ||
+            target.dataset.label ||
             target.innerText ||
             target.id ||
             target.className ||
@@ -66,16 +65,13 @@
             page: window.location.pathname,
             event_type: "click",
             label: String(label).substring(0, 200),
-
             x: e.clientX,
             y: e.clientY,
-
             screen_width: window.innerWidth,
             screen_height: window.innerHeight
         });
 
     }, true);
-
 
     // =========================
     // SEARCH TRACKING
@@ -83,15 +79,12 @@
     document.addEventListener("submit", function (e) {
 
         const form = e.target;
-
         if (!form) return;
 
         const input = form.querySelector('input[type="search"]');
-
         if (!input) return;
 
         const query = input.value.trim();
-
         if (!query) return;
 
         send(ENDPOINTS.search, {
@@ -101,43 +94,41 @@
 
     });
 
-
     // =========================
-    // OPTIONAL: TRACK ONLY MARKED ELEMENTS
+    // BUTTON-ONLY TRACKING
     // =========================
     document.addEventListener("click", function (e) {
 
         const el = e.target;
-
         if (!el) return;
 
-        // only track elements with data-track-event="true"
         if (el.dataset && el.dataset.trackEvent === "true") {
 
             send(ENDPOINTS.click, {
                 page: window.location.pathname,
                 event_type: "button_click",
                 label: el.dataset.label || el.innerText || "button",
-
                 x: e.clientX,
                 y: e.clientY
             });
-
         }
 
     });
 
+    // =========================
+    // FUNNEL TRACKING (FIXED)
+    // =========================
+    function trackFunnel(data) {
+
+        send(ENDPOINTS.funnel, {
+            funnel_name: data.funnel_name,
+            step_number: data.step_number,
+            step_name: data.step_name,
+            metadata: data.metadata || {}
+        });
+    }
+
+    // expose globally
+    window.trackFunnel = trackFunnel;
+
 })();
-
-
-fetch("/userprofile/track_funnel/", {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-        funnel_name: "signup_flow",
-        step_number: 1,
-        step_name: "landing_page"
-    })
-});
