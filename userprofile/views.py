@@ -308,7 +308,7 @@ def track_funnel(request):
 
 def analytics_dashboard(request):
 
-    last_7_days = now() - timedelta(days=0)
+    last_7_days = now() - timedelta(days=7)
 
     # ------------------------
     # BASIC STATS

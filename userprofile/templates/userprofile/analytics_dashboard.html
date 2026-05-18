@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Analytics Dashboard</title>
+    <title>Advanced Analytics Dashboard</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
         body {
             font-family: Arial;
-            background: #f5f6fa;
+            background: #f4f6fb;
             margin: 0;
             padding: 20px;
         }
@@ -20,156 +22,109 @@
         .card {
             background: white;
             padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        h2 {
-            margin-top: 0;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th, td {
-            padding: 8px;
-            border-bottom: 1px solid #ddd;
-            text-align: left;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
         }
 
         .big {
-            font-size: 22px;
+            font-size: 24px;
             font-weight: bold;
         }
 
-        .section {
-            margin-top: 20px;
+        canvas {
+            margin-top: 10px;
         }
     </style>
 </head>
 
 <body>
 
-<h1>📊 Analytics Dashboard</h1>
+<h1>📊 Advanced Analytics Dashboard</h1>
 
-<!-- SUMMARY CARDS -->
+<!-- SUMMARY -->
 <div class="grid">
 
     <div class="card">
-        <h2>👤 Visitors</h2>
+        <h3>👤 Visitors</h3>
         <div class="big">{{ total_visitors }}</div>
-        <p>Today: {{ visitors_today }}</p>
     </div>
 
     <div class="card">
-        <h2>📄 Page Views</h2>
+        <h3>📄 Page Views</h3>
         <div class="big">{{ total_pageviews }}</div>
     </div>
 
     <div class="card">
-        <h2>🖱 Clicks</h2>
+        <h3>🖱 Clicks</h3>
         <div class="big">{{ total_clicks }}</div>
     </div>
 
 </div>
 
-<!-- TOP COUNTRIES -->
-<div class="section card">
-    <h2>🌍 Top Countries</h2>
-
-    <table>
-        <tr>
-            <th>Country</th>
-            <th>Visitors</th>
-        </tr>
-
-        {% for c in top_countries %}
-        <tr>
-            <td>{{ c.country|default:"Unknown" }}</td>
-            <td>{{ c.total }}</td>
-        </tr>
-        {% endfor %}
-    </table>
+<!-- LINE CHART -->
+<div class="card" style="margin-top:20px;">
+    <h3>📈 Activity (Last 7 Days)</h3>
+    <canvas id="trendChart"></canvas>
 </div>
 
-<!-- TOP PAGES -->
-<div class="section card">
-    <h2>📄 Top Pages</h2>
-
-    <table>
-        <tr>
-            <th>Page</th>
-            <th>Views</th>
-        </tr>
-
-        {% for p in top_pages %}
-        <tr>
-            <td>{{ p.path }}</td>
-            <td>{{ p.total }}</td>
-        </tr>
-        {% endfor %}
-    </table>
+<!-- TOP CHART -->
+<div class="card" style="margin-top:20px;">
+    <h3>🌍 Top Countries</h3>
+    <canvas id="countryChart"></canvas>
 </div>
 
-<!-- TOP CLICKS -->
-<div class="section card">
-    <h2>🖱 Top Clicked Elements</h2>
+<script>
+    // -----------------------------
+    // DATA FROM DJANGO
+    // -----------------------------
 
-    <table>
-        <tr>
-            <th>Element</th>
-            <th>Clicks</th>
-        </tr>
+    const pageviews = {{ pageviews_by_day|safe }};
+    const clicks = {{ clicks_by_day|safe }};
 
-        {% for c in top_clicks %}
-        <tr>
-            <td>{{ c.label|default:"Unknown" }}</td>
-            <td>{{ c.total }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-</div>
+    // labels
+    const labels = pageviews.map(x => x.day);
 
-<!-- RECENT ACTIVITY -->
-<div class="section card">
-    <h2>⚡ Recent Clicks</h2>
+    const pageviewData = pageviews.map(x => x.total);
+    const clickData = clicks.map(x => x.total);
 
-    <table>
-        <tr>
-            <th>Label</th>
-            <th>Page</th>
-            <th>Time</th>
-        </tr>
+    // -----------------------------
+    // LINE CHART
+    // -----------------------------
+    new Chart(document.getElementById("trendChart"), {
+        type: "line",
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: "Pageviews",
+                    data: pageviewData,
+                },
+                {
+                    label: "Clicks",
+                    data: clickData,
+                }
+            ]
+        }
+    });
 
-        {% for c in recent_clicks %}
-        <tr>
-            <td>{{ c.label }}</td>
-            <td>{{ c.page }}</td>
-            <td>{{ c.timestamp }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-</div>
+    // -----------------------------
+    // COUNTRY CHART
+    // -----------------------------
+    const countries = {{ top_countries|safe }}.map(x => x.country || "Unknown");
+    const countryValues = {{ top_countries|safe }}.map(x => x.total);
 
-<div class="section card">
-    <h2>📄 Recent Page Views</h2>
+    new Chart(document.getElementById("countryChart"), {
+        type: "bar",
+        data: {
+            labels: countries,
+            datasets: [{
+                label: "Visitors",
+                data: countryValues
+            }]
+        }
+    });
 
-    <table>
-        <tr>
-            <th>Path</th>
-            <th>Time</th>
-        </tr>
-
-        {% for p in recent_pageviews %}
-        <tr>
-            <td>{{ p.path }}</td>
-            <td>{{ p.timestamp }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-</div>
+</script>
 
 </body>
 </html>
