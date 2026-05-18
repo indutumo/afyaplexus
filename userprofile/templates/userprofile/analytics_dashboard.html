@@ -136,7 +136,7 @@ Analytics Dashboard
 <!-- CHARTS -->
 <div class="grid grid-cols-1 xl:grid-cols-3 gap-5 mt-8">
 
-    <div class="card p-6 xl:col-span-2">
+    <div class="card p-6 xl:col-span-2 h-[450px]">
 
         <h2 class="text-2xl font-bold mb-5">
             📈 Traffic Trends
@@ -146,7 +146,7 @@ Analytics Dashboard
 
     </div>
 
-    <div class="card p-6">
+    <div class="card p-6 h-[450px]">
 
         <h2 class="text-2xl font-bold mb-5">
             🌍 Countries
@@ -206,22 +206,19 @@ new Chart(document.getElementById("trendChart"), {
 
 });
 
-const countryData = {{ country_stats|safe }};
+const countryData = JSON.parse('{{ country_stats_json|escapejs }}');
 
-const countries = countryData.map(x => x.country || "Unknown");
+const countries = countryData.map(x => x.country);
 const values = countryData.map(x => x.total);
 
 new Chart(document.getElementById("countryChart"), {
 
-    type: "doughnut",
+    type: "bar",
 
     data: {
-
         labels: countries,
-
         datasets: [{
             data: values,
-
             backgroundColor: [
                 "#2563eb",
                 "#ec4899",
@@ -233,8 +230,12 @@ new Chart(document.getElementById("countryChart"), {
                 "#84cc16"
             ]
         }]
-    }
+    },
 
+    options: {
+        responsive: true,
+        maintainAspectRatio: false
+    }
 });
 
 </script>

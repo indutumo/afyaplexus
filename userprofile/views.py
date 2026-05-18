@@ -399,13 +399,14 @@ def analytics_dashboard(request):
     # --------------------------------
     # COUNTRY STATS
     # --------------------------------
-    country_stats = (
+    country_stats = list(
         Visitor.objects.filter(first_seen__gte=start_date)
+        .exclude(country__isnull=True)
+        .exclude(country="")
         .values("country")
         .annotate(total=Count("id"))
         .order_by("-total")[:10]
     )
-
     # --------------------------------
     # DAILY PAGE TRENDS
     # --------------------------------
@@ -458,8 +459,7 @@ def analytics_dashboard(request):
         "country_stats": list(country_stats),
         "daily_pages": list(daily_pages),
         "daily_clicks": list(daily_clicks),
-
-        # FILTER
+        "country_stats_json": json.dumps(list(country_stats)),
         "period": period,
     }
 
