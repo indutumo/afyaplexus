@@ -23,26 +23,39 @@ class UserProfileAdmin(ImportExportModelAdmin):
 
 
 
+from django.contrib import admin
+from django.db.models import Count, F
+from django.utils.html import format_html
+
+from .models import Visitor, PageView, ClickEvent, SearchEvent
+
+
 @admin.register(Visitor)
 class VisitorAdmin(admin.ModelAdmin):
 
     list_display = (
         "visitor_id",
         "user",
-        "ip_address",
         "country",
         "city",
+        "device_type",
+        "browser",
+        "is_bot",
         "pageviews_count",
         "clicks_count",
         "searches_count",
-        "first_seen",
+        "visit_count",
         "last_seen",
     )
 
     list_filter = (
         "country",
         "city",
+        "device_type",
+        "browser",
+        "is_bot",
         "first_seen",
+        "last_seen",
     )
 
     search_fields = (
@@ -50,6 +63,7 @@ class VisitorAdmin(admin.ModelAdmin):
         "ip_address",
         "country",
         "city",
+        "user__username",
     )
 
     readonly_fields = (
@@ -64,41 +78,49 @@ class VisitorAdmin(admin.ModelAdmin):
 
         return qs.annotate(
             pv_count=Count("pageview", distinct=True),
-            click_count=Count("clickevent", distinct=True),
+            click_count=Count("click_events", distinct=True),
             search_count=Count("searchevent", distinct=True),
         )
 
     def pageviews_count(self, obj):
         return obj.pv_count
     pageviews_count.admin_order_field = "pv_count"
+    pageviews_count.short_description = "Page Views"
 
     def clicks_count(self, obj):
         return obj.click_count
     clicks_count.admin_order_field = "click_count"
+    clicks_count.short_description = "Clicks"
 
     def searches_count(self, obj):
         return obj.search_count
     searches_count.admin_order_field = "search_count"
+    searches_count.short_description = "Searches"
 
     def analytics_summary(self, obj):
         return format_html(
             """
-            <div style="padding:10px;">
-                <h3>Analytics Summary</h3>
+            <div style="padding:12px;">
+                <h3>Visitor Overview</h3>
                 <ul>
-                    <li><b>Visitor ID:</b> {}</li>
-                    <li><b>Country:</b> {}</li>
-                    <li><b>City:</b> {}</li>
+                    <li><b>ID:</b> {}</li>
+                    <li><b>Location:</b> {}, {}</li>
+                    <li><b>Device:</b> {}</li>
+                    <li><b>Browser:</b> {}</li>
                     <li><b>IP:</b> {}</li>
+                    <li><b>Bot:</b> {}</li>
                     <li><b>First Seen:</b> {}</li>
                     <li><b>Last Seen:</b> {}</li>
                 </ul>
             </div>
             """,
             obj.visitor_id,
-            obj.country,
             obj.city,
+            obj.country,
+            obj.device_type,
+            obj.browser,
             obj.ip_address,
+            "Yes" if obj.is_bot else "No",
             obj.first_seen,
             obj.last_seen,
         )

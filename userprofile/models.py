@@ -51,21 +51,58 @@ class UserProfile(models.Model):
         return str(self.user)
 
 
+
 class Visitor(models.Model):
-    visitor_id = models.CharField(max_length=120, unique=True)
+    visitor_id = models.CharField(max_length=120,unique=True)
+    user = models.ForeignKey(User,null=True,blank=True,on_delete=models.SET_NULL)
     first_seen = models.DateTimeField(auto_now_add=True)
     last_seen = models.DateTimeField(auto_now=True)
-    ip_address = models.GenericIPAddressField(null=True, blank=True)
-    country = models.CharField(max_length=120, null=True, blank=True)
-    city = models.CharField(max_length=120, null=True, blank=True)
-    user_agent = models.TextField(null=True, blank=True)
+    last_activity = models.DateTimeField(null=True,blank=True)
+    visit_count = models.PositiveIntegerField(default=1)
+    total_page_views = models.PositiveIntegerField(default=0)
+    ip_address = models.GenericIPAddressField(null=True,blank=True)
+    country = models.CharField(max_length=120,null=True,blank=True)
+    region = models.CharField(max_length=120,null=True,blank=True)
+    city = models.CharField(max_length=120,null=True,blank=True)
+    timezone = models.CharField(max_length=120,null=True,blank=True)
+    latitude = models.FloatField(null=True,blank=True)
+    longitude = models.FloatField(null=True,blank=True)
+    user_agent = models.TextField(null=True,blank=True)
+    browser = models.CharField(max_length=120,null=True,blank=True)
+    browser_version = models.CharField(max_length=50,null=True,blank=True)
+    operating_system = models.CharField(max_length=120,null=True,blank=True)
+    device_type = models.CharField(max_length=50,null=True,blank=True)
+    device_brand = models.CharField(max_length=120,null=True,blank=True)
+    is_mobile = models.BooleanField(default=False)
+    is_tablet = models.BooleanField(default=False)
+    is_desktop = models.BooleanField(default=True)
+    referrer = models.URLField(null=True,blank=True)
+    referrer_domain = models.CharField(max_length=255,null=True,blank=True)
+    landing_page = models.CharField(max_length=500,null=True,blank=True)
+    utm_source = models.CharField(max_length=255,null=True,blank=True)
+    utm_medium = models.CharField(max_length=255,null=True,blank=True)
+    utm_campaign = models.CharField(max_length=255,null=True,blank=True)
     is_bot = models.BooleanField(default=False)
-    user = models.ForeignKey(User,null=True,blank=True,on_delete=models.SET_NULL)
-    latitude = models.FloatField(null=True, blank=True)
-    longitude = models.FloatField(null=True, blank=True)
+    bot_name = models.CharField(max_length=120,null=True,blank=True)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-last_seen"]
 
     def __str__(self):
-        return self.visitor_id
+
+        if self.user:
+            return f"{self.user.username}"
+
+        location = ", ".join(
+            filter(None, [self.city, self.country])
+        )
+
+        device = self.device_type or "Unknown Device"
+
+        return f"{location} • {device}"
 
 
 class Session(models.Model):
@@ -95,19 +132,35 @@ class PageView(models.Model):
 
 
 class ClickEvent(models.Model):
-    visitor = models.ForeignKey(Visitor, on_delete=models.CASCADE)
-    session = models.ForeignKey(Session, on_delete=models.CASCADE)
-    page = models.CharField(max_length=500)
+    visitor = models.ForeignKey(Visitor,on_delete=models.CASCADE,related_name="click_events")
+    session = models.ForeignKey(Session,on_delete=models.CASCADE,related_name="click_events")
+    page = models.CharField(max_length=500,blank=True,null=True)
+    page_title = models.CharField(max_length=255,blank=True,null=True)
+    url = models.URLField(blank=True,null=True)
+    referrer = models.URLField(blank=True,null=True)
     event_type = models.CharField(max_length=120)
-    label = models.CharField(max_length=255, null=True, blank=True)
-    x = models.IntegerField(null=True, blank=True)
-    y = models.IntegerField(null=True, blank=True)
-    screen_width = models.IntegerField(null=True, blank=True)
-    screen_height = models.IntegerField(null=True, blank=True)
+    label = models.CharField(max_length=255,blank=True,null=True)
+    element_type = models.CharField(max_length=50,blank=True,null=True)
+    element_id = models.CharField(max_length=255,blank=True,null=True)
+    css_class = models.TextField(blank=True,null=True)
+    selector = models.TextField(blank=True,null=True)
+    x = models.IntegerField(blank=True,null=True)
+    y = models.IntegerField(blank=True,null=True)
+    screen_width = models.IntegerField(blank=True,null=True)
+    screen_height = models.IntegerField(blank=True,null=True)
+    device_type = models.CharField(max_length=50,blank=True,null=True)
+    browser = models.CharField(max_length=100,blank=True,null=True)
+    operating_system = models.CharField(max_length=100,blank=True,null=True)
     timestamp = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        ordering = ["-timestamp"]
+
     def __str__(self):
-        return self.label
+        return (
+            f"{self.event_type} - "
+            f"{self.label or 'Unknown'}"
+        )
 
 
 class SearchEvent(models.Model):

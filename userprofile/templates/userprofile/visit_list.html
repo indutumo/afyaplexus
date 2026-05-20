@@ -48,17 +48,21 @@ Visitor List
 
                 <tr>
 
-                    <th class="p-4 text-left flex items-center gap-2">
-                        Visitor
-                    </th>
+                    <th class="p-4 text-left">Visitor ID</th>
+
+                    <th class="p-4 text-left">Page Views</th>
 
                     <th class="p-4 text-left">User</th>
+
                     <th class="p-4 text-left">Country</th>
                     <th class="p-4 text-left">City</th>
                     <th class="p-4 text-left">IP Address</th>
+
                     <th class="p-4 text-left">First Seen</th>
                     <th class="p-4 text-left">Last Seen</th>
+
                     <th class="p-4 text-left">Type</th>
+
                 </tr>
 
             </thead>
@@ -67,43 +71,60 @@ Visitor List
 
                 {% for item in page_obj %}
 
-                <tr class="border-b hover:bg-gray-50">
+                <tr class="border-b hover:bg-gray-50 transition">
 
-                    <td class="p-4 font-medium">
-                        {{ item.visitor.visitor_id }}
+                    <!-- VISITOR ID -->
+                    <td class="p-4 font-medium text-gray-800">
+                        {{ item.visitor_id }}
                     </td>
 
+                    <!-- PAGE VIEWS -->
                     <td class="p-4">
-                        {% if item.visitor.user %}
-                            {{ item.visitor.user.username }}
+
+                        <span class="px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-sm font-semibold">
+                            {{ item.pageview_count }}
+                        </span>
+
+                    </td>
+
+                    <!-- USER -->
+                    <td class="p-4 text-gray-700">
+                        {% if item.user %}
+                            {{ item.user.username }}
                         {% else %}
-                            Anonymous
+                            -
                         {% endif %}
                     </td>
 
+                    <!-- COUNTRY -->
+                    <td class="p-4 text-gray-600">
+                        {{ item.country|default:"-" }}
+                    </td>
+
+                    <!-- CITY -->
+                    <td class="p-4 text-gray-600">
+                        {{ item.city|default:"-" }}
+                    </td>
+
+                    <!-- IP -->
+                    <td class="p-4 text-gray-600">
+                        {{ item.ip_address|default:"-" }}
+                    </td>
+
+                    <!-- FIRST SEEN -->
+                    <td class="p-4 text-gray-500 whitespace-nowrap">
+                        {{ item.first_seen|date:"M d, H:i" }}
+                    </td>
+
+                    <!-- LAST SEEN -->
+                    <td class="p-4 text-gray-500 whitespace-nowrap">
+                        {{ item.last_seen|date:"M d, H:i" }}
+                    </td>
+
+                    <!-- TYPE -->
                     <td class="p-4">
-                        {{ item.visitor.country|default:"-" }}
-                    </td>
 
-                    <td class="p-4">
-                        {{ item.visitor.city|default:"-" }}
-                    </td>
-
-                    <td class="p-4">
-                        {{ item.visitor.ip_address|default:"-" }}
-                    </td>
-
-                    <td class="p-4 text-gray-500">
-                        {{ item.visitor.first_seen }}
-                    </td>
-
-                    <td class="p-4 text-gray-500">
-                        {{ item.visitor.last_seen }}
-                    </td>
-
-                    <td class="p-4">
-
-                        {% if item.is_returning %}
+                        {% if item.pageview_count > 1 %}
                             <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-semibold">
                                 Returning
                             </span>
@@ -131,8 +152,8 @@ Visitor List
 <div class="flex justify-center items-center gap-3 mt-8">
 
     {% if page_obj.has_previous %}
-        <a href="?page={{ page_obj.previous_page_number }}"
-           class="px-5 py-2 bg-white rounded-xl shadow">
+        <a href="?page={{ page_obj.previous_page_number }}&search={{ search }}"
+           class="px-5 py-2 bg-white rounded-xl shadow hover:bg-gray-50">
             Previous
         </a>
     {% endif %}
@@ -142,8 +163,8 @@ Visitor List
     </span>
 
     {% if page_obj.has_next %}
-        <a href="?page={{ page_obj.next_page_number }}"
-           class="px-5 py-2 bg-white rounded-xl shadow">
+        <a href="?page={{ page_obj.next_page_number }}&search={{ search }}"
+           class="px-5 py-2 bg-white rounded-xl shadow hover:bg-gray-50">
             Next
         </a>
     {% endif %}

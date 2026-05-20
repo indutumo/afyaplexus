@@ -81,34 +81,29 @@ from django.db.models import Count
 from django.db.models.functions import TruncDate
 
 
-import json
-
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-
-from .models import (
-    ClickEvent,
-    SearchEvent
-)
-
-
 @csrf_exempt
 def track_click(request):
 
     if request.method != "POST":
-        return JsonResponse({"error": "Invalid request"}, status=400)
+        return JsonResponse(
+            {"error": "Invalid request"},
+            status=400
+        )
 
     try:
         data = json.loads(request.body or "{}")
 
         # -------------------------
-        # ALWAYS RESOLVE SESSION HERE
+        # SESSION
         # -------------------------
         if not request.session.session_key:
             request.session.save()
 
         session_key = request.session.session_key
 
+        # -------------------------
+        # VISITOR
+        # -------------------------
         visitor_id = request.COOKIES.get("visitor_id")
 
         if not visitor_id:
@@ -123,26 +118,85 @@ def track_click(request):
             defaults={"visitor": visitor}
         )
 
+        # -------------------------
+        # HUMAN FRIENDLY EVENT
+        # -------------------------
+        raw_event = data.get("event_type", "click")
+
+        event_map = {
+            "click": "Button Click",
+            "submit": "Form Submission",
+            "link": "Link Click",
+            "nav": "Navigation Click",
+            "download": "File Download",
+            "video_play": "Video Play",
+            "video_pause": "Video Pause",
+        }
+
+        friendly_event = event_map.get(
+            raw_event,
+            raw_event.replace("_", " ").title()
+        )
+
+        # -------------------------
+        # LABEL
+        # -------------------------
+        label = (
+            data.get("label")
+            or data.get("text")
+            or data.get("element_text")
+            or "Unknown Element"
+        )
+
+        # -------------------------
+        # CREATE EVENT
+        # -------------------------
         ClickEvent.objects.create(
             visitor=visitor,
             session=session_obj,
+
+            # Page info
             page=data.get("page", ""),
-            event_type=data.get("event_type", "click"),
-            label=data.get("label", ""),
+            page_title=data.get("page_title", ""),
+
+            # Human-readable event
+            event_type=friendly_event,
+            label=label,
+
+            # Element info
+            element_type=data.get("element_type", ""),
+            element_id=data.get("element_id", ""),
+            css_class=data.get("css_class", ""),
+            selector=data.get("selector", ""),
+
+            # Position
             x=data.get("x"),
             y=data.get("y"),
+
+            # Screen
             screen_width=data.get("screen_width"),
             screen_height=data.get("screen_height"),
+
+            # Extra useful data
+            url=data.get("url", ""),
+            referrer=data.get("referrer", ""),
         )
 
         response = JsonResponse({"status": "ok"})
-        response.set_cookie("visitor_id", visitor_id, max_age=60 * 60 * 24 * 365)
+
+        response.set_cookie(
+            "visitor_id",
+            visitor_id,
+            max_age=60 * 60 * 24 * 365
+        )
 
         return response
 
     except Exception as e:
-        return JsonResponse({"error": str(e)}, status=500)
-
+        return JsonResponse(
+            {"error": str(e)},
+            status=500
+        )
 
 
 
@@ -349,9 +403,8 @@ def analytics_dashboard(request):
     # RETURNING VISITS
     # --------------------------------
     revisit_count = Visitor.objects.filter(
-        last_seen__gt=start_date
-    ).exclude(
-        first_seen__gte=start_date
+        first_seen__lt=start_date,
+        last_seen__gte=start_date
     ).count()
 
     # --------------------------------
@@ -470,8 +523,11 @@ def visit_list(request):
 
     search = request.GET.get("search", "")
 
-    visitors = Visitor.objects.all().order_by("-last_seen")
+    visitors = Visitor.objects.annotate(
+        pageview_count=Count("pageview")
+    ).order_by("-last_seen")
 
+    # SEARCH
     if search:
         visitors = visitors.filter(
             Q(visitor_id__icontains=search) |
@@ -480,33 +536,19 @@ def visit_list(request):
             Q(ip_address__icontains=search)
         )
 
-    # Detect returning visitors
-    visitor_data = []
+    # PAGINATION
+    paginator = Paginator(visitors, 25)
 
-    for visitor in visitors:
-        is_returning = (
-            visitor.last_seen - visitor.first_seen
-        ) > timedelta(minutes=30)
-
-        visitor_data.append({
-            "visitor": visitor,
-            "is_returning": is_returning
-        })
-
-    paginator = Paginator(visitor_data, 20)
     page_number = request.GET.get("page")
+
     page_obj = paginator.get_page(page_number)
 
     context = {
         "page_obj": page_obj,
-        "search": search
+        "search": search,
     }
 
-    return render(
-        request,
-        "userprofile/visit_list.html",
-        context
-    )
+    return render(request,"userprofile/visit_list.html",context)
 
 
 def pageview_list(request):
