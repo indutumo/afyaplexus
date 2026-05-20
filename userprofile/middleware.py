@@ -33,7 +33,7 @@ class AnalyticsMiddleware:
             "/static/",
             "/media/",
             "/admin/",
-            "userprofile",
+            "/userprofile/",
             "/favicon.ico",
             "/.well-known",
         ]
