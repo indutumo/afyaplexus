@@ -289,23 +289,39 @@ def analytics_summary(request):
 @csrf_exempt
 def track_funnel(request):
 
+    # =========================
+    # ALLOW ONLY POST
+    # =========================
     if request.method != "POST":
-        return JsonResponse({"error": "Invalid request"}, status=400)
+        return JsonResponse(
+            {"error": "Invalid request method"},
+            status=405
+        )
 
     try:
-        data = json.loads(request.body or "{}")
 
-        # -------------------------
-        # SESSION SAFETY
-        # -------------------------
+        # =========================
+        # PARSE JSON BODY
+        # =========================
+        try:
+            data = json.loads(request.body or "{}")
+        except json.JSONDecodeError:
+            return JsonResponse(
+                {"error": "Invalid JSON"},
+                status=400
+            )
+
+        # =========================
+        # ENSURE SESSION EXISTS
+        # =========================
         if not request.session.session_key:
             request.session.save()
 
         session_key = request.session.session_key
 
-        # -------------------------
+        # =========================
         # VISITOR COOKIE
-        # -------------------------
+        # =========================
         visitor_id = request.COOKIES.get("visitor_id")
 
         if not visitor_id:
@@ -315,101 +331,133 @@ def track_funnel(request):
             visitor_id=visitor_id
         )
 
+        # =========================
+        # SESSION OBJECT
+        # =========================
         session_obj, _ = Session.objects.get_or_create(
             session_key=session_key,
-            defaults={"visitor": visitor}
+            defaults={
+                "visitor": visitor
+            }
         )
 
-        # -------------------------
-        # VALIDATION (IMPORTANT)
-        # -------------------------
+        # =========================
+        # REQUIRED FIELDS
+        # =========================
         funnel_name = data.get("funnel_name")
         step_number = data.get("step_number")
         step_name = data.get("step_name")
 
-        if not funnel_name or step_number is None or not step_name:
-            return JsonResponse({
-                "error": "Missing funnel_name, step_number, or step_name"
-            }, status=400)
+        if not funnel_name:
+            return JsonResponse(
+                {"error": "funnel_name is required"},
+                status=400
+            )
 
-        # -------------------------
+        if step_number is None:
+            return JsonResponse(
+                {"error": "step_number is required"},
+                status=400
+            )
+
+        if not step_name:
+            return JsonResponse(
+                {"error": "step_name is required"},
+                status=400
+            )
+
+        # =========================
+        # SAFE INTEGER CONVERSION
+        # =========================
+        try:
+            step_number = int(step_number)
+        except (TypeError, ValueError):
+            return JsonResponse(
+                {"error": "step_number must be an integer"},
+                status=400
+            )
+
+        # =========================
         # CREATE EVENT
-        # -------------------------
-        FunnelEvent.objects.create(
+        # =========================
+        event = FunnelEvent.objects.create(
             visitor=visitor,
             session=session_obj,
             funnel_name=funnel_name,
-            step_number=int(step_number),
+            step_number=step_number,
             step_name=step_name,
             metadata=data.get("metadata", {})
         )
 
-        # -------------------------
-        # RESPONSE
-        # -------------------------
-        response = JsonResponse({"status": "ok"})
+        # =========================
+        # SUCCESS RESPONSE
+        # =========================
+        response = JsonResponse({
+            "status": "ok",
+            "event_id": event.id
+        })
+
         response.set_cookie(
             "visitor_id",
             visitor_id,
-            max_age=60 * 60 * 24 * 365
+            max_age=60 * 60 * 24 * 365,
+            httponly=True,
+            samesite="Lax",
+            secure=request.is_secure()
         )
 
         return response
 
     except Exception as e:
-        return JsonResponse({"error": str(e)}, status=500)
+        print("TRACK FUNNEL ERROR:", str(e))
+
+        return JsonResponse(
+            {"error": str(e)},
+            status=500
+        )
 
 
 
 def analytics_dashboard(request):
 
-    # --------------------------------
-    # FILTERS
-    # --------------------------------
     period = request.GET.get("period", "7d")
 
+    # -------------------------
+    # DATE RANGE
+    # -------------------------
     if period == "24h":
-        start_date = now() - timedelta(days=1)
-
+        trend_days = 1
     elif period == "30d":
-        start_date = now() - timedelta(days=30)
-
+        trend_days = 30
     else:
-        start_date = now() - timedelta(days=7)
+        trend_days = 7
 
-    # --------------------------------
+    end_date = now().date()
+    start_date = end_date - timedelta(days=trend_days - 1)
+
+    # build continuous date list (IMPORTANT FIX)
+    dates = [
+        start_date + timedelta(days=i)
+        for i in range(trend_days)
+    ]
+
+    # -------------------------
     # BASIC STATS
-    # --------------------------------
-    visitors = Visitor.objects.filter(
-        first_seen__gte=start_date
-    ).count()
+    # -------------------------
+    visitors = Visitor.objects.filter(first_seen__gte=start_date).count()
+    pageviews = PageView.objects.filter(timestamp__gte=start_date).count()
+    clicks = ClickEvent.objects.filter(timestamp__gte=start_date).count()
 
-    pageviews = PageView.objects.filter(
-        timestamp__gte=start_date
-    ).count()
+    new_visits = visitors
 
-    clicks = ClickEvent.objects.filter(
-        timestamp__gte=start_date
-    ).count()
-
-    # --------------------------------
-    # NEW VISITS
-    # --------------------------------
-    new_visits = Visitor.objects.filter(
-        first_seen__gte=start_date
-    ).count()
-
-    # --------------------------------
-    # RETURNING VISITS
-    # --------------------------------
     revisit_count = Visitor.objects.filter(
         first_seen__lt=start_date,
         last_seen__gte=start_date
     ).count()
 
-    # --------------------------------
-    # TOP PAGES
-    # --------------------------------
+    # -------------------------
+    # TOP DATA
+    # -------------------------
     top_pages = (
         PageView.objects.filter(timestamp__gte=start_date)
         .values("path")
@@ -417,9 +465,6 @@ def analytics_dashboard(request):
         .order_by("-total")[:10]
     )
 
-    # --------------------------------
-    # TOP CLICKS
-    # --------------------------------
     top_clicks = (
         ClickEvent.objects.filter(timestamp__gte=start_date)
         .values("label")
@@ -427,96 +472,82 @@ def analytics_dashboard(request):
         .order_by("-total")[:10]
     )
 
-    # --------------------------------
-    # MOST VISITED PAGE
-    # --------------------------------
-    top_page = (
-        PageView.objects.filter(timestamp__gte=start_date)
-        .values("path")
-        .annotate(total=Count("id"))
-        .order_by("-total")
-        .first()
-    )
+    top_page = top_pages[0] if top_pages else None
+    top_click = top_clicks[0] if top_clicks else None
 
-    # --------------------------------
-    # MOST CLICKED ITEM
-    # --------------------------------
-    top_click = (
-        ClickEvent.objects.filter(timestamp__gte=start_date)
-        .values("label")
-        .annotate(total=Count("id"))
-        .order_by("-total")
-        .first()
-    )
-
-    # --------------------------------
-    # COUNTRY STATS
-    # --------------------------------
-    country_stats = list(
+    # -------------------------
+    # COUNTRY STATS (SAFE)
+    # -------------------------
+    country_stats_qs = (
         Visitor.objects.filter(first_seen__gte=start_date)
-        .exclude(country__isnull=True)
-        .exclude(country="")
         .values("country")
         .annotate(total=Count("id"))
         .order_by("-total")[:10]
     )
-    # --------------------------------
-    # DAILY PAGE TRENDS
-    # --------------------------------
-    trend_days = 7
 
-    daily_pages = (
-        PageView.objects.filter(
-            timestamp__gte=now() - timedelta(days=trend_days)
-        )
-        .extra(select={"day": "date(timestamp)"})
+    country_stats = [
+        {
+            "country": c["country"] or "Unknown",
+            "total": c["total"] or 0
+        }
+        for c in country_stats_qs
+    ]
+
+    # -------------------------
+    # DAILY PAGE TRENDS (FIXED)
+    # -------------------------
+    page_qs = (
+        PageView.objects.filter(timestamp__date__range=(start_date, end_date))
+        .annotate(day=TruncDate("timestamp"))
         .values("day")
         .annotate(total=Count("id"))
-        .order_by("day")
     )
 
-    # --------------------------------
-    # DAILY CLICK TRENDS
-    # --------------------------------
-    daily_clicks = (
-        ClickEvent.objects.filter(
-            timestamp__gte=now() - timedelta(days=trend_days)
-        )
-        .extra(select={"day": "date(timestamp)"})
+    click_qs = (
+        ClickEvent.objects.filter(timestamp__date__range=(start_date, end_date))
+        .annotate(day=TruncDate("timestamp"))
         .values("day")
         .annotate(total=Count("id"))
-        .order_by("day")
     )
 
-    # --------------------------------
+    # convert to dict maps
+    page_map = {r["day"]: r["total"] for r in page_qs}
+    click_map = {r["day"]: r["total"] for r in click_qs}
+
+    # FORCE ALIGNMENT (THIS FIXES YOUR "TODAY NOT SHOWING")
+    daily_pages = {
+        "labels": [d.strftime("%Y-%m-%d") for d in dates],
+        "data": [page_map.get(d, 0) for d in dates],
+    }
+
+    daily_clicks = {
+        "labels": [d.strftime("%Y-%m-%d") for d in dates],
+        "data": [click_map.get(d, 0) for d in dates],
+    }
+
+    # -------------------------
     # CONTEXT
-    # --------------------------------
+    # -------------------------
     context = {
-
-        # KPI
         "visitors": visitors,
         "pageviews": pageviews,
         "clicks": clicks,
         "new_visits": new_visits,
         "revisit_count": revisit_count,
 
-        # TOP STATS
         "top_page": top_page,
         "top_click": top_click,
 
-        # TABLES
-        "top_pages": list(top_pages),
-        "top_clicks": list(top_clicks),
+        "country_stats": country_stats,
+        "country_stats_json": country_stats,  # IMPORTANT (no dumps)
 
-        # CHARTS
-        "country_stats": list(country_stats),
-        "daily_pages": list(daily_pages),
-        "daily_clicks": list(daily_clicks),
-        "country_stats_json": json.dumps(list(country_stats)),
+        "daily_pages": daily_pages,
+        "daily_clicks": daily_clicks,
+
         "period": period,
     }
 
-    return render(request,"userprofile/analytics_dashboard.html",context)
+    return render(request, "userprofile/analytics_dashboard.html", context)
 
 
 def visit_list(request):

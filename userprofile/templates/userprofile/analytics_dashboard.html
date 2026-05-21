@@ -1,49 +1,24 @@
 {% extends "userprofile/base_analytics.html" %}
 
-{% block title %}
-Analytics Dashboard
-{% endblock %}
+{% block title %}Analytics Dashboard{% endblock %}
 
 {% block content %}
 
-<!-- HEADER -->
 <div class="flex flex-col lg:flex-row justify-between gap-5 lg:items-center">
 
     <div>
-
-        <h1 class="text-4xl font-extrabold">
-            Dashboard Overview
-        </h1>
-
-        <p class="text-gray-500 mt-2 text-lg">
-            Monitor website traffic and analytics
-        </p>
-
+        <h1 class="text-4xl font-extrabold">Dashboard Overview</h1>
+        <p class="text-gray-500 mt-2 text-lg">Monitor website traffic and analytics</p>
     </div>
 
-    <!-- FILTER -->
     <form method="GET">
-
-        <select
-            name="period"
-            onchange="this.form.submit()"
-            class="bg-white border border-gray-300 px-5 py-3 rounded-xl outline-none focus:ring-2 focus:ring-blue-500"
-        >
-
-            <option value="24h" {% if period == "24h" %}selected{% endif %}>
-                Last 24 Hours
-            </option>
-
-            <option value="7d" {% if period == "7d" %}selected{% endif %}>
-                Last 7 Days
-            </option>
-
-            <option value="30d" {% if period == "30d" %}selected{% endif %}>
-                Last 30 Days
-            </option>
+        <select name="period" onchange="this.form.submit()"
+            class="bg-white border px-5 py-3 rounded-xl focus:ring-2 focus:ring-blue-500">
+            <option value="30d" {% if period == "30d" %}selected{% endif %}>Last 30 Days</option>
+            <option value="24h" {% if period == "24h" %}selected{% endif %}>Last 24 Hours</option>
+            <option value="7d" {% if period == "7d" %}selected{% endif %}>Last 7 Days</option>
 
         </select>
-
     </form>
 
 </div>
@@ -51,84 +26,27 @@ Analytics Dashboard
 <!-- STATS -->
 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-5 mt-10">
 
-    <div class="card p-6">
-        <div class="text-gray-500 text-sm">Total Visits</div>
-        <div class="text-4xl font-extrabold mt-3 text-blue-600">
-            {{ pageviews }}
-        </div>
-    </div>
-
-    <div class="card p-6">
-        <div class="text-gray-500 text-sm">Unique Visitors</div>
-        <div class="text-4xl font-extrabold mt-3 text-green-600">
-            {{ visitors }}
-        </div>
-    </div>
-
-    <div class="card p-6">
-        <div class="text-gray-500 text-sm">New Visits</div>
-        <div class="text-4xl font-extrabold mt-3 text-cyan-600">
-            {{ new_visits }}
-        </div>
-    </div>
-
-    <div class="card p-6">
-        <div class="text-gray-500 text-sm">Returning Visitors</div>
-        <div class="text-4xl font-extrabold mt-3 text-pink-600">
-            {{ revisit_count }}
-        </div>
-    </div>
-
-    <div class="card p-6">
-        <div class="text-gray-500 text-sm">Total Clicks</div>
-        <div class="text-4xl font-extrabold mt-3 text-orange-500">
-            {{ clicks }}
-        </div>
-    </div>
+    <div class="card p-6"><div>Total Visits</div><div class="text-3xl font-bold">{{ pageviews }}</div></div>
+    <div class="card p-6"><div>Visitors</div><div class="text-3xl font-bold">{{ visitors }}</div></div>
+    <div class="card p-6"><div>New Visits</div><div class="text-3xl font-bold">{{ new_visits }}</div></div>
+    <div class="card p-6"><div>Returning</div><div class="text-3xl font-bold">{{ revisit_count }}</div></div>
+    <div class="card p-6"><div>Clicks</div><div class="text-3xl font-bold">{{ clicks }}</div></div>
 
 </div>
 
-<!-- TOP SECTION -->
+<!-- TOP -->
 <div class="grid grid-cols-1 xl:grid-cols-2 gap-5 mt-8">
 
     <div class="card p-6">
-
-        <h2 class="text-2xl font-bold">
-            🔥 Most Visited Page
-        </h2>
-
-        <div class="mt-6">
-
-            <div class="text-xl font-bold">
-                {{ top_page.path }}
-            </div>
-
-            <div class="text-gray-500 mt-2">
-                {{ top_page.total }} visits
-            </div>
-
-        </div>
-
+        <h2>🔥 Most Visited Page</h2>
+        <div class="text-xl font-bold">{{ top_page.path|default:"No data" }}</div>
+        <div class="text-gray-500">{{ top_page.total|default:0 }}</div>
     </div>
 
     <div class="card p-6">
-
-        <h2 class="text-2xl font-bold">
-            🖱 Most Clicked Item
-        </h2>
-
-        <div class="mt-6">
-
-            <div class="text-xl font-bold">
-                {{ top_click.label }}
-            </div>
-
-            <div class="text-gray-500 mt-2">
-                {{ top_click.total }} clicks
-            </div>
-
-        </div>
-
+        <h2>🖱 Most Clicked Item</h2>
+        <div class="text-xl font-bold">{{ top_click.label|default:"No data" }}</div>
+        <div class="text-gray-500">{{ top_click.total|default:0 }}</div>
     </div>
 
 </div>
@@ -137,23 +55,13 @@ Analytics Dashboard
 <div class="grid grid-cols-1 xl:grid-cols-3 gap-5 mt-8">
 
     <div class="card p-6 xl:col-span-2 h-[450px]">
-
-        <h2 class="text-2xl font-bold mb-5">
-            📈 Traffic Trends
-        </h2>
-
+        <h2>📈 Traffic Trends</h2>
         <canvas id="trendChart"></canvas>
-
     </div>
 
     <div class="card p-6 h-[450px]">
-
-        <h2 class="text-2xl font-bold mb-5">
-            🌍 Countries
-        </h2>
-
+        <h2>🌍 Countries</h2>
         <canvas id="countryChart"></canvas>
-
     </div>
 
 </div>
@@ -162,76 +70,67 @@ Analytics Dashboard
 
 {% block extra_js %}
 
+{{ daily_pages|json_script:"daily-pages-data" }}
+{{ daily_clicks|json_script:"daily-clicks-data" }}
+{{ country_stats_json|json_script:"country-data" }}
+
 <script>
 
-const pages = {{ daily_pages|safe }};
-const clicks = {{ daily_clicks|safe }};
+// -------------------- SAFE PARSE --------------------
+function parse(id) {
+    try {
+        return JSON.parse(document.getElementById(id)?.textContent || "{}");
+    } catch {
+        return {};
+    }
+}
 
-const labels = pages.map(x => x.day);
-const pageData = pages.map(x => x.total);
-const clickData = clicks.map(x => x.total);
+// -------------------- DATA --------------------
+const pages = parse("daily-pages-data");
+const clicks = parse("daily-clicks-data");
+const countryData = parse("country-data");
 
+// -------------------- TREND CHART --------------------
 new Chart(document.getElementById("trendChart"), {
-
     type: "line",
-
     data: {
-
-        labels: labels,
-
+        labels: pages.labels || [],
         datasets: [
-
             {
                 label: "Pageviews",
-                data: pageData,
+                data: pages.data || [],
                 borderColor: "#2563eb",
-                backgroundColor: "rgba(37,99,235,0.1)",
                 fill: true,
-                tension: 0.4,
-                borderWidth: 3,
+                tension: 0.4
             },
-
             {
                 label: "Clicks",
-                data: clickData,
+                data: clicks.data || [],
                 borderColor: "#ec4899",
-                backgroundColor: "rgba(236,72,153,0.1)",
                 fill: true,
-                tension: 0.4,
-                borderWidth: 3,
+                tension: 0.4
             }
-
         ]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false
     }
-
 });
 
-const countryData = JSON.parse('{{ country_stats_json|escapejs }}');
-
-const countries = countryData.map(x => x.country);
-const values = countryData.map(x => x.total);
+// -------------------- COUNTRY CHART --------------------
+const countries = countryData.map(x => x.country || "Unknown");
+const values = countryData.map(x => x.total || 0);
 
 new Chart(document.getElementById("countryChart"), {
-
     type: "bar",
-
     data: {
-        labels: countries,
+        labels: countries.length ? countries : ["No data"],
         datasets: [{
-            data: values,
-            backgroundColor: [
-                "#2563eb",
-                "#ec4899",
-                "#10b981",
-                "#f59e0b",
-                "#8b5cf6",
-                "#06b6d4",
-                "#ef4444",
-                "#84cc16"
-            ]
+            data: values.length ? values : [0],
+            backgroundColor: "#2563eb"
         }]
     },
-
     options: {
         responsive: true,
         maintainAspectRatio: false
