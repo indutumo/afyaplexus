@@ -82,15 +82,26 @@ WSGI_APPLICATION = 'afyaplexus.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
+'''
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+'''
 
-
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'afyaplexus', #production
+        'USER': 'erp',
+        'PASSWORD': 'ErpZola@20!',
+        'HOST':'localhost',
+        'PORT': '5432',
+        'CONN_MAX_AGE': 60,
+    }
+}
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
@@ -176,3 +187,59 @@ JAZZMIN_UI_TWEEKS = {
 }
 #CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
 #CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/0'
+
+# ------------------------------------------------------------
+# LOGGING (backend errors only)
+# ------------------------------------------------------------
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '[{asctime}] {levelname} [{name}] {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'ERROR',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': BASE_DIR / 'afyaplexus.log',
+            'maxBytes': 15 * 1024 * 1024,
+            'backupCount': 10,
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'django': {'handlers': ['file'], 'level': 'ERROR', 'propagate': False},
+        'django.request': {'handlers': ['file'], 'level': 'ERROR', 'propagate': False},
+        'django.db.backends': {'handlers': ['file'], 'level': 'ERROR', 'propagate': False},
+        'django.server': {'handlers': ['file'], 'level': 'ERROR', 'propagate': False},
+        'django.template': {'handlers': [], 'level': 'CRITICAL', 'propagate': False},
+        'django.security.DisallowedHost': {'handlers': ['file'], 'level': 'ERROR', 'propagate': False},
+    },
+}
+
+# ------------------------------------------------------------
+# SECURITY & HTTPS
+# ------------------------------------------------------------
+# --- Security: Only enable SSL settings in production ---
+
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 31536000  # 1 year
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    X_FRAME_OPTIONS = 'SAMEORIGIN'
+else:
+    # Disable SSL in development
+    SECURE_SSL_REDIRECT = False
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
+    SECURE_HSTS_SECONDS = 0
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = False
+    SECURE_HSTS_PRELOAD = False
+    X_FRAME_OPTIONS = 'SAMEORIGIN'
