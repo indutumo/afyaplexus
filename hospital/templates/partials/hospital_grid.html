@@ -8,7 +8,7 @@
     {% if hospital.image %}
       <img src="{{ hospital.image.url }}" class="w-full h-44 object-cover">
     {% else %}
-      <img src="{% static 'placeholder.png' %}" class="w-full h-44 object-cover">
+      <img src="{% static 'hospital.jpeg' %}" class="w-full h-44 object-cover">
     {% endif %}
   </a>
 
@@ -20,7 +20,7 @@
     </h2>
 
     <p class="text-sm text-gray-500 truncate">
-      📍 {{ hospital.location }}
+      📍 {{ hospital.county }}|{{ hospital.constituent }}|{{ hospital.ward }}
     </p>
 
     {% if hospital.distance %}
