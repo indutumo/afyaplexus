@@ -22,7 +22,7 @@ class WardAdmin(ImportExportModelAdmin):
 
 @admin.register(Hospital)
 class HospitalAdmin(ImportExportModelAdmin):
-    list_display = ['county','name','mobile_number']
+    list_display = ['county','name','mobile_number','google_pin']
     list_filter = ['county','name']
     search_fields = ['county','name']
 
